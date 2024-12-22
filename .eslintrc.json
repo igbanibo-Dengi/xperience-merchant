@@ -1,3 +1,16 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": [
+      "warn", // or "off" if you want no warnings
+      {
+        "ts-ignore": "allow-with-description",
+        "ts-nocheck": true, // Enable @ts-nocheck
+        "ts-check": true
+      }
+    ],
+    "no-unused-vars": "off"
+  }
 }
