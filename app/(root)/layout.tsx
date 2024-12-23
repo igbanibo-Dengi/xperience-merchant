@@ -9,7 +9,7 @@ export default function RootLayout({
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main className="bg-muted w-full" >
+            <main className="bg-muted/50 w-full p-4" >
                 {children}
             </main>
         </SidebarProvider>

@@ -33,3 +33,28 @@ export type PersonalDetails = z.infer<typeof personalDetailsSchema>
 export type CompanyDetails = z.infer<typeof companyDetailsSchema>
 export type SignInData = z.infer<typeof signInSchema>
 
+// PAYMENT DETAILS SCHEMA
+
+export const cardSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  cardNumber: z.string().regex(/^\d{16}$/, "Invalid card number"),
+  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, "Invalid expiry date (MM/YY)"),
+  cvv: z.string().regex(/^\d{3,4}$/, "Invalid CVV"),
+})
+
+export const billingSchema = z.object({
+  useCompanyAddress: z.boolean().default(false),
+  address: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(1, "State is required"),
+  zipCode: z.string().min(1, "ZIP code is required"),
+  country: z.string().min(1, "Country is required"),
+})
+
+export const paymentFormSchema = z.object({
+  card: cardSchema,
+  billing: billingSchema,
+})
+
+export type PaymentFormValues = z.infer<typeof paymentFormSchema>
+

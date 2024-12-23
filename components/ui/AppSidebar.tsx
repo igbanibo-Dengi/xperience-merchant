@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, CalendarDays, BarChart2, Settings, HelpCircle } from 'lucide-react'
+import { Home, CalendarDays, BarChart2, Settings, HelpCircle, Banknote } from 'lucide-react'
 import Image from "next/image"
 import {
     Sidebar,
@@ -36,6 +36,11 @@ const items = [
         title: "Settings",
         url: "/settings",
         icon: Settings,
+    },
+    {
+        title: "Pricing",
+        url: "/pricing",
+        icon: Banknote,
     },
     {
         title: "Support",
