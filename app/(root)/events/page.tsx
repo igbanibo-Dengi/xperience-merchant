@@ -1,8 +1,13 @@
+import Link from 'next/link'
 import React from 'react'
 
 const page = () => {
     return (
-        <div>page</div>
+        <div>
+            <Link href={"/events/1"}>
+                Event 1
+            </Link>
+        </div>
     )
 }
 
