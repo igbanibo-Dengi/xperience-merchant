@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { CircleAlert, X } from 'lucide-react';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
 const Page = () => {
@@ -45,8 +46,10 @@ const Page = () => {
                         <h4 className="text-lg font-bold mb-4">Upcoming Events</h4>
                         <div className="border-2 rounded-md p-8 text-center">
                             <p className="mb-4">You have no upcoming events.</p>
-                            <Button size={"lg"}>
-                                + Create Event
+                            <Button size={"lg"} asChild>
+                                <Link href="/events/new-event">
+                                    + Create Event
+                                </Link>
                             </Button>
                         </div>
                     </div>
