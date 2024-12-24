@@ -15,11 +15,12 @@ import {
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 const items = [
     {
         title: "Home",
-        url: "/",
+        url: "/home",
         icon: Home,
     },
     {
@@ -68,7 +69,7 @@ export function AppSidebar() {
         <Sidebar collapsible="icon" className="border-r-0">
             <SidebarContent className="bg-black pb-4">
                 <div className="flex items-center justify-between px-4 py-4">
-                    <span className={`flex items-center overflow-hidden transition-all ease-in-out duration-300 ${open ? "w-full" : 'w-0'}`}>
+                    <span className={`flex items-center overflow-hidden transition-all ease-in-out duration-300 ${open ? "w-full" : ''}`}>
                         <Image
                             src="/icons/x.svg"
                             width={14}
@@ -78,25 +79,31 @@ export function AppSidebar() {
                         />
                         <p className="text-2xl font-bold text-white">perience</p>
                     </span>
-                    <SidebarTrigger className='hover:bg-transparent' />
+                    <SidebarTrigger className='hover:text-white hover:bg-transparent text-white' />
                 </div>
                 <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={pathname === item.url}
-                                        className="text-white data-[active=true]:bg-primary data-[active=true]:text-white hover:bg-muted h-[41px] text-base"
-                                    >
-                                        <a href={item.url}>
-                                            <item.icon size={16} className={`text-muted-foreground mr-3 data-[active=true]:text-white ${pathname === item.url ? "text-white" : ""}`} />
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                            {items.map((item) => {
+                                const isActive = pathname === item.url || pathname.startsWith(`${item.url}/`)
+                                return (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={isActive}
+                                            className="text-white data-[active=true]:bg-primary data-[active=true]:text-white hover:bg-muted h-[41px] text-base"
+                                        >
+                                            <Link href={item.url}>
+                                                <item.icon
+                                                    size={16}
+                                                    className={`text-muted-foreground mr-3 ${isActive ? "text-white" : ""}`}
+                                                />
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                )
+                            })}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

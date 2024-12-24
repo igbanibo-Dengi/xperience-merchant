@@ -4,9 +4,7 @@ import React from 'react'
 const page = () => {
     return (
         <div>
-            <Link href={"/events/1"}>
-                Event 1
-            </Link>
+            <h3 className='text-[32px] fotn-bold'>Hey there, John</h3>
         </div>
     )
 }
