@@ -58,3 +58,46 @@ export const paymentFormSchema = z.object({
 
 export type PaymentFormValues = z.infer<typeof paymentFormSchema>
 
+// EVENT SCHEMA
+
+export const eventDetailsSchema = z.object({
+  name: z.string().min(1, "Event name is required"),
+  description: z.string().min(1, "Event description is required"),
+  venue: z.object({
+    name: z.string().min(1, "Venue name is required"),
+    address: z.string().min(1, "Address is required"),
+    city: z.string().min(1, "City is required"),
+    state: z.string().min(1, "State is required"),
+    zipCode: z.string().min(1, "ZIP code is required"),
+  }),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().min(1, "End date is required"),
+  startTime: z.string().min(1, "Start time is required"),
+  endTime: z.string().min(1, "End time is required"),
+})
+
+export const photoSchema = z.object({
+  coverPhoto: z
+    .custom<File>((file) => file instanceof File, {
+      message: "Cover photo is required"
+    }),
+  feedPhotos: z.array(z.any().refine((file) => file instanceof File, "Feed photo must be a file")).max(4, "Maximum 5 feed photos allowed"),
+})
+
+export const experienceMomentSchema = z.object({
+  startTime: z.string().min(1, "Start time is required"),
+  endTime: z.string().min(1, "End time is required"),
+})
+
+export const experienceMomentsSchema = z.object({
+  enabled: z.boolean(),
+  moments: z.array(experienceMomentSchema),
+})
+
+export const eventFormSchema = z.object({
+  details: eventDetailsSchema,
+  photos: photoSchema,
+  experienceMoments: experienceMomentsSchema,
+})
+
+export type EventFormValues = z.infer<typeof eventFormSchema>
