@@ -28,12 +28,20 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { eventDetailsSchema } from "@/lib/schema"
-import { mockVenues, type Venue } from "@/lib/mock-data"
-
+import { mockVenues } from "@/lib/mock-data"
 interface EventDetailsStepProps {
   defaultValues?: any
   onSubmit: (data: any) => void
   onBack?: () => void
+}
+
+interface Venue {
+  id: string
+  name: string
+  address: string
+  city: string
+  state: string
+  zipCode: string
 }
 
 export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetailsStepProps) {
