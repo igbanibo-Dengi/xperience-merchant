@@ -18,7 +18,7 @@ export function SuccessScreen({ planName, onBackToHome, onCreateEvent }: Success
                     Your subscription has now been upgraded to the {planName}!
                 </p>
                 <p className="text-left">
-                    Let's get you started with your new plan by creating <br className="hidden md:block" /> your first event and checking out all of
+                    Let&apos;s get you started with your new plan by creating <br className="hidden md:block" /> your first event and checking out all of
                     the cool <br className="hidden md:block" /> features that come with your plan.
                 </p>
                 <div className="flex justify-center gap-4 md:gap-8 md:w-[70%] mt-8">
