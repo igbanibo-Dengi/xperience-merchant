@@ -14,7 +14,7 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 13% 99%;
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
@@ -92,4 +92,33 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+  background: gray;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  background: #f36340;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e0ecfd;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f36340;
+  border: 1px solid white;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f36340;
 }
