@@ -78,9 +78,9 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit }: ReviewStepPr
             </div>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {eventData.photos.feedPhotos.map((photo: File, index: number) => (
-                <div className="relative group size-[160px] md:size-[300px] xl:size-[180px] ">
+                <div className="relative group size-[160px] md:size-[300px] xl:size-[180px] " key={index}>
                   <Image
-                    key={index}
+
                     src={URL.createObjectURL(photo)}
                     alt={`Feed Photo ${index + 1}`}
                     // width={200} height={200}
