@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type CompanyDetails, companyDetailsSchema } from "@/lib/schema"
+import { CompanyDetailsFormProps } from "@/types/auth"
 import { Button } from "@/components/ui/button"
 // import { Checkbox } from "@/components/ui/checkbox"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -11,12 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Link from "next/link"
 import { Building2, MapPin, Globe } from "lucide-react"
 
-interface CompanyDetailsFormProps {
-  onSubmit: (data: CompanyDetails) => void
-  onBack: () => void
-}
-
-export function CompanyDetailsForm({ onSubmit, onBack }: CompanyDetailsFormProps) {
+export function CompanyDetailsForm({ onSubmit, onBack, isLoading }: CompanyDetailsFormProps) {
   const form = useForm<CompanyDetails>({
     resolver: zodResolver(companyDetailsSchema),
     defaultValues: {
@@ -192,7 +188,7 @@ export function CompanyDetailsForm({ onSubmit, onBack }: CompanyDetailsFormProps
                 Back
               </Button>
               <Button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600">
-                Sign up
+                {isLoading ? 'Signing You Up...' : 'Sign Up'}
               </Button>
             </div>
             <p className="text-center text-muted-foreground text-sm">Already have an account? <Link href='/sign-in' className="text-foreground font-semibold hover:underline">Sign In</Link></p>

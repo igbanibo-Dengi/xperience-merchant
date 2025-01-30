@@ -7,11 +7,14 @@ import { SignupSuccess } from "@/components/signup-success"
 import type { PersonalDetails, CompanyDetails } from "@/lib/schema"
 import { signUpAction } from "@/actions/auth.actions"
 import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
+import { CheckCircle, XCircle } from "lucide-react"
 
 export default function SignUpPage() {
     const [step, setStep] = useState(1)
     const [personalDetails, setPersonalDetails] = useState<PersonalDetails | null>(null)
     const [isSuccess, setIsSuccess] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const { toast } = useToast()
 
     const userType = "organizer"
@@ -23,6 +26,7 @@ export default function SignUpPage() {
 
     const handleCompanyDetailsSubmit = async (data: CompanyDetails) => {
         try {
+            setIsLoading(true)
             if (!personalDetails) {
                 throw new Error("Personal details are missing. Please go back and fill the form.")
             }
@@ -36,17 +40,37 @@ export default function SignUpPage() {
             const result = await signUpAction(formData)
 
             if (result.success) {
-                // setIsSuccess(true)
+                setIsSuccess(true)
+                setIsLoading(false)
                 toast({
                     title: "Success",
                     description: "Your account has been created successfully.",
                     variant: "default",
+                    action: (
+                        <ToastAction
+                            disabled
+                            altText="error"
+                            className="disabled:opacity-100 h-[60px] w-[60px] border-none"
+                        >
+                            <CheckCircle className="h-20 w-20 text-green-500" />
+                        </ToastAction>
+                    ),
                 })
             } else {
+                setIsLoading(false)
                 toast({
                     title: "Error",
                     description: result.error || "An unexpected error occurred.",
-                    variant: "destructive",
+                    variant: "default",
+                    action: (
+                        <ToastAction
+                            disabled
+                            altText="error"
+                            className="disabled:opacity-100 h-[60px] w-[60px] border-none"
+                        >
+                            <XCircle className="h-20 w-20 text-red-500" />
+                        </ToastAction>
+                    ),
                 })
             }
         } catch (error: any) {
@@ -54,7 +78,16 @@ export default function SignUpPage() {
             toast({
                 title: "Error",
                 description: error.message || "An unexpected error occurred.",
-                variant: "destructive",
+                variant: "default",
+                action: (
+                    <ToastAction
+                        disabled
+                        altText="error"
+                        className="disabled:opacity-100 h-[60px] w-[60px] border-none"
+                    >
+                        <XCircle className="h-20 w-20 text-red-500" />
+                    </ToastAction>
+                ),
             })
         }
     }
@@ -72,7 +105,10 @@ export default function SignUpPage() {
             {step === 1 ? (
                 <PersonalDetailsForm onSubmit={handlePersonalDetailsSubmit} />
             ) : (
-                <CompanyDetailsForm onSubmit={handleCompanyDetailsSubmit} onBack={() => setStep(1)} />
+                <CompanyDetailsForm
+                    isLoading={isLoading}
+                    onSubmit={handleCompanyDetailsSubmit} onBack={() => setStep(1)}
+                />
             )}
         </div>
     )

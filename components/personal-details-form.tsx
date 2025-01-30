@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type PersonalDetails, personalDetailsSchema } from "@/lib/schema"
+import { PersonalDetailsFormProps } from "@/types/auth"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -10,9 +11,6 @@ import { useFormStatus } from "react-dom"
 import { User, Phone, Mail, Lock, Apple, Chrome } from "lucide-react"
 import Link from "next/link"
 
-interface PersonalDetailsFormProps {
-  onSubmit: (data: PersonalDetails) => void
-}
 
 export function PersonalDetailsForm({ onSubmit }: PersonalDetailsFormProps) {
   const form = useForm<PersonalDetails>({

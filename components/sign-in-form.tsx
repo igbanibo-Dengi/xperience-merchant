@@ -3,18 +3,16 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type SignInData, signInSchema } from "@/lib/schema"
+import { SignInFormProps } from "@/types/auth"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 import { Mail, Lock, Apple, Chrome } from "lucide-react"
 
-interface SignInFormProps {
-    onSubmit: (data: SignInData) => void
-}
 
-export function SignInForm({ onSubmit }: SignInFormProps) {
+
+export function SignInForm({ onSubmit, isLoading }: SignInFormProps) {
     const form = useForm<SignInData>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
@@ -67,7 +65,7 @@ export function SignInForm({ onSubmit }: SignInFormProps) {
                             />
                         </div>
                         <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600">
-                            Sign in
+                            {isLoading ? 'Signing in...' : 'Sign in'}
                         </Button>
                         <div className="text-center">
                             <Link href="/forgot-password" className="text-sm text-orange-500 hover:text-orange-600">
