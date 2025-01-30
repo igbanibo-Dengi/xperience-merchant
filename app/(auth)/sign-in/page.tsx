@@ -5,9 +5,9 @@ import { SignInForm } from "@/components/sign-in-form"
 import { SignInSuccess } from "@/components/sign-in-success"
 import type { SignInData } from "@/lib/schema"
 import { useToast } from "@/hooks/use-toast"
-import { logInAction } from "@/actions/auth.actions"
 import { CheckCircle, XCircle } from "lucide-react"
 import { ToastAction } from "@/components/ui/toast"
+import { logInAction } from "@/lib/actions/auth/logIn.action"
 
 export default function SignInPage() {
     const [isSuccess, setIsSuccess] = useState(false)
@@ -17,7 +17,6 @@ export default function SignInPage() {
 
     const handleSignIn = async (data: SignInData) => {
         try {
-            // If successful, show success state
             setIsLoading(true)
             const result = await logInAction(data)
 

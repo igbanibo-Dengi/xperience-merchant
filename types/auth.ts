@@ -19,3 +19,17 @@ export interface CompanyDetailsFormProps {
   onBack: () => void
   isLoading: boolean
 }
+
+export interface AuthResponse {
+  token: string;
+  user?: {
+    id: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string,
+    userType: string,
+    companyName: string,
+    address: string,
+    industry: string
+  };
+}

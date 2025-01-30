@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { PersonalDetailsForm } from "@/components/personal-details-form"
 import { CompanyDetailsForm } from "@/components/company-details-form"
-import { SignupSuccess } from "@/components/signup-success"
 import type { PersonalDetails, CompanyDetails } from "@/lib/schema"
-import { signUpAction } from "@/actions/auth.actions"
 import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 import { CheckCircle, XCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { signUpAction } from "@/lib/actions/auth/signUp.action"
 
 export default function SignUpPage() {
     const [step, setStep] = useState(1)
@@ -16,6 +16,8 @@ export default function SignUpPage() {
     const [isSuccess, setIsSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const { toast } = useToast()
+
+    const router = useRouter()
 
     const userType = "organizer"
 
@@ -56,6 +58,7 @@ export default function SignUpPage() {
                         </ToastAction>
                     ),
                 })
+                router.push('/sign-in')
             } else {
                 setIsLoading(false)
                 toast({
@@ -92,13 +95,13 @@ export default function SignUpPage() {
         }
     }
 
-    if (isSuccess) {
-        return (
-            <div className="flex flex-1 items-center h-full w-full justify-center p-6 xl:p-12">
-                <SignupSuccess />
-            </div>
-        )
-    }
+    // if (isSuccess) {
+    //     return (
+    //         <div className="flex flex-1 items-center h-full w-full justify-center p-6 xl:p-12">
+    //             <SignupSuccess />
+    //         </div>
+    //     )
+    // }
 
     return (
         <div>

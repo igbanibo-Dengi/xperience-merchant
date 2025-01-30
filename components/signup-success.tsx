@@ -11,7 +11,7 @@ export function SignupSuccess() {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            router.push("/")
+            router.push("/sign-in")
         }, 3000)
 
         return () => clearTimeout(timeout)
