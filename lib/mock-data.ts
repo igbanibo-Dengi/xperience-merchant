@@ -47,3 +47,22 @@ export const mockVenues = [
 //       ).then(setFeedPreviews)
 //     }
 //   }, [defaultValues])
+
+
+
+// {
+
+//   "name": "Igbanibo Dengimo-owei Alex",
+//     "phoneNumber": "+2348107438135",
+//       "email": "igbanibodengi@gmail.com",
+//         "password": "123123123",
+//           "confirmPassword": "123123123",
+//             "companyName": "CAPACITY BAY",
+//               "industryType": "tech",
+//                 "address": "Port-harcourt, Rivers state",
+//                   "city": "Port-Harcourt, Rivers, Nigeria",
+//                     "state": "BY:BAYELSA STATE",
+//                       "zipCode": "500211",
+//                         "country": "ca",
+//                           "userType": "organizer"
+// }

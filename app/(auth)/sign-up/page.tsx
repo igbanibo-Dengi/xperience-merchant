@@ -5,12 +5,16 @@ import { PersonalDetailsForm } from "@/components/personal-details-form"
 import { CompanyDetailsForm } from "@/components/company-details-form"
 import { SignupSuccess } from "@/components/signup-success"
 import type { PersonalDetails, CompanyDetails } from "@/lib/schema"
-import Image from "next/image";
+import { signUpAction } from "@/actions/auth.actions"
+import { useToast } from "@/hooks/use-toast"
 
 export default function SignUpPage() {
     const [step, setStep] = useState(1)
     const [personalDetails, setPersonalDetails] = useState<PersonalDetails | null>(null)
     const [isSuccess, setIsSuccess] = useState(false)
+    const { toast } = useToast()
+
+    const userType = "organizer"
 
     const handlePersonalDetailsSubmit = (data: PersonalDetails) => {
         setPersonalDetails(data)
@@ -18,93 +22,58 @@ export default function SignUpPage() {
     }
 
     const handleCompanyDetailsSubmit = async (data: CompanyDetails) => {
-        // Simulate API call
         try {
-            // Combine both forms data
+            if (!personalDetails) {
+                throw new Error("Personal details are missing. Please go back and fill the form.")
+            }
+
             const formData = {
                 ...personalDetails,
                 ...data,
+                userType,
             }
 
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 1000))
+            const result = await signUpAction(formData)
 
-            // If successful, show success state
-            setIsSuccess(true)
-
-            // Log the form data
-            console.log('Form submitted:', formData)
-        } catch (error) {
-            console.error('Error submitting form:', error)
+            if (result.success) {
+                // setIsSuccess(true)
+                toast({
+                    title: "Success",
+                    description: "Your account has been created successfully.",
+                    variant: "default",
+                })
+            } else {
+                toast({
+                    title: "Error",
+                    description: result.error || "An unexpected error occurred.",
+                    variant: "destructive",
+                })
+            }
+        } catch (error: any) {
+            console.error("Error submitting form:", error)
+            toast({
+                title: "Error",
+                description: error.message || "An unexpected error occurred.",
+                variant: "destructive",
+            })
         }
     }
 
     if (isSuccess) {
         return (
-            <div className="flex flex-col xl:flex-row h-screen">
-                <div className="hidden xl:flex xl:w-1/2 bg-black p-4">
-                    <div className="grid grid-cols-3 gap-4 w-full">
-                        <div
-                            className="col-span-3 bg-[url('/images/auth-1.svg')] h-52 bg-cover bg-center bg-no-repeat rounded-lg"
-                        />
-                        <div
-                            className="bg-[url('/images/auth-2.jpg')] h-full bg-cover bg-center bg-no-repeat rounded-lg"
-                        />
-                        <div
-                            className="bg-[url('/images/auth-3.jpg')] h-full bg-cover bg-center bg-no-repeat rounded-lg"
-                        />
-                        <div className="rounded-lg overflow-hidden">
-                            <Image
-                                src="/images/auth-4.jpg"
-                                alt="Auth Image"
-                                width={100}
-                                height={100}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-1 items-center justify-center p-6 xl:p-12">
-                    <SignupSuccess />
-                </div>
+            <div className="flex flex-1 items-center h-full w-full justify-center p-6 xl:p-12">
+                <SignupSuccess />
             </div>
         )
     }
 
     return (
-        <div className="flex">
-            <div className="hidden xl:flex xl:w-1/2 bg-black p-4">
-                <div className="grid grid-cols-3 gap-4 w-full">
-                    <div
-                        className="col-span-3 bg-[url('/images/auth-1.svg')] h-52 bg-cover bg-center bg-no-repeat rounded-lg"
-                    />
-                    <div
-                        className="bg-[url('/images/auth-2.jpg')] h-full bg-cover bg-center bg-no-repeat rounded-lg"
-                    />
-                    <div
-                        className="bg-[url('/images/auth-3.jpg')] h-full bg-cover bg-center bg-no-repeat rounded-lg"
-                    />
-                    <div className="rounded-lg overflow-hidden">
-                        <Image
-                            src="/images/auth-4.jpg"
-                            alt="Auth Image"
-                            width={100}
-                            height={100}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div className="mx-auto mt-6 p-4">
-                {step === 1 ? (
-                    <PersonalDetailsForm onSubmit={handlePersonalDetailsSubmit} />
-                ) : (
-                    <CompanyDetailsForm
-                        onSubmit={handleCompanyDetailsSubmit}
-                        onBack={() => setStep(1)}
-                    />
-                )}
-            </div>
+        <div>
+            {step === 1 ? (
+                <PersonalDetailsForm onSubmit={handlePersonalDetailsSubmit} />
+            ) : (
+                <CompanyDetailsForm onSubmit={handleCompanyDetailsSubmit} onBack={() => setStep(1)} />
+            )}
         </div>
     )
 }

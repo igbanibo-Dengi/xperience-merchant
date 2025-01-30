@@ -1,7 +1,30 @@
 import * as z from "zod"
 
+export const signUpSchema = z.object({
+  userType: z.string().min(1).max(9),
+  fullName: z.string().min(2, "Name must be at least 2 characters"),
+  phoneNumber: z.string().min(10, "Please enter a valid phone number"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string(),
+  companyName: z.string().min(2, "Company name must be at least 2 characters"),
+  industry: z.string().min(1, "Please select an industry type"),
+  address: z.string().min(1, "Please enter an address"),
+  city: z.string().min(1, "Please enter a city"),
+  state: z.string().min(1, "Please enter a state/province"),
+  zipCode: z.string().min(1, "Please enter a ZIP/postal code"),
+  country: z.string().min(1, "Please select a country"),
+  // termsAccepted: z.boolean().refine((val) => val === true, {
+  //   message: "You must accept the terms and conditions",
+  // })
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+
+})
+
 export const personalDetailsSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  fullName: z.string().min(2, "Name must be at least 2 characters"),
   phoneNumber: z.string().min(10, "Please enter a valid phone number"),
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -13,15 +36,15 @@ export const personalDetailsSchema = z.object({
 
 export const companyDetailsSchema = z.object({
   companyName: z.string().min(2, "Company name must be at least 2 characters"),
-  industryType: z.string().min(1, "Please select an industry type"),
+  industry: z.string().min(1, "Please select an industry type"),
   address: z.string().min(1, "Please enter an address"),
   city: z.string().min(1, "Please enter a city"),
-  stateProvince: z.string().min(1, "Please enter a state/province"),
-  zipPostalCode: z.string().min(1, "Please enter a ZIP/postal code"),
+  state: z.string().min(1, "Please enter a state/province"),
+  zipCode: z.string().min(1, "Please enter a ZIP/postal code"),
   country: z.string().min(1, "Please select a country"),
-  termsAccepted: z.boolean().refine((val) => val === true, {
-    message: "You must accept the terms and conditions",
-  })
+  // termsAccepted: z.boolean().refine((val) => val === true, {
+  //   message: "You must accept the terms and conditions",
+  // })
 })
 
 export const signInSchema = z.object({
