@@ -6,11 +6,11 @@ import { cookies } from 'next/headers'
 
 export async function logInAction(values: signIn) {
   try {
-    if (!process.env.NEXT_PUBLIC_BASE_URL) {
+    if (!process.env.BASE_URL) {
       throw new Error("Base URL is not set in environment variables.");
     }
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`;
+    const url = `${process.env.BASE_URL}/auth/login`;
     const response = await fetch(url, {
       method: "POST",
       headers: {

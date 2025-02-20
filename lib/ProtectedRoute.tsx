@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
-import type React from "react" // Added import for React
+import type React from "react"
 
 interface ProtectedRouteProps {
   children: React.ReactNode

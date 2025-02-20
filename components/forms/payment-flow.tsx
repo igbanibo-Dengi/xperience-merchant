@@ -6,6 +6,7 @@ import { PaymentForm } from "./payment-form"
 import { ReviewOrder } from "./review-order"
 import { SuccessScreen } from "./success-screen"
 import type { PaymentFormValues } from "@/lib/schema"
+import { useRouter } from "next/navigation"
 
 type Step = "plan-selection" | "payment-form" | "review" | "success"
 
@@ -21,6 +22,8 @@ export function PaymentFlow() {
     const [step, setStep] = useState<Step>("plan-selection")
     const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null)
     const [paymentDetails, setPaymentDetails] = useState<PaymentFormValues | null>(null)
+
+    const router = useRouter()
 
     const handlePlanSelection = (plan: Plan) => {
         console.log('Selected plan:', plan)
@@ -49,11 +52,11 @@ export function PaymentFlow() {
 
     const handleCreateEvent = () => {
         // Navigate to event creation page
-        console.log("Navigate to event creation")
+        router.push('/events/new-event')
     }
 
     return (
-        <div className="">
+        <div className="h-[90%]">
             {step === "plan-selection" && <PlanSelection onSelectPlan={handlePlanSelection} />}
 
             {step === "payment-form" && (

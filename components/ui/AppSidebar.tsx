@@ -3,8 +3,18 @@
 import { Home, CalendarDays, BarChart2, Settings, HelpCircle, Banknote } from 'lucide-react'
 import Image from "next/image"
 import {
+    Menubar,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarTrigger,
+} from "@/components/ui/menubar"
+import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarMenu,
@@ -16,6 +26,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { Button } from './button'
+import { NavUser } from '../nav-user'
 
 const items = [
     {
@@ -49,6 +61,14 @@ const items = [
         icon: HelpCircle,
     },
 ]
+
+const data = {
+    user: {
+        name: "shadcn",
+        email: "m@example.com",
+        avatar: "/avatars/shadcn.jpg",
+    },
+}
 
 export function AppSidebar() {
 
@@ -109,22 +129,9 @@ export function AppSidebar() {
                 </SidebarGroup>
 
                 {/* Profile Section */}
-                <div className="mt-auto">
-                    <SidebarMenuButton
-                        className="w-full text-white hover:bg-white/10"
-                    >
-                        <Avatar className="h-6 w-6">
-                            <AvatarImage src="/avatars/user.png" alt="Profile" />
-                            <AvatarFallback>U</AvatarFallback>
-                        </Avatar>
-                        {
-                            open ?
-                                <span>Profile</span>
-                                :
-                                ""
-                        }
-                    </SidebarMenuButton>
-                </div>
+                <SidebarFooter className='mt-auto'>
+                    <NavUser user={data.user} />
+                </SidebarFooter>
             </SidebarContent>
         </Sidebar>
     )

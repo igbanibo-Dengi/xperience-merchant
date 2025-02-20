@@ -12,9 +12,9 @@ export default function RootLayout({
         <ProtectedRoute>
             <SidebarProvider>
                 <AppSidebar />
-                <main className=" w-full" >
+                <main className=" w-full h-screen flex flex-col" >
                     <Header />
-                    <div className="p-4">
+                    <div className="px-4 flex-1 overflow-y-scroll">
                         {children}
                     </div>
                 </main>

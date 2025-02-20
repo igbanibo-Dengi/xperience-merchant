@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from "next/link"
 
 interface SuccessScreenProps {
     planName: string
@@ -22,8 +23,15 @@ export function SuccessScreen({ planName, onBackToHome, onCreateEvent }: Success
                     the cool <br className="hidden md:block" /> features that come with your plan.
                 </p>
                 <div className="flex justify-center gap-4 md:gap-8 md:w-[70%] mt-8">
-                    <Button size={"lg"} className="w-full" variant="outline" onClick={onBackToHome}>
-                        Back to Home
+                    <Button
+                        size={"lg"}
+                        className="w-full"
+                        variant="outline"
+                        asChild
+                    >
+                        <Link href='/home'>
+                            Back to Home
+                        </Link>
                     </Button>
                     <Button size={"lg"} className="w-full" onClick={onCreateEvent}>Create new event</Button>
                 </div>

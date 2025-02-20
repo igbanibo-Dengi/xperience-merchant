@@ -66,12 +66,12 @@ export function PaymentForm({ onSubmit, onBack }: PaymentFormProps) {
     }
 
     return (
-        <Card className="max-w-2xl border-none bg-transparent xl:ml-20">
-            <CardHeader>
-                <CardTitle className="text-[32px] font-bold">Payment Information</CardTitle>
+        <div className="max-w-2xl border-none bg-transparent xl:ml-20">
+            <div>
+                <div className="text-[32px] font-bold">Payment Information</div>
                 <Separator />
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
                         {/* Card Details */}
@@ -247,8 +247,8 @@ export function PaymentForm({ onSubmit, onBack }: PaymentFormProps) {
                         </div>
                     </form>
                 </Form>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     )
 }
 

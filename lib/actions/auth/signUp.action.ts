@@ -2,7 +2,7 @@
 
 export async function signUpAction(formData: { [key: string]: string }) {
   try {
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/register`;
+    const url = `${process.env.BASE_URL}/auth/register`;
 
     const response = await fetch(url, {
       method: "POST",
