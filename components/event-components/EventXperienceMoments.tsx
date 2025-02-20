@@ -1,12 +1,24 @@
 'use client'
 
-import { useState } from "react"
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { InfoIcon as InfoCircle } from 'lucide-react'
-import { useMediaQuery } from "@/hooks/use-media-query"
+import { useMediaQuery } from '@/hooks/use-media-query'
 
 interface TimeSlot {
   startTime: string
@@ -16,34 +28,36 @@ interface TimeSlot {
 
 const timeSlots: TimeSlot[] = [
   {
-    startTime: "7:30 PM",
-    endTime: "7:35 PM",
-    images: Array(6).fill("/images/swift.jpg")
+    startTime: '7:30 PM',
+    endTime: '7:35 PM',
+    images: Array(6).fill('/images/swift.jpg'),
   },
   {
-    startTime: "8:15 PM",
-    endTime: "8:20 PM",
-    images: Array(6).fill("/images/swift.jpg")
+    startTime: '8:15 PM',
+    endTime: '8:20 PM',
+    images: Array(6).fill('/images/swift.jpg'),
   },
   {
-    startTime: "8:55 PM",
-    endTime: "9:00 PM",
-    images: Array(6).fill("/images/swift.jpg")
+    startTime: '8:55 PM',
+    endTime: '9:00 PM',
+    images: Array(6).fill('/images/swift.jpg'),
   },
   {
-    startTime: "10:00 PM",
-    endTime: "10:05 PM",
-    images: Array(6).fill("/images/swift.jpg")
-  }
+    startTime: '10:00 PM',
+    endTime: '10:05 PM',
+    images: Array(6).fill('/images/swift.jpg'),
+  },
 ]
 export default function XperienceMoments() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(null)
-  const [transitionTime, setTransitionTime] = useState("5")
-  const [photosPerSlide, setPhotosPerSlide] = useState("6")
-  const [startTime, setStartTime] = useState(selectedTimeSlot?.startTime || "")
-  const [endTime, setEndTime] = useState(selectedTimeSlot?.endTime || "")
-  const isDesktop = useMediaQuery("(min-width: 540px)")
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
+    null
+  )
+  const [transitionTime, setTransitionTime] = useState('5')
+  const [photosPerSlide, setPhotosPerSlide] = useState('6')
+  const [startTime, setStartTime] = useState(selectedTimeSlot?.startTime || '')
+  const [endTime, setEndTime] = useState(selectedTimeSlot?.endTime || '')
+  const isDesktop = useMediaQuery('(min-width: 540px)')
 
   const handleReviewClick = (timeSlot: TimeSlot) => {
     setSelectedTimeSlot(timeSlot)
@@ -53,7 +67,7 @@ export default function XperienceMoments() {
   }
 
   const ModalContent = () => (
-    <div className="space-y-6 py-4 overflow-y-auto pl-4 pr-4">
+    <div className="space-y-6 overflow-y-auto py-4 pl-4 pr-4">
       {/* Time Settings */}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
@@ -76,20 +90,32 @@ export default function XperienceMoments() {
 
       {/* Transition Settings */}
       <div>
-        <p className="font-semibold mb-2">5 second transition between slides</p>
+        <p className="mb-2 font-semibold">5 second transition between slides</p>
         <div className="grid grid-cols-5 gap-4">
           {[1, 2, 3, 4, 5].map((num) => (
-            <Button key={num} variant={'outline'} className="border-border border text-foreground">{num}</Button>
+            <Button
+              key={num}
+              variant={'outline'}
+              className="border border-border text-foreground"
+            >
+              {num}
+            </Button>
           ))}
         </div>
       </div>
 
       {/* Photos Per Slide */}
       <div>
-        <p className="font-semibold mb-2">8 photos per slide</p>
+        <p className="mb-2 font-semibold">8 photos per slide</p>
         <div className="grid grid-cols-5 gap-4">
           {[2, 4, 8, 10, 12].map((num) => (
-            <Button key={num} variant={'outline'} className="border-border border text-foreground">{num}</Button>
+            <Button
+              key={num}
+              variant={'outline'}
+              className="border border-border text-foreground"
+            >
+              {num}
+            </Button>
           ))}
         </div>
       </div>
@@ -99,11 +125,14 @@ export default function XperienceMoments() {
         <h3 className="font-semibold">Preview</h3>
         <div className="grid grid-cols-3 gap-2">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="aspect-video rounded-lg overflow-hidden bg-gray-100">
+            <div
+              key={i}
+              className="aspect-video overflow-hidden rounded-lg bg-gray-100"
+            >
               <img
                 src="/images/swift.jpg"
                 alt={`Preview ${i + 1}`}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
           ))}
@@ -114,15 +143,20 @@ export default function XperienceMoments() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold">Submitted Photos</h3>
-          <Button variant="outline" size="sm">Edit</Button>
+          <Button variant="outline" size="sm">
+            Edit
+          </Button>
         </div>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 border rounded-lg p-4">
+        <div className="grid grid-cols-3 gap-2 rounded-lg border p-4 sm:grid-cols-6">
           {Array.from({ length: 18 }).map((_, i) => (
-            <div key={i} className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+            <div
+              key={i}
+              className="aspect-square overflow-hidden rounded-lg bg-gray-100"
+            >
               <img
                 src="/images/swift.jpg"
                 alt={`Submitted ${i + 1}`}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
           ))}
@@ -132,9 +166,9 @@ export default function XperienceMoments() {
   )
 
   return (
-    <div className="md:max-w-4xl space-y-6">
-      <div className="bg-blue-50 p-4 rounded-lg flex items-start gap-2">
-        <InfoCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+    <div className="space-y-6 md:max-w-4xl">
+      <div className="flex items-start gap-2 rounded-lg bg-blue-50 p-4">
+        <InfoCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-500" />
         <p className="text-sm text-blue-700">
           Xperience Moments will automatically go live at their scheduled time.
         </p>
@@ -164,7 +198,7 @@ export default function XperienceMoments() {
 
       {isDesktop ? (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="md:max-w-6xl h-[90vh] ">
+          <DialogContent className="h-[90vh] md:max-w-6xl">
             <DialogHeader className="flex flex-row items-center justify-between">
               <DialogTitle>Xperience Moment 1</DialogTitle>
               <DialogClose asChild>
@@ -199,8 +233,8 @@ interface TimeSlotRowProps {
 
 function TimeSlotRow({ timeSlot, onReviewClick }: TimeSlotRowProps) {
   return (
-    <div className="border rounded-lg p-4">
-      <div className="flex items-center justify-between mb-3">
+    <div className="rounded-lg border p-4">
+      <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="font-semibold">{timeSlot.startTime}</span>
           <span className="text-muted-foreground">|</span>
@@ -210,22 +244,22 @@ function TimeSlotRow({ timeSlot, onReviewClick }: TimeSlotRowProps) {
           onClick={onReviewClick}
           // variant={""}
           size={'sm'}
-          className="ml-auto w-[140px] hidden md:block"
+          className="ml-auto hidden w-[140px] md:block"
         >
           Review
         </Button>
       </div>
-      <div className="flex flex-col md:flex-row items-center gap-4">
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 flex-1">
+      <div className="flex flex-col items-center gap-4 md:flex-row">
+        <div className="grid flex-1 grid-cols-3 gap-2 md:grid-cols-6">
           {timeSlot.images.map((image, index) => (
             <div
               key={index}
-              className="aspect-square rounded-lg overflow-hidden bg-gray-100"
+              className="aspect-square overflow-hidden rounded-lg bg-gray-100"
             >
               <img
                 src={image}
                 alt={`Moment ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
                 width={100}
                 height={100}
               />
@@ -234,7 +268,7 @@ function TimeSlotRow({ timeSlot, onReviewClick }: TimeSlotRowProps) {
         </div>
         <Button
           onClick={onReviewClick}
-          className="ml-auto w-full md:w-auto md:hidden"
+          className="ml-auto w-full md:hidden md:w-auto"
         >
           Review
         </Button>
@@ -242,4 +276,3 @@ function TimeSlotRow({ timeSlot, onReviewClick }: TimeSlotRowProps) {
     </div>
   )
 }
-

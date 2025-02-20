@@ -1,88 +1,90 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { PlanSelection } from "./plan-selection"
-import { PaymentForm } from "./payment-form"
-import { ReviewOrder } from "./review-order"
-import { SuccessScreen } from "./success-screen"
-import type { PaymentFormValues } from "@/lib/schema"
-import { useRouter } from "next/navigation"
+import { useState } from 'react'
+import { PlanSelection } from './plan-selection'
+import { PaymentForm } from './payment-form'
+import { ReviewOrder } from './review-order'
+import { SuccessScreen } from './success-screen'
+import type { PaymentFormValues } from '@/lib/schema'
+import { useRouter } from 'next/navigation'
 
-type Step = "plan-selection" | "payment-form" | "review" | "success"
+type Step = 'plan-selection' | 'payment-form' | 'review' | 'success'
 
 interface Plan {
-    id: string
-    name: string
-    price: number
-    description: string
-    features: string[]
+  id: string
+  name: string
+  price: number
+  description: string
+  features: string[]
 }
 
 export function PaymentFlow() {
-    const [step, setStep] = useState<Step>("plan-selection")
-    const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null)
-    const [paymentDetails, setPaymentDetails] = useState<PaymentFormValues | null>(null)
+  const [step, setStep] = useState<Step>('plan-selection')
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null)
+  const [paymentDetails, setPaymentDetails] =
+    useState<PaymentFormValues | null>(null)
 
-    const router = useRouter()
+  const router = useRouter()
 
-    const handlePlanSelection = (plan: Plan) => {
-        console.log('Selected plan:', plan)
-        setSelectedPlan(plan)
-        setStep("payment-form")
-    }
+  const handlePlanSelection = (plan: Plan) => {
+    console.log('Selected plan:', plan)
+    setSelectedPlan(plan)
+    setStep('payment-form')
+  }
 
-    const handlePaymentSubmit = (data: PaymentFormValues) => {
-        console.log('Payment form submitted:', data)
-        setPaymentDetails(data)
-        setStep("review")
-    }
+  const handlePaymentSubmit = (data: PaymentFormValues) => {
+    console.log('Payment form submitted:', data)
+    setPaymentDetails(data)
+    setStep('review')
+  }
 
-    const handlePaymentConfirm = () => {
-        // Here you would typically make an API call to process the payment
-        console.log('Payment confirmed')
-        setStep("success")
-    }
+  const handlePaymentConfirm = () => {
+    // Here you would typically make an API call to process the payment
+    console.log('Payment confirmed')
+    setStep('success')
+  }
 
-    const handleBackToHome = () => {
-        // Reset the flow
-        setStep("plan-selection")
-        setSelectedPlan(null)
-        setPaymentDetails(null)
-    }
+  const handleBackToHome = () => {
+    // Reset the flow
+    setStep('plan-selection')
+    setSelectedPlan(null)
+    setPaymentDetails(null)
+  }
 
-    const handleCreateEvent = () => {
-        // Navigate to event creation page
-        router.push('/events/new-event')
-    }
+  const handleCreateEvent = () => {
+    // Navigate to event creation page
+    router.push('/events/new-event')
+  }
 
-    return (
-        <div className="h-[90%]">
-            {step === "plan-selection" && <PlanSelection onSelectPlan={handlePlanSelection} />}
+  return (
+    <div className="h-[90%]">
+      {step === 'plan-selection' && (
+        <PlanSelection onSelectPlan={handlePlanSelection} />
+      )}
 
-            {step === "payment-form" && (
-                <PaymentForm
-                    onSubmit={handlePaymentSubmit}
-                    onBack={() => setStep("plan-selection")}
-                />
-            )}
+      {step === 'payment-form' && (
+        <PaymentForm
+          onSubmit={handlePaymentSubmit}
+          onBack={() => setStep('plan-selection')}
+        />
+      )}
 
-            {step === "review" && selectedPlan && paymentDetails && (
-                <ReviewOrder
-                    plan={selectedPlan}
-                    paymentDetails={paymentDetails}
-                    onBack={() => setStep("payment-form")}
-                    onConfirm={handlePaymentConfirm}
-                />
-            )}
+      {step === 'review' && selectedPlan && paymentDetails && (
+        <ReviewOrder
+          plan={selectedPlan}
+          paymentDetails={paymentDetails}
+          onBack={() => setStep('payment-form')}
+          onConfirm={handlePaymentConfirm}
+        />
+      )}
 
-            {step === "success" && selectedPlan && (
-                <SuccessScreen
-                    planName={selectedPlan.name}
-                    onBackToHome={handleBackToHome}
-                    onCreateEvent={handleCreateEvent}
-                />
-            )}
-        </div>
-    )
+      {step === 'success' && selectedPlan && (
+        <SuccessScreen
+          planName={selectedPlan.name}
+          onBackToHome={handleBackToHome}
+          onCreateEvent={handleCreateEvent}
+        />
+      )}
+    </div>
+  )
 }
-

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { EventData, Photo, XperienceMoment } from '@/types/event'
@@ -15,44 +15,54 @@ const EventContext = createContext<EventContextType | null>(null)
 
 // Sample data
 const initialEventData: EventData = {
-  title: "Taylor Swift: Eras Tour",
-  date: "November 1, 2024 at 7:00PM",
-  venue: "Scotiabank Arena",
+  title: 'Taylor Swift: Eras Tour',
+  date: 'November 1, 2024 at 7:00PM',
+  venue: 'Scotiabank Arena',
   isLive: true,
-  nextMomentTime: "00:09:37",
-  photos: Array(12).fill(null).map((_, i) => ({
-    id: `photo-${i}`,
-    url: "/placeholder.svg",
-    timestamp: new Date().toISOString()
-  })),
-  recentPhotos: Array(5).fill(null).map((_, i) => ({
-    id: `recent-${i}`,
-    url: "/placeholder.svg",
-    timestamp: new Date().toISOString()
-  })),
+  nextMomentTime: '00:09:37',
+  photos: Array(12)
+    .fill(null)
+    .map((_, i) => ({
+      id: `photo-${i}`,
+      url: '/placeholder.svg',
+      timestamp: new Date().toISOString(),
+    })),
+  recentPhotos: Array(5)
+    .fill(null)
+    .map((_, i) => ({
+      id: `recent-${i}`,
+      url: '/placeholder.svg',
+      timestamp: new Date().toISOString(),
+    })),
   xperienceMoments: [
     {
-      id: "moment-1",
-      startTime: "7:30",
-      endTime: "7:35",
+      id: 'moment-1',
+      startTime: '7:30',
+      endTime: '7:35',
       transitionTime: 5,
-      slides: Array(12).fill(null).map((_, i) => i + 1),
-      photos: Array(6).fill(null).map((_, i) => ({
-        id: `moment1-photo-${i}`,
-        url: "/placeholder.svg",
-        timestamp: new Date().toISOString()
-      })),
-      submittedPhotos: Array(12).fill(null).map((_, i) => ({
-        id: `moment1-submitted-${i}`,
-        url: "/placeholder.svg",
-        timestamp: new Date().toISOString()
-      }))
-    }
+      slides: Array(12)
+        .fill(null)
+        .map((_, i) => i + 1),
+      photos: Array(6)
+        .fill(null)
+        .map((_, i) => ({
+          id: `moment1-photo-${i}`,
+          url: '/placeholder.svg',
+          timestamp: new Date().toISOString(),
+        })),
+      submittedPhotos: Array(12)
+        .fill(null)
+        .map((_, i) => ({
+          id: `moment1-submitted-${i}`,
+          url: '/placeholder.svg',
+          timestamp: new Date().toISOString(),
+        })),
+    },
   ],
   analytics: {
     photosUploaded: 8756,
-    liveUsers: 3692
-  }
+    liveUsers: 3692,
+  },
 }
 
 export function EventProvider({ children }: { children: React.ReactNode }) {
@@ -62,13 +72,15 @@ export function EventProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const timer = setInterval(() => {
       // Update countdown timer
-      const [minutes, seconds, milliseconds] = timeUntilNext.split(/[:.]/).map(Number)
+      const [minutes, seconds, milliseconds] = timeUntilNext
+        .split(/[:.]/)
+        .map(Number)
       let totalMs = (minutes * 60 + seconds) * 1000 + (milliseconds || 0)
       totalMs -= 10
 
       if (totalMs <= 0) {
         clearInterval(timer)
-        setTimeUntilNext("00:00:00")
+        setTimeUntilNext('00:00:00')
       } else {
         const newMinutes = Math.floor(totalMs / 60000)
         const newSeconds = Math.floor((totalMs % 60000) / 1000)
@@ -83,38 +95,40 @@ export function EventProvider({ children }: { children: React.ReactNode }) {
   }, [timeUntilNext])
 
   const updateMoment = (id: string, moment: Partial<XperienceMoment>) => {
-    setEventData(prev => ({
+    setEventData((prev) => ({
       ...prev,
-      xperienceMoments: prev.xperienceMoments.map(m =>
+      xperienceMoments: prev.xperienceMoments.map((m) =>
         m.id === id ? { ...m, ...moment } : m
-      )
+      ),
     }))
   }
 
   const addPhoto = (photo: Photo) => {
-    setEventData(prev => ({
+    setEventData((prev) => ({
       ...prev,
       photos: [photo, ...prev.photos],
-      recentPhotos: [photo, ...prev.recentPhotos.slice(0, 4)]
+      recentPhotos: [photo, ...prev.recentPhotos.slice(0, 4)],
     }))
   }
 
   const removePhoto = (id: string) => {
-    setEventData(prev => ({
+    setEventData((prev) => ({
       ...prev,
-      photos: prev.photos.filter(p => p.id !== id),
-      recentPhotos: prev.recentPhotos.filter(p => p.id !== id)
+      photos: prev.photos.filter((p) => p.id !== id),
+      recentPhotos: prev.recentPhotos.filter((p) => p.id !== id),
     }))
   }
 
   return (
-    <EventContext.Provider value={{
-      eventData,
-      updateMoment,
-      addPhoto,
-      removePhoto,
-      timeUntilNext
-    }}>
+    <EventContext.Provider
+      value={{
+        eventData,
+        updateMoment,
+        addPhoto,
+        removePhoto,
+        timeUntilNext,
+      }}
+    >
       {children}
     </EventContext.Provider>
   )
@@ -125,4 +139,3 @@ export const useEvent = () => {
   if (!context) throw new Error('useEvent must be used within an EventProvider')
   return context
 }
-

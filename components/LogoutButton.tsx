@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { logOutAction } from "@/lib/actions/auth/logout.action"
-import { LogOut } from "lucide-react"
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { logOutAction } from '@/lib/actions/auth/logout.action'
+import { LogOut } from 'lucide-react'
 
 export function LogoutButton() {
   const router = useRouter()
@@ -14,9 +14,8 @@ export function LogoutButton() {
   }
 
   return (
-    <span onClick={handleLogout} className="w-full" >
+    <span onClick={handleLogout} className="w-full">
       Log out
     </span>
   )
 }
-

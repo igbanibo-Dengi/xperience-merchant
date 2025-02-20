@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Asterisk, Search } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Form,
   FormControl,
@@ -13,7 +13,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from '@/components/ui/form'
 import {
   Command,
   CommandList,
@@ -21,14 +21,14 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+} from '@/components/ui/command'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { eventDetailsSchema } from "@/lib/schema"
-import { mockVenues } from "@/lib/mock-data"
+} from '@/components/ui/popover'
+import { eventDetailsSchema } from '@/lib/schema'
+import { mockVenues } from '@/lib/mock-data'
 interface EventDetailsStepProps {
   defaultValues?: any
   onSubmit: (data: any) => void
@@ -44,26 +44,30 @@ interface Venue {
   zipCode: string
 }
 
-export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetailsStepProps) {
+export function EventDetailsStep({
+  defaultValues,
+  onSubmit,
+  onBack,
+}: EventDetailsStepProps) {
   const [open, setOpen] = React.useState(false)
   const [venues] = React.useState<Venue[]>(mockVenues)
 
   const form = useForm({
     resolver: zodResolver(eventDetailsSchema),
     defaultValues: {
-      name: defaultValues?.name || "",
-      description: defaultValues?.description || "",
+      name: defaultValues?.name || '',
+      description: defaultValues?.description || '',
       venue: defaultValues?.venue || {
-        name: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
+        name: '',
+        address: '',
+        city: '',
+        state: '',
+        zipCode: '',
       },
-      startDate: defaultValues?.startDate || "",
-      endDate: defaultValues?.endDate || "",
-      startTime: defaultValues?.startTime || "",
-      endTime: defaultValues?.endTime || "",
+      startDate: defaultValues?.startDate || '',
+      endDate: defaultValues?.endDate || '',
+      startTime: defaultValues?.startTime || '',
+      endTime: defaultValues?.endTime || '',
     },
   })
 
@@ -72,23 +76,32 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
   }
 
   return (
-    <div className="max-w-2xl xl:max-w-3xl mx-auto">
+    <div className="mx-auto max-w-2xl xl:max-w-3xl">
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-bold">Event Name</h2>
           <p className="">
-            Write a name and description to your event so people can find it easily.
+            Write a name and description to your event so people can find it
+            easily.
           </p>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-8"
+          >
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Event Title <span><Asterisk size={10} /></span></FormLabel>
+                  <FormLabel>
+                    Event Title{' '}
+                    <span>
+                      <Asterisk size={10} />
+                    </span>
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder="Be clear and descriptive." {...field} />
                   </FormControl>
@@ -102,7 +115,12 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Event Description <span><Asterisk size={10} /></span></FormLabel>
+                  <FormLabel>
+                    Event Description{' '}
+                    <span>
+                      <Asterisk size={10} />
+                    </span>
+                  </FormLabel>
                   <FormControl>
                     <textarea
                       className="min-h-[100px] w-full rounded-md border border-[#9D9A98] bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -133,8 +151,9 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                           role="combobox"
                           className="w-full justify-start border-[#9D9A98] text-foreground"
                         >
-                          <Search className="ml-2 h-4 w-4 shrink-0 " />
-                          {field.value?.name || "Search for venue or location address"}
+                          <Search className="ml-2 h-4 w-4 shrink-0" />
+                          {field.value?.name ||
+                            'Search for venue or location address'}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-[400px] p-0">
@@ -148,7 +167,9 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                                   key={venue.id}
                                   value={venue.name}
                                   onSelect={() => {
-                                    form.setValue("venue", venue, { shouldValidate: true })
+                                    form.setValue('venue', venue, {
+                                      shouldValidate: true,
+                                    })
                                     setOpen(false)
                                   }}
                                 >
@@ -165,16 +186,14 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                 )}
               />
 
-              {form.watch("venue.name") && (
+              {form.watch('venue.name') && (
                 <div className="rounded-lg p-4">
                   <div className="space-y-1">
-                    <p className="font-bold">{form.watch("venue.name")}</p>
+                    <p className="font-bold">{form.watch('venue.name')}</p>
+                    <p className="text-sm">{form.watch('venue.address')}</p>
                     <p className="text-sm">
-                      {form.watch("venue.address")}
-                    </p>
-                    <p className="text-sm">
-                      {form.watch("venue.city")}, {form.watch("venue.state")}{" "}
-                      {form.watch("venue.zipCode")}
+                      {form.watch('venue.city')}, {form.watch('venue.state')}{' '}
+                      {form.watch('venue.zipCode')}
                     </p>
                   </div>
                 </div>
@@ -183,11 +202,9 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
 
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">Date and time</h2>
-              <p className="">
-                Choose a date for your event.
-              </p>
+              <p className="">Choose a date for your event.</p>
 
-              <div className="grid gap-4 grid-cols-2">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="startDate"
@@ -216,7 +233,7 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                 />
               </div>
 
-              <div className="grid gap-4 grid-cols-2">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="startTime"
@@ -252,7 +269,9 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                   Back
                 </Button>
               )}
-              <Button className="w-[160px] ml-auto" type="submit">Next</Button>
+              <Button className="ml-auto w-[160px]" type="submit">
+                Next
+              </Button>
             </div>
           </form>
         </Form>
@@ -260,4 +279,3 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
     </div>
   )
 }
-

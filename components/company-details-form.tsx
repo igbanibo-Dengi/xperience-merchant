@@ -1,35 +1,52 @@
-"use client"
+'use client'
 
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { type CompanyDetails, companyDetailsSchema } from "@/lib/schema"
-import { CompanyDetailsFormProps } from "@/types/auth"
-import { Button } from "@/components/ui/button"
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { type CompanyDetails, companyDetailsSchema } from '@/lib/schema'
+import { CompanyDetailsFormProps } from '@/types/auth'
+import { Button } from '@/components/ui/button'
 // import { Checkbox } from "@/components/ui/checkbox"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import Link from "next/link"
-import { Building2, MapPin, Globe } from "lucide-react"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import Link from 'next/link'
+import { Building2, MapPin, Globe } from 'lucide-react'
 
-export function CompanyDetailsForm({ onSubmit, onBack, isLoading }: CompanyDetailsFormProps) {
+export function CompanyDetailsForm({
+  onSubmit,
+  onBack,
+  isLoading,
+}: CompanyDetailsFormProps) {
   const form = useForm<CompanyDetails>({
     resolver: zodResolver(companyDetailsSchema),
     defaultValues: {
-      companyName: "",
-      industry: "",
-      address: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      country: "",
+      companyName: '',
+      industry: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: '',
       // termsAccepted: false,
     },
   })
 
   return (
-    <div className="flex flex-col justify-center min-h-screen p-8">
-      <div className="w-full max-w-lg mx-auto space-y-8">
+    <div className="flex min-h-screen flex-col justify-center p-8">
+      <div className="mx-auto w-full max-w-lg space-y-8">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Sign up</h1>
         </div>
@@ -46,7 +63,11 @@ export function CompanyDetailsForm({ onSubmit, onBack, isLoading }: CompanyDetai
                     <FormControl>
                       <div className="relative">
                         <Building2 className="absolute left-3 top-4 h-4 w-4 text-muted-foreground" />
-                        <Input placeholder="Company Name" className="pl-10" {...field} />
+                        <Input
+                          placeholder="Company Name"
+                          className="pl-10"
+                          {...field}
+                        />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -59,7 +80,10 @@ export function CompanyDetailsForm({ onSubmit, onBack, isLoading }: CompanyDetai
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Industry Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="pl-10">
                           <Globe className="absolute left-3 top-4 h-4 w-4 text-muted-foreground" />
@@ -90,7 +114,11 @@ export function CompanyDetailsForm({ onSubmit, onBack, isLoading }: CompanyDetai
                       <FormControl>
                         <div className="relative">
                           <MapPin className="absolute left-3 top-4 h-4 w-4 text-muted-foreground" />
-                          <Input placeholder="Enter Address" className="pl-10" {...field} />
+                          <Input
+                            placeholder="Enter Address"
+                            className="pl-10"
+                            {...field}
+                          />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -144,7 +172,10 @@ export function CompanyDetailsForm({ onSubmit, onBack, isLoading }: CompanyDetai
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Country</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select Country" />
@@ -184,18 +215,33 @@ export function CompanyDetailsForm({ onSubmit, onBack, isLoading }: CompanyDetai
               )}
             /> */}
             <div className="flex gap-4">
-              <Button type="button" variant="outline" className="flex-1" onClick={onBack}>
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1"
+                onClick={onBack}
+              >
                 Back
               </Button>
-              <Button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600">
+              <Button
+                type="submit"
+                className="flex-1 bg-orange-500 hover:bg-orange-600"
+              >
                 {isLoading ? 'Signing You Up...' : 'Sign Up'}
               </Button>
             </div>
-            <p className="text-center text-muted-foreground text-sm">Already have an account? <Link href='/sign-in' className="text-foreground font-semibold hover:underline">Sign In</Link></p>
+            <p className="text-center text-sm text-muted-foreground">
+              Already have an account?{' '}
+              <Link
+                href="/sign-in"
+                className="font-semibold text-foreground hover:underline"
+              >
+                Sign In
+              </Link>
+            </p>
           </form>
         </Form>
       </div>
     </div>
   )
 }
-

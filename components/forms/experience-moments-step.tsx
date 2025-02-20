@@ -1,13 +1,20 @@
-"use client"
+'use client'
 
-import { useFieldArray, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
-import { experienceMomentsSchema } from "@/lib/schema"
-import { Plus, Trash2 } from "lucide-react"
+import { useFieldArray, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
+import { experienceMomentsSchema } from '@/lib/schema'
+import { Plus, Trash2 } from 'lucide-react'
 
 interface ExperienceMomentsStepProps {
   defaultValues?: any
@@ -15,33 +22,40 @@ interface ExperienceMomentsStepProps {
   onBack: () => void
 }
 
-export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: ExperienceMomentsStepProps) {
+export function ExperienceMomentsStep({
+  defaultValues,
+  onSubmit,
+  onBack,
+}: ExperienceMomentsStepProps) {
   const form = useForm({
     resolver: zodResolver(experienceMomentsSchema),
     defaultValues: defaultValues || {
       enabled: false,
-      moments: [{ startTime: "", endTime: "" }],
+      moments: [{ startTime: '', endTime: '' }],
     },
   })
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "moments",
+    name: 'moments',
   })
 
   const handleSubmit = (data: any) => {
-    onSubmit({ experienceMoments: data });
+    onSubmit({ experienceMoments: data })
   }
 
   return (
-    <div className="max-w-2xl xl:max-w-3xl mx-auto">
+    <div className="mx-auto max-w-2xl xl:max-w-3xl">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           <div>
-            <h2 className="text-2xl md:text-[32px] font-bold">Create Xperience Moments</h2>
+            <h2 className="text-2xl font-bold md:text-[32px]">
+              Create Xperience Moments
+            </h2>
             <p className="mt-2">
-              Xperience Moments highlight the best photos on the big screen. Let your attendees
-              participate in specific time frames for a chance to be featured!
+              Xperience Moments highlight the best photos on the big screen. Let
+              your attendees participate in specific time frames for a chance to
+              be featured!
             </p>
           </div>
 
@@ -58,8 +72,12 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
                     />
                   </FormControl>
                   <div className="space-y-1">
-                    <FormLabel className="text-lg text-muted-foreground">Enable Xperience Moments?</FormLabel>
-                    <p className="text-muted-foreground text-sm">You can change this later</p>
+                    <FormLabel className="text-lg text-muted-foreground">
+                      Enable Xperience Moments?
+                    </FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      You can change this later
+                    </p>
                     <FormMessage />
                   </div>
                 </div>
@@ -67,10 +85,10 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
             )}
           />
 
-          {form.watch("enabled") && (
+          {form.watch('enabled') && (
             <div className="space-y-4">
               {fields.map((field, index) => (
-                <div key={field.id} className="flex items-end gap-4 relative">
+                <div key={field.id} className="relative flex items-end gap-4">
                   <FormField
                     control={form.control}
                     name={`moments.${index}.startTime`}
@@ -81,7 +99,7 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
                           <Input
                             type="time"
                             {...field}
-                          // className="w-full"
+                            // className="w-full"
                           />
                         </FormControl>
                         <FormMessage />
@@ -98,7 +116,7 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
                           <Input
                             type="time"
                             {...field}
-                          // className="w-full"
+                            // className="w-full"
                           />
                         </FormControl>
                         <FormMessage />
@@ -121,7 +139,7 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
                       type="button"
                       variant="outline"
                       onClick={() => remove(index)}
-                      className="size-8 absolute right-1 sm:right-2 top-[36px] border-none  rounded-full bg-transparent hover:scale-125 transition-all duration-300"
+                      className="absolute right-1 top-[36px] size-8 rounded-full border-none bg-transparent transition-all duration-300 hover:scale-125 sm:right-2"
                     >
                       <Trash2 className="text-foreground" />
                     </Button>
@@ -131,24 +149,30 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
               <Button
                 type="button"
                 variant="outline"
-                size={"lg"}
-                className="h-12 font-bold border-foreground text-foreground w-full"
-                onClick={() => append({ startTime: "", endTime: "" })}
+                size={'lg'}
+                className="h-12 w-full border-foreground font-bold text-foreground"
+                onClick={() => append({ startTime: '', endTime: '' })}
               >
-                <Plus />  Add Another Xperience Moment
+                <Plus /> Add Another Xperience Moment
               </Button>
             </div>
           )}
 
           <div className="flex justify-between">
-            <Button className="w-[160px]" type="button" variant="outline" onClick={onBack}>
+            <Button
+              className="w-[160px]"
+              type="button"
+              variant="outline"
+              onClick={onBack}
+            >
               Back
             </Button>
-            <Button className="w-[160px]" type="submit">Next</Button>
+            <Button className="w-[160px]" type="submit">
+              Next
+            </Button>
           </div>
         </form>
       </Form>
     </div>
   )
 }
-

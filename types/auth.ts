@@ -1,8 +1,8 @@
-import { CompanyDetails, PersonalDetails, SignInData } from "@/lib/schema";
+import { CompanyDetails, PersonalDetails, SignInData } from '@/lib/schema'
 
 export interface signIn {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export interface SignInFormProps {
@@ -21,15 +21,15 @@ export interface CompanyDetailsFormProps {
 }
 
 export interface AuthResponse {
-  token: string;
+  token: string
   user?: {
-    id: string;
-    fullName: string;
-    email: string;
-    phoneNumber: string,
-    userType: string,
-    companyName: string,
-    address: string,
+    id: string
+    fullName: string
+    email: string
+    phoneNumber: string
+    userType: string
+    companyName: string
+    address: string
     industry: string
-  };
+  }
 }

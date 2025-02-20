@@ -1,34 +1,39 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { ProgressSteps } from "./progress-steps"
-import { EventDetailsStep } from "./event-details-step"
-import { PhotoUploadStep } from "./photo-upload-step"
-import { ExperienceMomentsStep } from "./experience-moments-step"
-import { ReviewStep } from "./review-step"
-import type { EventFormValues } from "@/lib/schema"
-import EventSuucess from "./event-suucess"
+import { useState } from 'react'
+import { ProgressSteps } from './progress-steps'
+import { EventDetailsStep } from './event-details-step'
+import { PhotoUploadStep } from './photo-upload-step'
+import { ExperienceMomentsStep } from './experience-moments-step'
+import { ReviewStep } from './review-step'
+import type { EventFormValues } from '@/lib/schema'
+import EventSuucess from './event-suucess'
 
-const steps = ["Event Details", "Add Photos", "Set Experience Moments", "Review Content"]
+const steps = [
+  'Event Details',
+  'Add Photos',
+  'Set Experience Moments',
+  'Review Content',
+]
 
 const initialFormState: EventFormValues = {
   details: {
-    name: "",
-    description: "",
+    name: '',
+    description: '',
     venue: {
-      name: "",
-      address: "",
-      city: "",
-      state: "",
-      zipCode: "",
+      name: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
     },
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
+    startDate: '',
+    endDate: '',
+    startTime: '',
+    endTime: '',
   },
   photos: {
-    coverPhoto: new File([], "cover.jpg"),
+    coverPhoto: new File([], 'cover.jpg'),
     feedPhotos: [],
   },
   experienceMoments: {
@@ -67,24 +72,24 @@ export function EventCreationForm() {
 
   const handleEdit = (step: string) => {
     switch (step) {
-      case "details":
+      case 'details':
         setCurrentStep(0)
         break
-      case "photos":
+      case 'photos':
         setCurrentStep(1)
         break
-      case "experienceMoments":
+      case 'experienceMoments':
         setCurrentStep(2)
         break
-      case "success":
+      case 'success':
         setCurrentStep(3)
         break
     }
   }
 
   const handleSubmit = () => {
-    console.log("Form submitted:", formData)
-    alert("Event created successfully!")
+    console.log('Form submitted:', formData)
+    alert('Event created successfully!')
     setSuccess(true)
   }
 
@@ -111,7 +116,9 @@ export function EventCreationForm() {
           {currentStep === 2 && (
             <ExperienceMomentsStep
               defaultValues={formData.experienceMoments}
-              onSubmit={(data) => handleNext({ experienceMoments: data.experienceMoments })}
+              onSubmit={(data) =>
+                handleNext({ experienceMoments: data.experienceMoments })
+              }
               onBack={handleBack}
             />
           )}
@@ -129,4 +136,3 @@ export function EventCreationForm() {
     </>
   )
 }
-

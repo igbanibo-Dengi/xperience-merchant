@@ -1,4 +1,4 @@
-import { ImageGrid } from "@/components/image-grid"
+import { ImageGrid } from '@/components/image-grid'
 
 export default function AuthLayout({
   children,
@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="grid xl:grid-cols-2 h-screen overflow-hidden">
+    <div className="grid h-screen overflow-hidden xl:grid-cols-2">
       <div className="hidden xl:block">
         <ImageGrid />
       </div>
@@ -14,4 +14,3 @@ export default function AuthLayout({
     </div>
   )
 }
-

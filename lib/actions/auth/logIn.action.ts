@@ -1,49 +1,52 @@
 'use server'
 
-
-import { signIn } from "@/types/auth";
+import { signIn } from '@/types/auth'
 import { cookies } from 'next/headers'
 
 export async function logInAction(values: signIn) {
   try {
     if (!process.env.BASE_URL) {
-      throw new Error("Base URL is not set in environment variables.");
+      throw new Error('Base URL is not set in environment variables.')
     }
 
-    const url = `${process.env.BASE_URL}/auth/login`;
+    const url = `${process.env.BASE_URL}/auth/login`
     const response = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(values),
-    });
+    })
 
     if (!response.ok) {
-      const error = await response.json();
-      console.error("Error response status:", response.status, "Error body:", error);
-      return { error: error.message || "An error occurred during login." };
+      const error = await response.json()
+      console.error(
+        'Error response status:',
+        response.status,
+        'Error body:',
+        error
+      )
+      return { error: error.message || 'An error occurred during login.' }
     }
 
-    const authData = await response.json();
-    const token = authData?.data?.token;
+    const authData = await response.json()
+    const token = authData?.data?.token
 
     if (!token) {
-      return { error: "Failed to retrieve token from server." };
+      return { error: 'Failed to retrieve token from server.' }
     }
 
     cookies().set('auth_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 24 * 7, // 1 week
-      sameSite: "strict",
-      path: "/",
-    });
+      sameSite: 'strict',
+      path: '/',
+    })
     // console.log("Auth Token successfully stored in cookie.");
-    return { success: true, user: authData.user || null };
+    return { success: true, user: authData.user || null }
   } catch (error) {
-    console.error("Error in log-in action:", error);
-    return { error: "An unexpected error occurred while trying to log in." };
+    console.error('Error in log-in action:', error)
+    return { error: 'An unexpected error occurred while trying to log in.' }
   }
 }
-
