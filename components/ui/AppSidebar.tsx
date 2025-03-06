@@ -93,19 +93,8 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r-0">
       <SidebarContent className="bg-black pb-4">
         <div className="flex items-center justify-between px-4 py-4">
-          <span
-            className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out ${open ? 'w-full' : ''}`}
-          >
-            <Image
-              src="/icons/x.svg"
-              width={14}
-              height={16}
-              alt="Xperience Logo"
-              className="mr-0.5"
-            />
-            <p className="text-2xl font-bold text-white">perience</p>
-          </span>
-          <SidebarTrigger className="text-white hover:bg-transparent hover:text-white" />
+
+          {/* <SidebarTrigger className="text-white hover:bg-transparent hover:text-white" /> */}
         </div>
         <SidebarGroup>
           <SidebarGroupContent>

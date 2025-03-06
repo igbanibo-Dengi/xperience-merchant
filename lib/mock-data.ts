@@ -1,7 +1,7 @@
 export const mockVenues = [
   {
     id: '1',
-    name: 'Scotiabank Arena',
+    venueName: 'Scotiabank Arena',
     address: '40 Bay St.',
     city: 'Toronto',
     state: 'ON',
@@ -9,7 +9,7 @@ export const mockVenues = [
   },
   {
     id: '2',
-    name: 'Rogers Centre',
+    venueName: 'Rogers Centre',
     address: '1 Blue Jays Way',
     city: 'Toronto',
     state: 'ON',
@@ -17,7 +17,7 @@ export const mockVenues = [
   },
   {
     id: '3',
-    name: 'BMO Field',
+    venueName: 'BMO Field',
     address: "170 Princes' Blvd",
     city: 'Toronto',
     state: 'ON',

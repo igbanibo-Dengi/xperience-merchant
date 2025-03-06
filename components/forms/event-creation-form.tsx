@@ -1,61 +1,59 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { ProgressSteps } from './progress-steps'
-import { EventDetailsStep } from './event-details-step'
-import { PhotoUploadStep } from './photo-upload-step'
-import { ExperienceMomentsStep } from './experience-moments-step'
-import { ReviewStep } from './review-step'
-import type { EventFormValues } from '@/lib/schema'
-import EventSuucess from './event-suucess'
+import { useState } from "react"
+import { ProgressSteps } from "./progress-steps"
+import { EventDetailsStep } from "./event-details-step"
+import { PhotoUploadStep } from "./photo-upload-step"
+import { ExperienceMomentsStep } from "./experience-moments-step"
+import { ReviewStep } from "./review-step"
+import type { EventData } from "@/types/event"
+import { EventSuccess } from "./event-suucess"
 
-const steps = [
-  'Event Details',
-  'Add Photos',
-  'Set Experience Moments',
-  'Review Content',
-]
+const steps = ["Event Details", "Add Photos", "Set Experience Moments", "Review Content"]
 
-const initialFormState: EventFormValues = {
-  details: {
-    name: '',
-    description: '',
-    venue: {
-      name: '',
-      address: '',
-      city: '',
-      state: '',
-      zipCode: '',
+const initialFormState: EventData = {
+  eventDetails: {
+    title: "",
+    description: "",
+    location: {
+      type: "Physical",
+      venueName: "",
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
     },
-    startDate: '',
-    endDate: '',
-    startTime: '',
-    endTime: '',
+    eventStartDay: "",
+    eventEndDay: "",
+    eventStartTime: "",
+    eventEndTime: "",
   },
-  photos: {
-    coverPhoto: new File([], 'cover.jpg'),
-    feedPhotos: [],
+  eventImages: {
+    coverPhotoUrl: null,
+    sampleFeedPhotosUrl: [],
   },
   experienceMoments: {
-    enabled: false,
-    moments: [],
+    active: false,
+    recurrence: "",
+    duration: "",
   },
 }
+
 export function EventCreationForm() {
   const [currentStep, setCurrentStep] = useState(0)
-  const [formData, setFormData] = useState<EventFormValues>(initialFormState)
+  const [formData, setFormData] = useState<EventData>(initialFormState)
   const [success, setSuccess] = useState(false)
 
-  const handleNext = (stepData: Partial<EventFormValues>) => {
+  const handleNext = (stepData: Partial<EventData>) => {
     setFormData((prev) => {
       // Deep merge the new data with the existing data
       const newData = { ...prev }
 
-      if (stepData.details) {
-        newData.details = stepData.details
+      if (stepData.eventDetails) {
+        newData.eventDetails = stepData.eventDetails
       }
-      if (stepData.photos) {
-        newData.photos = stepData.photos
+      if (stepData.eventImages) {
+        newData.eventImages = stepData.eventImages
       }
       if (stepData.experienceMoments) {
         newData.experienceMoments = stepData.experienceMoments
@@ -63,7 +61,7 @@ export function EventCreationForm() {
 
       return newData
     })
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))
+    setCurrentStep((prev) => Math.min(prev + 1, steps.length))
   }
 
   const handleBack = () => {
@@ -72,67 +70,58 @@ export function EventCreationForm() {
 
   const handleEdit = (step: string) => {
     switch (step) {
-      case 'details':
+      case "details":
         setCurrentStep(0)
         break
-      case 'photos':
+      case "photos":
         setCurrentStep(1)
         break
-      case 'experienceMoments':
+      case "experienceMoments":
         setCurrentStep(2)
         break
-      case 'success':
-        setCurrentStep(3)
+      default:
         break
     }
   }
 
   const handleSubmit = () => {
-    console.log('Form submitted:', formData)
-    alert('Event created successfully!')
-    setSuccess(true)
+    console.log("Form submitted:", formData)
+    // setSuccess(true)
   }
 
   return (
     <>
       {success ? (
-        <EventSuucess />
+        <EventSuccess />
       ) : (
-        <div className="container mx-auto">
-          {/* <ProgressSteps steps={steps} currentStep={currentStep} /> */}
+        <div className="container mx-auto pb-20">
+          <ProgressSteps steps={steps} currentStep={currentStep} />
           {currentStep === 0 && (
             <EventDetailsStep
-              defaultValues={formData.details}
-              onSubmit={(data) => handleNext({ details: data })}
+              defaultValues={formData.eventDetails}
+              onSubmit={(data) => handleNext({ eventDetails: data })}
             />
           )}
           {currentStep === 1 && (
             <PhotoUploadStep
-              defaultValues={formData.photos}
-              onSubmit={(data) => handleNext({ photos: data.photos })}
+              defaultValues={formData.eventImages}
+              onSubmit={(data) => handleNext({ eventImages: data.photos })}
               onBack={handleBack}
             />
           )}
           {currentStep === 2 && (
             <ExperienceMomentsStep
               defaultValues={formData.experienceMoments}
-              onSubmit={(data) =>
-                handleNext({ experienceMoments: data.experienceMoments })
-              }
+              onSubmit={(data) => handleNext({ experienceMoments: data.experienceMoments })}
               onBack={handleBack}
             />
           )}
           {currentStep === 3 && (
-            <ReviewStep
-              eventData={formData}
-              onSubmit={handleSubmit}
-              onBack={handleBack}
-              onEdit={handleEdit}
-            />
+            <ReviewStep eventData={formData} onSubmit={handleSubmit} onBack={handleBack} onEdit={handleEdit} />
           )}
-          {currentStep === 4 && <EventSuucess />}
         </div>
       )}
     </>
   )
 }
+

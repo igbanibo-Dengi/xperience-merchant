@@ -91,48 +91,62 @@ export type PaymentFormValues = z.infer<typeof paymentFormSchema>
 // EVENT SCHEMA
 
 export const eventDetailsSchema = z.object({
-  name: z.string().min(1, 'Event name is required'),
-  description: z.string().min(1, 'Event description is required'),
-  venue: z.object({
-    name: z.string().min(1, 'Venue name is required'),
-    address: z.string().min(1, 'Address is required'),
-    city: z.string().min(1, 'City is required'),
-    state: z.string().min(1, 'State is required'),
-    zipCode: z.string().min(1, 'ZIP code is required'),
+  title: z.string().min(1, "Event name is required"),
+  description: z.string().min(1, "Event description is required"),
+  location: z.object({
+    type: z.string().min(1, "Location type is required"),
+    venueName: z.string().min(1, "Venue name is required"),
+    address: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    zipCode: z.string().optional(),
   }),
-  startDate: z.string().min(1, 'Start date is required'),
-  endDate: z.string().min(1, 'End date is required'),
-  startTime: z.string().min(1, 'Start time is required'),
-  endTime: z.string().min(1, 'End time is required'),
+  eventStartDay: z.string().min(1, "Start date is required"),
+  eventEndDay: z.string().min(1, "End date is required"),
+  eventStartTime: z.string().min(1, "Start time is required"),
+  eventEndTime: z.string().min(1, "End time is required"),
 })
 
 export const photoSchema = z.object({
-  coverPhoto: z.custom<File>((file) => file instanceof File, {
-    message: 'Cover photo is required',
-  }),
-  feedPhotos: z
-    .array(
-      z
-        .any()
-        .refine((file) => file instanceof File, 'Feed photo must be a file')
-    )
-    .max(4, 'Maximum 5 feed photos allowed'),
+  coverPhotoUrl: z
+    .any()
+    .refine((file) => file instanceof File || file === null, {
+      message: "Cover photo must be a file",
+    })
+    .refine((file) => file !== null, {
+      message: "Cover photo is required",
+    }),
+  sampleFeedPhotosUrl: z
+    .array(z.any().refine((file) => file instanceof File, "Feed photo must be a file"))
+    .max(4, "Maximum 4 feed photos allowed"),
 })
 
-export const experienceMomentSchema = z.object({
-  startTime: z.string().min(1, 'Start time is required'),
-  endTime: z.string().min(1, 'End time is required'),
-})
-
-export const experienceMomentsSchema = z.object({
-  enabled: z.boolean(),
-  moments: z.array(experienceMomentSchema),
-})
+export const experienceMomentsSchema = z
+  .object({
+    active: z.boolean(),
+    recurrence: z.string().optional(),
+    duration: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // If active is true, both recurrence and duration must be filled
+      if (data.active) {
+        return !!data.recurrence && !!data.duration
+      }
+      return true
+    },
+    {
+      message: "Recurrence and duration are required when Experience Moments are active",
+      path: ["active"], // This will show the error at the active field level
+    },
+  )
 
 export const eventFormSchema = z.object({
-  details: eventDetailsSchema,
-  photos: photoSchema,
+  eventDetails: eventDetailsSchema,
+  eventImages: photoSchema,
   experienceMoments: experienceMomentsSchema,
 })
 
 export type EventFormValues = z.infer<typeof eventFormSchema>
+
+

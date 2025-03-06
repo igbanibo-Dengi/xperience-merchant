@@ -1,45 +1,53 @@
+"use client"
+
+import { CheckIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
+
 interface ProgressStepsProps {
   steps: string[]
   currentStep: number
 }
 
 export function ProgressSteps({ steps, currentStep }: ProgressStepsProps) {
-  if (steps.length === 0 || currentStep < 0 || currentStep >= steps.length) {
-    console.error('Invalid steps or currentStep value.')
-    return null
-  }
-
   return (
-    <div className="mx-auto mb-8 w-full max-w-3xl">
-      <div className="relative flex items-center justify-between">
-        {steps.map((step, index) => (
-          <div
-            key={step}
-            className="relative flex flex-col items-center"
-            aria-current={index === currentStep ? 'step' : undefined}
-          >
-            <div
-              className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${index <= currentStep ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
-            >
-              <span
-                className={`block h-2 w-2 rounded-full bg-current`}
-                aria-hidden="true"
-              />
-            </div>
-            <span
-              className={`mt-2 text-sm ${index <= currentStep ? 'text-primary-foreground' : 'text-muted-foreground'}`}
-            >
-              {step}
-            </span>
-            {index < steps.length - 1 && (
+    <div className="mb-8 hidden md:block">
+      <div className="relative mx-auto flex max-w-3xl justify-between">
+        {steps.map((step, index) => {
+          const isCompleted = index < currentStep
+          const isCurrent = index === currentStep
+
+          return (
+            <div key={index} className="flex flex-col items-center">
               <div
-                className={`absolute left-[50%] top-4 h-[2px] w-full translate-x-[-50%] ${index < currentStep ? 'bg-primary' : 'bg-muted'}`}
-                style={{ width: `calc(100% + 2rem)` }}
-              />
-            )}
-          </div>
-        ))}
+                className={cn(
+                  "flex h-10 w-10 items-center justify-center rounded-full border-2",
+                  isCompleted
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : isCurrent
+                      ? "border-primary bg-background text-primary"
+                      : "border-muted-foreground bg-background text-muted-foreground",
+                )}
+              >
+                {isCompleted ? <CheckIcon className="h-5 w-5" /> : <span>{index + 1}</span>}
+              </div>
+              <span className={cn("mt-2 text-sm", isCurrent ? "font-medium text-foreground" : "text-muted-foreground")}>
+                {step}
+              </span>
+            </div>
+          )
+        })}
+
+        {/* Progress line */}
+        <div className="absolute left-0 top-5 h-0.5 w-full -translate-y-1/2 bg-muted-foreground/30">
+          <div
+            className="h-full bg-primary transition-all duration-300"
+            style={{
+              width: `${(currentStep / (steps.length - 1)) * 100}%`,
+            }}
+          />
+        </div>
       </div>
     </div>
   )
 }
+

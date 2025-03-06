@@ -1,90 +1,71 @@
-'use client'
+"use client"
 
-import { useCallback, useEffect, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ImagePlus, Trash2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { photoSchema } from '@/lib/schema'
-import Image from 'next/image'
-import { Separator } from '../ui/separator'
+import { useCallback, useEffect, useState } from "react"
+import { useDropzone } from "react-dropzone"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ImagePlus, Trash2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
+import { photoSchema } from "@/lib/schema"
+import Image from "next/image"
+import { Separator } from "@/components/ui/separator"
+import type { PhotoUploadStepProps } from "@/types/event"
 
-interface PhotoUploadStepProps {
-  defaultValues?: {
-    coverPhoto?: File | null
-    feedPhotos?: File[]
-  }
-  onSubmit: (data: any) => void
-  onBack: () => void
-}
-
-export function PhotoUploadStep({
-  defaultValues,
-  onSubmit,
-  onBack,
-}: PhotoUploadStepProps) {
+export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUploadStepProps) {
   const [coverPreview, setCoverPreview] = useState<string | null>(null)
   const [feedPreviews, setFeedPreviews] = useState<string[]>([])
 
   const form = useForm({
     resolver: zodResolver(photoSchema),
     defaultValues: {
-      coverPhoto: defaultValues?.coverPhoto || null,
-      feedPhotos: defaultValues?.feedPhotos || [],
+      coverPhotoUrl: defaultValues?.coverPhotoUrl || null,
+      sampleFeedPhotosUrl: defaultValues?.sampleFeedPhotosUrl || [],
     },
   })
 
   // Initialize previews if defaultValues exist
   useEffect(() => {
-    if (defaultValues?.coverPhoto) {
+    if (defaultValues?.coverPhotoUrl) {
       const reader = new FileReader()
       reader.onload = () => {
         setCoverPreview(reader.result as string)
       }
-      reader.readAsDataURL(defaultValues.coverPhoto)
+      reader.readAsDataURL(defaultValues.coverPhotoUrl)
     }
 
-    if (defaultValues?.feedPhotos?.length) {
+    if (defaultValues?.sampleFeedPhotosUrl?.length) {
       Promise.all(
-        defaultValues.feedPhotos.map((file) => {
+        defaultValues.sampleFeedPhotosUrl.map((file) => {
           return new Promise<string>((resolve) => {
             const reader = new FileReader()
             reader.onload = () => resolve(reader.result as string)
             reader.readAsDataURL(file)
           })
-        })
+        }),
       ).then(setFeedPreviews)
     }
   }, [defaultValues])
 
   const onDrop = useCallback(
-    (acceptedFiles: File[], type: 'cover' | 'feed') => {
-      if (type === 'cover') {
+    (acceptedFiles: File[], type: "cover" | "feed") => {
+      if (type === "cover") {
         const file = acceptedFiles[0]
         if (file) {
           const reader = new FileReader()
           reader.onload = () => {
             setCoverPreview(reader.result as string)
-            form.setValue('coverPhoto', file, { shouldValidate: true })
+            form.setValue("coverPhotoUrl", file, { shouldValidate: true })
           }
           reader.readAsDataURL(file)
         }
       } else {
-        const currentFiles = form.getValues('feedPhotos') || []
+        const currentFiles = form.getValues("sampleFeedPhotosUrl") || []
         const newFiles = [...currentFiles]
         const newPreviews = [...feedPreviews]
 
         acceptedFiles.forEach((file) => {
-          if (newFiles.length < 5) {
+          if (newFiles.length < 4) {
             const reader = new FileReader()
             reader.onload = () => {
               newPreviews.push(reader.result as string)
@@ -95,61 +76,64 @@ export function PhotoUploadStep({
           }
         })
 
-        form.setValue('feedPhotos', newFiles, { shouldValidate: true })
+        form.setValue("sampleFeedPhotosUrl", newFiles, { shouldValidate: true })
       }
     },
-    [form, feedPreviews]
+    [form, feedPreviews],
   )
 
   const removeCoverPhoto = () => {
-    form.setValue('coverPhoto', null, { shouldValidate: true })
+    form.setValue("coverPhotoUrl", null, { shouldValidate: true })
     setCoverPreview(null)
   }
 
   const removeFeedPhoto = (index: number) => {
-    const currentFiles = form.getValues('feedPhotos')
+    const currentFiles = form.getValues("sampleFeedPhotosUrl")
     const newFiles = [...currentFiles]
     newFiles.splice(index, 1)
-    form.setValue('feedPhotos', newFiles, { shouldValidate: true })
+    form.setValue("sampleFeedPhotosUrl", newFiles, { shouldValidate: true })
 
     const newPreviews = [...feedPreviews]
     newPreviews.splice(index, 1)
     setFeedPreviews(newPreviews)
   }
 
-  const { getRootProps: getCoverRootProps, getInputProps: getCoverInputProps } =
-    useDropzone({
-      onDrop: (files) => onDrop(files, 'cover'),
-      accept: { 'image/*': [] },
-      maxFiles: 1,
-    })
+  const { getRootProps: getCoverRootProps, getInputProps: getCoverInputProps } = useDropzone({
+    onDrop: (files) => onDrop(files, "cover"),
+    accept: { "image/*": [] },
+    maxFiles: 1,
+  })
 
-  const { getRootProps: getFeedRootProps, getInputProps: getFeedInputProps } =
-    useDropzone({
-      onDrop: (files) => onDrop(files, 'feed'),
-      accept: { 'image/*': [] },
-      maxFiles: 5,
-    })
+  const { getRootProps: getFeedRootProps, getInputProps: getFeedInputProps } = useDropzone({
+    onDrop: (files) => onDrop(files, "feed"),
+    accept: { "image/*": [] },
+    maxFiles: 4,
+  })
 
-  const feedPhotosCount = form.watch('feedPhotos')?.length || 0
+  const sampleFeedPhotosCount = form.watch("sampleFeedPhotosUrl")?.length || 0
+
+  const handleSubmit = (data: any) => {
+    onSubmit({
+      photos: {
+        coverPhotoUrl: data.coverPhotoUrl,
+        sampleFeedPhotosUrl: data.sampleFeedPhotosUrl,
+      },
+    })
+  }
 
   return (
     <div className="mx-auto max-w-2xl xl:max-w-3xl">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit((data) => onSubmit({ photos: data }))}
-          className="space-y-8"
-        >
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           <div>
             <h2 className="text-2xl font-bold">Cover Photo</h2>
             <p className="text-muted-foreground">
-              Add a cover photo to show what your event will be about.
-              Recommended size is 1920x1080.
+              Add a cover photo to show what your event will be about. Recommended size is 1920x1080.
             </p>
             <FormField
               control={form.control}
-              name="coverPhoto"
-              render={({ field }) => (
+              name="coverPhotoUrl"
+              render={({ field: { value, onChange, ...field } }) => (
                 <FormItem>
                   <FormControl>
                     {!coverPreview ? (
@@ -164,27 +148,19 @@ export function PhotoUploadStep({
                               className="relative cursor-pointer rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80"
                             >
                               <div className="relative flex flex-col gap-2">
-                                <ImagePlus
-                                  className="mx-auto text-foreground"
-                                  size={62}
-                                  strokeWidth={1}
-                                />
-                                <p className="text-muted-foreground">
-                                  Drag a photo here
-                                </p>
+                                <ImagePlus className="mx-auto text-foreground" size={62} strokeWidth={1} />
+                                <p className="text-muted-foreground">Drag a photo here</p>
                                 <span className="mx-auto flex items-center gap-2 text-muted-foreground">
                                   <Separator className="w-20" />
                                   or
                                   <Separator className="w-20" />
                                 </span>
-                                <Button className="bg-blue-400 hover:bg-blue-400/70">
-                                  Select from computer
-                                </Button>
+                                <Button className="bg-primary hover:bg-primary/90">Select from computer</Button>
                               </div>
                               <input {...getCoverInputProps()} />
                             </label>
                           </div>
-                          {/* <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p> */}
+                          <p className="mt-2 text-xs text-muted-foreground">PNG, JPG, GIF up to 10MB</p>
                         </div>
                       </div>
                     ) : null}
@@ -196,17 +172,15 @@ export function PhotoUploadStep({
             {coverPreview && (
               <div className="group relative mx-auto mt-4 h-[200px] w-[340px] md:h-[350px] md:w-[660px] xl:h-[400px] xl:w-[800px]">
                 <Image
-                  src={coverPreview}
+                  src={coverPreview || "/placeholder.svg"}
                   alt="Cover preview"
-                  // width={670}
-                  // height={400}
                   fill
-                  className="mx-auto rounded-lg"
+                  className="mx-auto rounded-lg object-cover"
                 />
                 <button
                   type="button"
                   onClick={removeCoverPhoto}
-                  className="absolute right-2 top-2 rounded-full bg-red-600 p-2 text-white transition-opacity"
+                  className="absolute right-2 top-2 rounded-full bg-red-600 p-2 text-white opacity-0 transition-opacity group-hover:opacity-100"
                   aria-label="Remove cover photo"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -218,19 +192,15 @@ export function PhotoUploadStep({
           <div>
             <h2 className="text-2xl font-bold">Sample Feed Photos</h2>
             <p className="mb-8 text-muted-foreground">
-              Insert sample feed photos to showcase to your attendees. You can
-              add up to 4 photos.
+              Insert sample feed photos to showcase to your attendees. You can add up to 4 photos.
             </p>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-4">
               {feedPreviews.length > 0 && (
-                <div className="grid w-fit grid-cols-2 place-items-center items-center gap-4 md:gap-4 xl:flex xl:grid-cols-4">
+                <div className="grid w-full grid-cols-2 place-items-center items-center gap-4 md:gap-4 xl:flex xl:grid-cols-4">
                   {feedPreviews.map((preview, index) => (
-                    <div
-                      key={index}
-                      className="group relative size-[160px] md:size-[300px] xl:size-[180px]"
-                    >
+                    <div key={index} className="group relative size-[160px] md:size-[300px] xl:size-[180px]">
                       <Image
-                        src={preview}
+                        src={preview || "/placeholder.svg"}
                         alt={`Feed preview ${index + 1}`}
                         fill
                         className="rounded-lg object-cover object-center"
@@ -238,7 +208,7 @@ export function PhotoUploadStep({
                       <button
                         type="button"
                         onClick={() => removeFeedPhoto(index)}
-                        className="absolute right-2 top-2 rounded-full bg-red-600/70 p-2 text-white transition-opacity"
+                        className="absolute right-2 top-2 rounded-full bg-red-600/70 p-2 text-white opacity-0 transition-opacity group-hover:opacity-100"
                         aria-label={`Remove photo ${index + 1}`}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -250,18 +220,15 @@ export function PhotoUploadStep({
 
               <FormField
                 control={form.control}
-                name="feedPhotos"
-                render={({ field }) => (
+                name="sampleFeedPhotosUrl"
+                render={({ field: { value, onChange, ...field } }) => (
                   <FormItem className="w-fit">
                     <FormControl>
-                      {feedPhotosCount < 4 && (
+                      {sampleFeedPhotosCount < 4 && (
                         <div className="w-fit">
                           <div {...getFeedRootProps()} className="w-fit">
-                            <label
-                              htmlFor="file-upload"
-                              // className="w-full border p-8 rounded-lg text-center cursor-pointer"
-                            >
-                              <span className="flex w-full flex-col items-center justify-center rounded-lg border border-[#9D9A98] p-4 text-center font-normal text-foreground xl:hidden">
+                            <label htmlFor="file-upload" className="cursor-pointer">
+                              <span className="flex w-full flex-col items-center justify-center rounded-lg border border-muted p-4 text-center font-normal text-foreground xl:hidden">
                                 <p>Add Photo</p>
                                 <input {...getFeedInputProps()} />
                               </span>
@@ -272,12 +239,11 @@ export function PhotoUploadStep({
                             className="hidden size-[160px] justify-center rounded-lg border px-6 py-10 md:size-[300px] xl:flex xl:size-[180px]"
                           >
                             <div className="text-center">
-                              <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                              <div className="mt-4 flex text-sm leading-6 text-muted-foreground">
                                 <label
                                   htmlFor="file-upload"
                                   className="relative cursor-pointer rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80"
                                 >
-                                  {/* <span>{feedPhotosCount === 0 ? "Upload files" : "Add more images"}</span> */}
                                   <span className="flex flex-col items-center justify-center font-normal text-foreground">
                                     <ImagePlus size={62} strokeWidth={1} />
                                     <p>Add</p>
@@ -285,9 +251,9 @@ export function PhotoUploadStep({
                                   </span>
                                 </label>
                               </div>
-                              {/* <p className="text-xs leading-5 text-gray-600">
-                            PNG, JPG, GIF up to 10MB ({5 - feedPhotosCount} remaining)
-                          </p> */}
+                              <p className="mt-2 text-xs text-muted-foreground">
+                                {4 - sampleFeedPhotosCount} remaining
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -301,15 +267,10 @@ export function PhotoUploadStep({
           </div>
 
           <div className="flex justify-between">
-            <Button
-              className="w-[160px]"
-              type="button"
-              variant="outline"
-              onClick={onBack}
-            >
+            <Button className="w-[160px]" type="button" variant="outline" onClick={onBack}>
               Back
             </Button>
-            <Button className="w-[160px]" type="submit">
+            <Button className="w-[160px]" type="submit" disabled={!form.watch("coverPhotoUrl")}>
               Next
             </Button>
           </div>
@@ -318,3 +279,4 @@ export function PhotoUploadStep({
     </div>
   )
 }
+

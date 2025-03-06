@@ -1,78 +1,63 @@
-'use client'
+"use client"
 
-import * as React from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Asterisk, Search } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import {
-  Command,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { eventDetailsSchema } from '@/lib/schema'
-import { mockVenues } from '@/lib/mock-data'
+import * as React from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Asterisk, Search } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Command, CommandList, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { eventDetailsSchema } from "@/lib/schema"
+import { mockVenues } from "@/lib/mock-data"
+import { Checkbox } from "@/components/ui/checkbox"
+import type { AvailableLocations, EventDetails } from "@/types/event"
+
 interface EventDetailsStepProps {
-  defaultValues?: any
-  onSubmit: (data: any) => void
+  defaultValues?: EventDetails
+  onSubmit: (data: EventDetails) => void
   onBack?: () => void
 }
 
-interface Venue {
-  id: string
-  name: string
-  address: string
-  city: string
-  state: string
-  zipCode: string
-}
-
-export function EventDetailsStep({
-  defaultValues,
-  onSubmit,
-  onBack,
-}: EventDetailsStepProps) {
+export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetailsStepProps) {
   const [open, setOpen] = React.useState(false)
-  const [venues] = React.useState<Venue[]>(mockVenues)
+  const [locations] = React.useState<AvailableLocations[]>(mockVenues)
+  const [manualEntry, setManualEntry] = React.useState(false)
 
   const form = useForm({
     resolver: zodResolver(eventDetailsSchema),
     defaultValues: {
-      name: defaultValues?.name || '',
-      description: defaultValues?.description || '',
-      venue: defaultValues?.venue || {
-        name: '',
-        address: '',
-        city: '',
-        state: '',
-        zipCode: '',
+      title: defaultValues?.title || "",
+      description: defaultValues?.description || "",
+      location: {
+        type: defaultValues?.location?.type || "Physical",
+        venueName: defaultValues?.location?.venueName || "",
+        address: defaultValues?.location?.address || "",
+        city: defaultValues?.location?.city || "",
+        state: defaultValues?.location?.state || "",
+        zipCode: defaultValues?.location?.zipCode || "",
       },
-      startDate: defaultValues?.startDate || '',
-      endDate: defaultValues?.endDate || '',
-      startTime: defaultValues?.startTime || '',
-      endTime: defaultValues?.endTime || '',
+      eventStartDay: defaultValues?.eventStartDay || "",
+      eventEndDay: defaultValues?.eventEndDay || "",
+      eventStartTime: defaultValues?.eventStartTime || "",
+      eventEndTime: defaultValues?.eventEndTime || "",
     },
   })
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (data: EventDetails) => {
     onSubmit(data)
+  }
+
+  const isOnlineEvent = form.watch("location.type") === "Online"
+
+  const handleLocationSelect = (location: AvailableLocations) => {
+    form.setValue("location.venueName", location.venueName)
+    form.setValue("location.address", location.address)
+    form.setValue("location.city", location.city)
+    form.setValue("location.state", location.state)
+    form.setValue("location.zipCode", location.zipCode)
+    setOpen(false)
   }
 
   return (
@@ -80,27 +65,20 @@ export function EventDetailsStep({
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-bold">Event Name</h2>
-          <p className="">
-            Write a name and description to your event so people can find it
-            easily.
+          <p className="text-muted-foreground">
+            Write a name and description to your event so people can find it easily.
           </p>
         </div>
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-8"
-          >
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="name"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Event Title{' '}
-                    <span>
-                      <Asterisk size={10} />
-                    </span>
+                    Event Title <Asterisk className="inline text-destructive" size={10} />
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="Be clear and descriptive." {...field} />
@@ -116,14 +94,11 @@ export function EventDetailsStep({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Event Description{' '}
-                    <span>
-                      <Asterisk size={10} />
-                    </span>
+                    Event Description <Asterisk className="inline text-destructive" size={10} />
                   </FormLabel>
                   <FormControl>
                     <textarea
-                      className="min-h-[100px] w-full rounded-md border border-[#9D9A98] bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       placeholder="Tell your attendees about your event."
                       {...field}
                     />
@@ -134,66 +109,179 @@ export function EventDetailsStep({
             />
 
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Venue Location</h2>
-              <p className="">
-                Help people in the area find your event location.
-              </p>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Event Location</h2>
+                {!isOnlineEvent && (
+                  <Button type="button" variant="outline" onClick={() => setManualEntry(!manualEntry)}>
+                    {manualEntry ? "Search locations" : "Enter Manually"}
+                  </Button>
+                )}
+              </div>
+              <p className="text-muted-foreground">Help people in the area find your event location.</p>
 
               <FormField
                 control={form.control}
-                name="venue"
+                name="location.type"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className="w-full justify-start border-[#9D9A98] text-foreground"
-                        >
-                          <Search className="ml-2 h-4 w-4 shrink-0" />
-                          {field.value?.name ||
-                            'Search for venue or location address'}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[400px] p-0">
-                        <Command>
-                          <CommandInput placeholder="Search venues..." />
-                          <CommandList>
-                            <CommandEmpty>No venues found.</CommandEmpty>
-                            <CommandGroup>
-                              {venues.map((venue) => (
-                                <CommandItem
-                                  key={venue.id}
-                                  value={venue.name}
-                                  onSelect={() => {
-                                    form.setValue('venue', venue, {
-                                      shouldValidate: true,
-                                    })
-                                    setOpen(false)
-                                  }}
-                                >
-                                  {venue.name}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value === "Online"}
+                        onCheckedChange={(checked) => {
+                          const newValue = checked ? "Online" : "Physical"
+                          form.setValue("location.type", newValue)
+                          if (newValue === "Online") {
+                            // Clear physical address fields but keep the name field
+                            form.setValue("location.address", "")
+                            form.setValue("location.city", "")
+                            form.setValue("location.state", "")
+                            form.setValue("location.zipCode", "")
+                          }
+                        }}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>This is an online event</FormLabel>
+                      <p className="text-sm text-muted-foreground">
+                        {isOnlineEvent
+                          ? "Enter the online platform details below"
+                          : "No physical location is needed for this event"}
+                      </p>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="location.venueName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {isOnlineEvent ? "Online Platform" : "Venue Name"}{" "}
+                      <Asterisk className="inline text-destructive" size={10} />
+                    </FormLabel>
+                    {!isOnlineEvent && !manualEntry ? (
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-label="Search for location"
+                            aria-expanded={open}
+                            className="w-full justify-start text-foreground"
+                          >
+                            <Search className="mr-2 h-4 w-4 shrink-0" />
+                            {field.value || "Search for venue or location address"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[400px] p-0">
+                          <Command>
+                            <CommandInput placeholder="Search venues..." />
+                            <CommandList>
+                              <CommandEmpty>No venues found.</CommandEmpty>
+                              <CommandGroup>
+                                {locations.map((location) => (
+                                  <CommandItem
+                                    key={location.id}
+                                    value={location.venueName}
+                                    onSelect={() => handleLocationSelect(location)}
+                                  >
+                                    {location.venueName}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    ) : (
+                      <FormControl>
+                        <Input
+                          placeholder={isOnlineEvent ? "e.g., Zoom, Google Meet, Microsoft Teams" : "Enter venue name"}
+                          {...field}
+                        />
+                      </FormControl>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {form.watch('venue.name') && (
-                <div className="rounded-lg p-4">
+              {!isOnlineEvent && manualEntry && (
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="location.address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Address <Asterisk className="inline text-destructive" size={10} />
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="Street address" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="grid grid-cols-3 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="location.city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            City <Asterisk className="inline text-destructive" size={10} />
+                          </FormLabel>
+                          <FormControl>
+                            <Input placeholder="City" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="location.state"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            State <Asterisk className="inline text-destructive" size={10} />
+                          </FormLabel>
+                          <FormControl>
+                            <Input placeholder="State" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="location.zipCode"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Zip Code <Asterisk className="inline text-destructive" size={10} />
+                          </FormLabel>
+                          <FormControl>
+                            <Input placeholder="Zip code" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {!isOnlineEvent && !manualEntry && form.watch("location.venueName") && (
+                <div className="rounded-lg border p-4">
                   <div className="space-y-1">
-                    <p className="font-bold">{form.watch('venue.name')}</p>
-                    <p className="text-sm">{form.watch('venue.address')}</p>
+                    <p className="font-bold">{form.watch("location.venueName")}</p>
+                    <p className="text-sm">{form.watch("location.address")}</p>
                     <p className="text-sm">
-                      {form.watch('venue.city')}, {form.watch('venue.state')}{' '}
-                      {form.watch('venue.zipCode')}
+                      {form.watch("location.city")}, {form.watch("location.state")} {form.watch("location.zipCode")}
                     </p>
                   </div>
                 </div>
@@ -202,15 +290,17 @@ export function EventDetailsStep({
 
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">Date and time</h2>
-              <p className="">Choose a date for your event.</p>
+              <p className="text-muted-foreground">Choose a date and time for your event.</p>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="startDate"
+                  name="eventStartDay"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Start Date *</FormLabel>
+                      <FormLabel>
+                        Start Date <Asterisk className="inline text-destructive" size={10} />
+                      </FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
@@ -220,10 +310,12 @@ export function EventDetailsStep({
                 />
                 <FormField
                   control={form.control}
-                  name="endDate"
+                  name="eventEndDay"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>End Date *</FormLabel>
+                      <FormLabel>
+                        End Date <Asterisk className="inline text-destructive" size={10} />
+                      </FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
@@ -233,13 +325,15 @@ export function EventDetailsStep({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="startTime"
+                  name="eventStartTime"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Start Time *</FormLabel>
+                      <FormLabel>
+                        Start Time <Asterisk className="inline text-destructive" size={10} />
+                      </FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
                       </FormControl>
@@ -249,10 +343,12 @@ export function EventDetailsStep({
                 />
                 <FormField
                   control={form.control}
-                  name="endTime"
+                  name="eventEndTime"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>End Time *</FormLabel>
+                      <FormLabel>
+                        End Time <Asterisk className="inline text-destructive" size={10} />
+                      </FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
                       </FormControl>
@@ -279,3 +375,4 @@ export function EventDetailsStep({
     </div>
   )
 }
+
