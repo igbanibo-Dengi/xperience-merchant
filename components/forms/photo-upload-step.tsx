@@ -19,24 +19,24 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
   const form = useForm({
     resolver: zodResolver(photoSchema),
     defaultValues: {
-      coverPhotoUrl: defaultValues?.coverPhotoUrl || null,
-      sampleFeedPhotosUrl: defaultValues?.sampleFeedPhotosUrl || [],
+      coverPhoto: defaultValues?.coverPhoto || null,
+      sampleFeedPhotos: defaultValues?.sampleFeedPhotos || [],
     },
   })
 
   // Initialize previews if defaultValues exist
   useEffect(() => {
-    if (defaultValues?.coverPhotoUrl) {
+    if (defaultValues?.coverPhoto) {
       const reader = new FileReader()
       reader.onload = () => {
         setCoverPreview(reader.result as string)
       }
-      reader.readAsDataURL(defaultValues.coverPhotoUrl)
+      reader.readAsDataURL(defaultValues.coverPhoto)
     }
 
-    if (defaultValues?.sampleFeedPhotosUrl?.length) {
+    if (defaultValues?.sampleFeedPhotos?.length) {
       Promise.all(
-        defaultValues.sampleFeedPhotosUrl.map((file) => {
+        defaultValues.sampleFeedPhotos.map((file) => {
           return new Promise<string>((resolve) => {
             const reader = new FileReader()
             reader.onload = () => resolve(reader.result as string)
@@ -55,12 +55,12 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
           const reader = new FileReader()
           reader.onload = () => {
             setCoverPreview(reader.result as string)
-            form.setValue("coverPhotoUrl", file, { shouldValidate: true })
+            form.setValue("coverPhoto", file, { shouldValidate: true })
           }
           reader.readAsDataURL(file)
         }
       } else {
-        const currentFiles = form.getValues("sampleFeedPhotosUrl") || []
+        const currentFiles = form.getValues("sampleFeedPhotos") || []
         const newFiles = [...currentFiles]
         const newPreviews = [...feedPreviews]
 
@@ -76,22 +76,22 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
           }
         })
 
-        form.setValue("sampleFeedPhotosUrl", newFiles, { shouldValidate: true })
+        form.setValue("sampleFeedPhotos", newFiles, { shouldValidate: true })
       }
     },
     [form, feedPreviews],
   )
 
   const removeCoverPhoto = () => {
-    form.setValue("coverPhotoUrl", null, { shouldValidate: true })
+    form.setValue("coverPhoto", null, { shouldValidate: true })
     setCoverPreview(null)
   }
 
   const removeFeedPhoto = (index: number) => {
-    const currentFiles = form.getValues("sampleFeedPhotosUrl")
+    const currentFiles = form.getValues("sampleFeedPhotos")
     const newFiles = [...currentFiles]
     newFiles.splice(index, 1)
-    form.setValue("sampleFeedPhotosUrl", newFiles, { shouldValidate: true })
+    form.setValue("sampleFeedPhotos", newFiles, { shouldValidate: true })
 
     const newPreviews = [...feedPreviews]
     newPreviews.splice(index, 1)
@@ -110,13 +110,13 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
     maxFiles: 4,
   })
 
-  const sampleFeedPhotosCount = form.watch("sampleFeedPhotosUrl")?.length || 0
+  const sampleFeedPhotosCount = form.watch("sampleFeedPhotos")?.length || 0
 
   const handleSubmit = (data: any) => {
     onSubmit({
       photos: {
-        coverPhotoUrl: data.coverPhotoUrl,
-        sampleFeedPhotosUrl: data.sampleFeedPhotosUrl,
+        coverPhoto: data.coverPhoto,
+        sampleFeedPhotos: data.sampleFeedPhotos,
       },
     })
   }
@@ -132,7 +132,7 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
             </p>
             <FormField
               control={form.control}
-              name="coverPhotoUrl"
+              name="coverPhoto"
               render={({ field: { value, onChange, ...field } }) => (
                 <FormItem>
                   <FormControl>
@@ -220,7 +220,7 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
 
               <FormField
                 control={form.control}
-                name="sampleFeedPhotosUrl"
+                name="sampleFeedPhotos"
                 render={({ field: { value, onChange, ...field } }) => (
                   <FormItem className="w-fit">
                     <FormControl>
@@ -270,7 +270,7 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
             <Button className="w-[160px]" type="button" variant="outline" onClick={onBack}>
               Back
             </Button>
-            <Button className="w-[160px]" type="submit" disabled={!form.watch("coverPhotoUrl")}>
+            <Button className="w-[160px]" type="submit" disabled={!form.watch("coverPhoto")}>
               Next
             </Button>
           </div>

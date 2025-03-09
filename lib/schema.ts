@@ -108,7 +108,7 @@ export const eventDetailsSchema = z.object({
 })
 
 export const photoSchema = z.object({
-  coverPhotoUrl: z
+  coverPhoto: z
     .any()
     .refine((file) => file instanceof File || file === null, {
       message: "Cover photo must be a file",
@@ -116,7 +116,7 @@ export const photoSchema = z.object({
     .refine((file) => file !== null, {
       message: "Cover photo is required",
     }),
-  sampleFeedPhotosUrl: z
+  sampleFeedPhotos: z
     .array(z.any().refine((file) => file instanceof File, "Feed photo must be a file"))
     .max(4, "Maximum 4 feed photos allowed"),
 })

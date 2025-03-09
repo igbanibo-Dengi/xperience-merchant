@@ -106,10 +106,10 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit }: ReviewStepPr
             <div className="mt-4 space-y-4">
               <div>
                 <h4 className="font-medium">Cover Photo</h4>
-                {eventImages.coverPhotoUrl && (
+                {eventImages.coverPhoto && (
                   <div className="mt-2 h-[200px] w-full overflow-hidden rounded-lg">
                     <Image
-                      src={URL.createObjectURL(eventImages.coverPhotoUrl) || "/placeholder.svg"}
+                      src={URL.createObjectURL(eventImages.coverPhoto) || "/placeholder.svg"}
                       alt="Cover photo"
                       width={400}
                       height={200}
@@ -118,11 +118,11 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit }: ReviewStepPr
                   </div>
                 )}
               </div>
-              {eventImages.sampleFeedPhotosUrl && eventImages.sampleFeedPhotosUrl.length > 0 && (
+              {eventImages.sampleFeedPhotos && eventImages.sampleFeedPhotos.length > 0 && (
                 <div>
                   <h4 className="font-medium">Sample Feed Photos</h4>
                   <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
-                    {eventImages.sampleFeedPhotosUrl.map((photo, index) => (
+                    {eventImages.sampleFeedPhotos.map((photo, index) => (
                       <div key={index} className="h-[100px] overflow-hidden rounded-lg">
                         <Image
                           src={URL.createObjectURL(photo) || "/placeholder.svg"}

@@ -8,6 +8,8 @@ import { ExperienceMomentsStep } from "./experience-moments-step"
 import { ReviewStep } from "./review-step"
 import type { EventData } from "@/types/event"
 import { EventSuccess } from "./event-suucess"
+import { uploadMultipleImages } from "@/lib/actions/upload-multiple-images"
+import { uploadImage } from "@/lib/actions/uploadImage"
 
 const steps = ["Event Details", "Add Photos", "Set Experience Moments", "Review Content"]
 
@@ -29,8 +31,8 @@ const initialFormState: EventData = {
     eventEndTime: "",
   },
   eventImages: {
-    coverPhotoUrl: null,
-    sampleFeedPhotosUrl: [],
+    coverPhoto: null,
+    sampleFeedPhotos: [],
   },
   experienceMoments: {
     active: false,
@@ -84,10 +86,70 @@ export function EventCreationForm() {
     }
   }
 
-  const handleSubmit = () => {
-    console.log("Form submitted:", formData)
-    // setSuccess(true)
-  }
+  const handleSubmit = async () => {
+    console.log("Initial Form Data:", formData);
+
+    // Create a copy of formData
+    let formDataCopy = { ...formData };
+
+    // Upload cover photo if it exists
+    if (formData.eventImages.coverPhoto) {
+      const imageFormData = new FormData();
+      imageFormData.append("image", formData.eventImages.coverPhoto);
+
+      try {
+        const response = await uploadImage(imageFormData);
+        console.log("Cover Photo Response:", response);
+
+        if (response.success && response.data) {
+          formDataCopy.eventImages.coverPhotoUrl = response.data.mediaUrl;
+        }
+      } catch (error) {
+        console.error("Error uploading cover photo:", error);
+      }
+    }
+
+    // Upload multiple sample feed photos if they exist
+    if (formData.eventImages.sampleFeedPhotos?.length) {
+      const multipleImageFormData = new FormData();
+      formData.eventImages.sampleFeedPhotos.forEach((file) =>
+        multipleImageFormData.append("images", file)
+      );
+
+      try {
+        const response = await uploadMultipleImages(multipleImageFormData);
+        console.log("Multiple Upload Response:", response);
+
+        if (response.success && response.data) {
+          formDataCopy.eventImages.sampleFeedPhotosUrls = response.data.mediaUrl; // Ensure this is an array
+        }
+      } catch (error) {
+        console.error("Error uploading sample feed photos:", error);
+      }
+    }
+
+    // Restructure `formDataCopy` to match the expected API format
+    const formattedData = {
+      title: formDataCopy.eventDetails.title,
+      description: formDataCopy.eventDetails.description,
+      location: formDataCopy.eventDetails.location,
+      eventStartDay: formDataCopy.eventDetails.eventStartDay,
+      eventEndDay: formDataCopy.eventDetails.eventEndDay,
+      eventStartTime: formDataCopy.eventDetails.eventStartTime,
+      eventEndTime: formDataCopy.eventDetails.eventEndTime,
+      xperienceMoment: {
+        active: formDataCopy.experienceMoments.active,
+        recurrence: formDataCopy.experienceMoments.recurrence || 0,
+        duration: formDataCopy.experienceMoments.duration || 0,
+      },
+      coverPhotoUrl: formDataCopy.eventImages.coverPhotoUrl || "",
+      sampleFeedPhotosUrl: formDataCopy.eventImages.sampleFeedPhotosUrls || [],
+    };
+
+    console.log("Formatted Data:", formattedData);
+  };
+
+
 
   return (
     <>

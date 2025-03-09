@@ -33,9 +33,13 @@ export interface AvailableLocations {
 }
 
 export interface EventImages {
-  coverPhotoUrl?: File | null
-  sampleFeedPhotosUrl?: File[]
+  coverPhoto?: File | null // File before upload
+  coverPhotoUrl?: string // Uploaded URL from server
+
+  sampleFeedPhotos?: File[] // Files before upload
+  sampleFeedPhotosUrls?: string[] // Uploaded URLs from server
 }
+
 
 export interface ExperienceMoments {
   active: boolean
@@ -45,8 +49,8 @@ export interface ExperienceMoments {
 
 export interface PhotoUploadStepProps {
   defaultValues?: {
-    coverPhotoUrl?: File | null
-    sampleFeedPhotosUrl?: File[]
+    coverPhoto?: File | null
+    sampleFeedPhotos?: File[]
   }
   onSubmit: (data: any) => void
   onBack: () => void
