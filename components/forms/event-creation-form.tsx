@@ -166,7 +166,7 @@ export function EventCreationForm() {
 
       if (result.success) {
         console.log("Event created successfully:", result.data)
-        // setSuccess(true)
+        setSuccess(true)
       } else {
         console.error("Failed to create event:", result.message)
         // Todo: Add error state and display to user
