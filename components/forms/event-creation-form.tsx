@@ -100,7 +100,7 @@ export function EventCreationForm() {
 
 
     // Create a copy of formData
-    let formDataCopy = { ...formData };
+    const formDataCopy = { ...formData };
 
     // Upload cover photo if it exists
     if (formData.eventImages.coverPhoto) {
@@ -158,13 +158,11 @@ export function EventCreationForm() {
       sampleFeedPhotosUrl: formDataCopy.eventImages.sampleFeedPhotosUrls || [],
     };
 
-    console.log("Formatted Data:", formattedData);
 
     // Submit the data using the server action
     try {
       const result = await createEvent(formattedData)
 
-      console.log('result', result);
 
       if (result.success) {
         console.log("Event created successfully:", result.data)
