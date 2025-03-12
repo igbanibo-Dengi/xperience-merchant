@@ -40,38 +40,36 @@ export async function getAllPlans() {
 
 
 export async function getUserPlan() {
-
   try {
-    const url = `${process.env.BASE_URL}/plan/user`
+    const url = `${process.env.BASE_URL}/plan/user`;
 
-    const token = (await cookies()).get('auth_token')?.value
+    const token = (await cookies()).get('auth_token')?.value;
 
     if (!token) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
-      }
-    })
+      },
+    });
 
     if (!response.ok) {
       throw new Error(
         `Failed to fetch data: ${response.status} ${response.statusText}`
-      )
+      );
     }
 
-    const data = response.json()
+    const data = await response.json(); // Fix: Add "await"
 
-    return data
-
+    return data;
   } catch (error) {
-    console.error('Error in get plans action:', error)
+    console.error('Error in get plans action:', error);
     return NextResponse.json(
       { message: 'Failed to fetch data' },
       { status: 500 }
-    )
+    );
   }
 }

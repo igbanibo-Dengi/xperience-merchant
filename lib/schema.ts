@@ -105,7 +105,10 @@ export const eventDetailsSchema = z.object({
   eventEndDay: z.string().min(1, "End date is required"),
   eventStartTime: z.string().min(1, "Start time is required"),
   eventEndTime: z.string().min(1, "End time is required"),
+  hashtags: z.array(z.string()).default([]),
 })
+
+
 
 export const photoSchema = z.object({
   coverPhoto: z

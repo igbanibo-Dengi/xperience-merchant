@@ -12,6 +12,8 @@ export interface EventDetails {
   eventEndDay: string
   eventStartTime: string
   eventEndTime: string
+  hashtags: string[]
+  planId: string
 }
 
 export interface EventLocation {
@@ -73,3 +75,17 @@ export interface ReviewStepProps {
   onEdit: (step: string) => void
 }
 
+export interface FormattedData {
+  title: string;
+  description: string;
+  location: EventLocation;
+  eventStartDay: string;
+  eventEndDay: string;
+  eventStartTime: string;
+  eventEndTime: string;
+  hashtags: string[];
+  xperienceMoment: ExperienceMoments;
+  planId: string;
+  coverPhotoUrl: string;
+  sampleFeedPhotosUrl: string[];
+}

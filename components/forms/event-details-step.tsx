@@ -13,6 +13,7 @@ import { eventDetailsSchema } from "@/lib/schema"
 import { mockVenues } from "@/lib/mock-data"
 import { Checkbox } from "@/components/ui/checkbox"
 import type { AvailableLocations, EventDetails } from "@/types/event"
+import { Badge } from "@/components/ui/badge"
 
 interface EventDetailsStepProps {
   defaultValues?: EventDetails
@@ -24,6 +25,7 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
   const [open, setOpen] = React.useState(false)
   const [locations] = React.useState<AvailableLocations[]>(mockVenues)
   const [manualEntry, setManualEntry] = React.useState(false)
+  const [hashtagInput, setHashtagInput] = React.useState("")
 
   const form = useForm({
     resolver: zodResolver(eventDetailsSchema),
@@ -42,6 +44,7 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
       eventEndDay: defaultValues?.eventEndDay || "",
       eventStartTime: defaultValues?.eventStartTime || "",
       eventEndTime: defaultValues?.eventEndTime || "",
+      hashtags: defaultValues?.hashtags || [],
     },
   })
 
@@ -58,6 +61,27 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
     form.setValue("location.state", location.state)
     form.setValue("location.zipCode", location.zipCode)
     setOpen(false)
+  }
+
+  const handleAddHashtag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && hashtagInput.trim() !== "") {
+      e.preventDefault()
+      const newHashtag = hashtagInput.trim().startsWith("#") ? hashtagInput.trim() : `#${hashtagInput.trim()}`
+
+      const currentHashtags = form.getValues("hashtags") || []
+      if (!currentHashtags.includes(newHashtag)) {
+        form.setValue("hashtags", [...currentHashtags, newHashtag])
+        setHashtagInput("")
+      }
+    }
+  }
+
+  const handleRemoveHashtag = (tagToRemove: string) => {
+    const currentHashtags = form.getValues("hashtags") || []
+    form.setValue(
+      "hashtags",
+      currentHashtags.filter((tag) => tag !== tagToRemove),
+    )
   }
 
   return (
@@ -356,6 +380,41 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                     </FormItem>
                   )}
                 />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">Hashtags</h2>
+              <p className="text-muted-foreground">Add hashtags to help people discover your event.</p>
+
+              <div className="space-y-4">
+                <div className="flex flex-col space-y-2">
+                  <FormLabel>Event Hashtags</FormLabel>
+                  <Input
+                    placeholder="Type a hashtag and press Enter"
+                    value={hashtagInput}
+                    onChange={(e) => setHashtagInput(e.target.value)}
+                    onKeyDown={handleAddHashtag}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Type a word and press Enter. The # will be added automatically.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {form.watch("hashtags")?.map((tag: string, index: number) => (
+                    <Badge key={index} variant="secondary" className="px-3 py-1 text-sm">
+                      {tag}
+                      <button
+                        type="button"
+                        className="ml-2 text-muted-foreground hover:text-foreground"
+                        onClick={() => handleRemoveHashtag(tag)}
+                      >
+                        ×
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </div>
 

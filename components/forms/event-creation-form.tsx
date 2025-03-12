@@ -10,6 +10,8 @@ import type { EventData } from "@/types/event"
 import { EventSuccess } from "./event-suucess"
 import { uploadMultipleImages } from "@/lib/actions/upload-multiple-images"
 import { uploadImage } from "@/lib/actions/uploadImage"
+import { getUserPlan } from "@/lib/actions/plans/plans.actions"
+import { createEvent } from "@/lib/actions/events/createEvent"
 
 const steps = ["Event Details", "Add Photos", "Set Experience Moments", "Review Content"]
 
@@ -29,6 +31,8 @@ const initialFormState: EventData = {
     eventEndDay: "",
     eventStartTime: "",
     eventEndTime: "",
+    hashtags: [],
+    planId: "",
   },
   eventImages: {
     coverPhoto: null,
@@ -87,7 +91,13 @@ export function EventCreationForm() {
   }
 
   const handleSubmit = async () => {
-    console.log("Initial Form Data:", formData);
+
+    console.log('initial Data', formData);
+
+    // Get the user's plan
+    const plan = await getUserPlan()
+    const userPlanId = plan.data[0]._id
+
 
     // Create a copy of formData
     let formDataCopy = { ...formData };
@@ -121,7 +131,7 @@ export function EventCreationForm() {
         console.log("Multiple Upload Response:", response);
 
         if (response.success && response.data) {
-          formDataCopy.eventImages.sampleFeedPhotosUrls = response.data.mediaUrl; // Ensure this is an array
+          formDataCopy.eventImages.sampleFeedPhotosUrls = response.data.mediaUrl;
         }
       } catch (error) {
         console.error("Error uploading sample feed photos:", error);
@@ -137,16 +147,35 @@ export function EventCreationForm() {
       eventEndDay: formDataCopy.eventDetails.eventEndDay,
       eventStartTime: formDataCopy.eventDetails.eventStartTime,
       eventEndTime: formDataCopy.eventDetails.eventEndTime,
+      hashtags: formDataCopy.eventDetails.hashtags,
       xperienceMoment: {
         active: formDataCopy.experienceMoments.active,
-        recurrence: formDataCopy.experienceMoments.recurrence || 0,
-        duration: formDataCopy.experienceMoments.duration || 0,
+        recurrence: formDataCopy.experienceMoments.recurrence,
+        duration: formDataCopy.experienceMoments.duration,
       },
+      planId: userPlanId,
       coverPhotoUrl: formDataCopy.eventImages.coverPhotoUrl || "",
       sampleFeedPhotosUrl: formDataCopy.eventImages.sampleFeedPhotosUrls || [],
     };
 
     console.log("Formatted Data:", formattedData);
+
+    // Submit the data using the server action
+    try {
+      const result = await createEvent(formattedData)
+
+      console.log('result', result);
+
+      if (result.success) {
+        console.log("Event created successfully:", result.data)
+        // setSuccess(true)
+      } else {
+        console.error("Failed to create event:", result.message)
+        // Todo: Add error state and display to user
+      }
+    } catch (error) {
+      console.error("Error submitting event:", error)
+    }
   };
 
 
