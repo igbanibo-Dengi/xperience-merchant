@@ -73,6 +73,7 @@ export interface ReviewStepProps {
   onSubmit: () => void
   onBack: () => void
   onEdit: (step: string) => void
+  submitting: boolean
 }
 
 export interface FormattedData {
@@ -89,3 +90,69 @@ export interface FormattedData {
   coverPhotoUrl: string;
   sampleFeedPhotosUrl: string[];
 }
+
+
+/////FOR FETCHED EVENT DATA==========================///////////////
+
+export interface Location {
+  type: 'Physical' | 'Virtual';
+  venueName?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+}
+
+export interface OrganizerSettings {
+  pushNotifications: boolean;
+  mode: string;
+}
+
+export interface Organizer {
+  settings: OrganizerSettings;
+  isProfileComplete: boolean;
+  _id: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  userType: 'organizer' | 'attendee';
+  googleId: string | null;
+  companyName: string;
+  address: string;
+  industry: string;
+  passwordHash: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Plan {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  features: string[];
+  createdAt: string;
+  updatedAt: string;
+  organizerId: string;
+}
+
+export interface Event {
+  location: Location;
+  _id: string;
+  organizerId: Organizer;
+  planId: Plan;
+  title: string;
+  description: string;
+  eventStartDay: string;
+  eventEndDay: string;
+  eventStartTime: string;
+  eventEndTime: string;
+  coverPhotoUrl: string[];
+  sampleFeedPhotosUrl: string[];
+  hashtags: string[];
+  createdAt: string;
+  updatedAt: string;
+  xperienceMomentId: string;
+}
+
+export type EventsData = Event[];

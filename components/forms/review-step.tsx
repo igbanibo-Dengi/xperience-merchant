@@ -6,7 +6,7 @@ import { Pencil } from "lucide-react"
 import Image from "next/image"
 import type { ReviewStepProps } from "@/types/event"
 
-export function ReviewStep({ eventData, onSubmit, onBack, onEdit }: ReviewStepProps) {
+export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: ReviewStepProps) {
   const { eventDetails, eventImages, experienceMoments } = eventData
 
   // Format date for display
@@ -182,7 +182,7 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit }: ReviewStepPr
             Back
           </Button>
           <Button className="w-[160px]" onClick={onSubmit}>
-            Submit Event
+            {submitting ? "Submitting..." : "Submit"}
           </Button>
         </div>
       </div>

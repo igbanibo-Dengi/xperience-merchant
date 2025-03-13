@@ -49,6 +49,7 @@ export function EventCreationForm() {
   const [currentStep, setCurrentStep] = useState(0)
   const [formData, setFormData] = useState<EventData>(initialFormState)
   const [success, setSuccess] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const handleNext = (stepData: Partial<EventData>) => {
     setFormData((prev) => {
@@ -91,8 +92,7 @@ export function EventCreationForm() {
   }
 
   const handleSubmit = async () => {
-
-    console.log('initial Data', formData);
+    setSubmitting(true)
 
     // Get the user's plan
     const plan = await getUserPlan()
@@ -109,7 +109,7 @@ export function EventCreationForm() {
 
       try {
         const response = await uploadImage(imageFormData);
-        console.log("Cover Photo Response:", response);
+        // console.log("Cover Photo Response:", response);
 
         if (response.success && response.data) {
           formDataCopy.eventImages.coverPhotoUrl = response.data.mediaUrl;
@@ -128,7 +128,7 @@ export function EventCreationForm() {
 
       try {
         const response = await uploadMultipleImages(multipleImageFormData);
-        console.log("Multiple Upload Response:", response);
+        // console.log("Multiple Upload Response:", response);
 
         if (response.success && response.data) {
           formDataCopy.eventImages.sampleFeedPhotosUrls = response.data.mediaUrl;
@@ -163,10 +163,10 @@ export function EventCreationForm() {
     try {
       const result = await createEvent(formattedData)
 
-
       if (result.success) {
         console.log("Event created successfully:", result.data)
         setSuccess(true)
+        setSubmitting(false)
       } else {
         console.error("Failed to create event:", result.message)
         // Todo: Add error state and display to user
@@ -206,7 +206,13 @@ export function EventCreationForm() {
             />
           )}
           {currentStep === 3 && (
-            <ReviewStep eventData={formData} onSubmit={handleSubmit} onBack={handleBack} onEdit={handleEdit} />
+            <ReviewStep
+              eventData={formData}
+              onSubmit={handleSubmit}
+              submitting={submitting}
+              onBack={handleBack}
+              onEdit={handleEdit}
+            />
           )}
         </div>
       )}

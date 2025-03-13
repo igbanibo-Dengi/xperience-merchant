@@ -8,7 +8,7 @@ import PastEvents from '@/components/PastEvents'
 
 const page = () => {
   return (
-    <div>
+    <div className='pb-20'>
       <h3 className="text-[32px] font-bold">My Events</h3>
       <Tabs defaultValue="all" className="mt-8 w-full p-0">
         <TabsList className="m-0 rounded-none bg-background p-0">

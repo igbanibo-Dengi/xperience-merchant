@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("auth_token")
   const { pathname } = request.nextUrl
 
-  console.log("Middleware Executed:", { pathname, token })
+  // console.log("Middleware Executed:", { pathname, token })
 
   // Allow access to public paths even without token
   if (publicPaths.includes(pathname)) {

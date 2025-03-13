@@ -18,6 +18,7 @@ export async function logInAction(values: signIn) {
       body: JSON.stringify(values),
     })
 
+
     if (!response.ok) {
       const error = await response.json()
       console.error(
@@ -43,7 +44,7 @@ export async function logInAction(values: signIn) {
       sameSite: 'strict',
       path: '/',
     })
-    // console.log("Auth Token successfully stored in cookie.");
+    console.log("Auth Token successfully stored in cookie.");
     return { success: true, user: authData.user || null }
   } catch (error) {
     console.error('Error in log-in action:', error)

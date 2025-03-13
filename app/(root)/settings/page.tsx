@@ -1,9 +1,12 @@
 import ImageUploader from '@/components/ImageUpload'
 import ImageUploadForm from '@/components/ImageUpload'
 import MultipleImageUploader from '@/components/multiple-image-uploader'
+import { getAllEvents } from '@/lib/actions/events/getAllEvents'
+import { getAllPlans, getUserPlan } from '@/lib/actions/plans/plans.actions'
 import React from 'react'
 
-const page = () => {
+const page = async () => {
+
   return (
     <main className="min-h-screen p-4 md:p-24 bg-gray-50">
       <div className="max-w-4xl mx-auto">

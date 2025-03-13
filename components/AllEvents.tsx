@@ -1,194 +1,161 @@
-import { Dot, Plus, Search } from 'lucide-react'
-import React from 'react'
-import { Input } from './ui/input'
-import { Button } from './ui/button'
-import Link from 'next/link'
-import Image from 'next/image'
+import { Dot, Plus, Search } from "lucide-react"
+import { Input } from "./ui/input"
+import { Button } from "./ui/button"
+import Link from "next/link"
+import Image from "next/image"
+import { getAllEvents } from "@/lib/actions/events/getAllEvents"
+import type { EventsData, Event } from "@/types/event"
 
-type Event = {
-  id: number
-  title: string
-  date: string
-  time: string
-  type: 'live' | 'upcoming'
-}
+const AllEvents = async () => {
+  let eventsData: EventsData = []
 
-const AllEvents = () => {
-  // Dummy event data
-  const events: Event[] = [
-    // Live Events
-    {
-      id: 1,
-      title: 'Taylor Swift Eras Tour',
-      date: 'November 1, 2024',
-      time: '7:00 PM',
-      type: 'live',
-    },
-    {
-      id: 2,
-      title: 'Super Bowl Halftime Show',
-      date: 'November 3, 2024',
-      time: '8:30 PM',
-      type: 'live',
-    },
+  try {
+    const response = await getAllEvents()
+    // Access the events array from response.data
+    eventsData = Array.isArray(response.data) ? response.data : []
+  } catch (error) {
+    console.error("Failed to fetch events:", error)
+    // Continue with empty array
+  }
 
-    // Upcoming Events
-    {
-      id: 3,
-      title: 'Coldplay Concert',
-      date: 'December 15, 2024',
-      time: '8:00 PM',
-      type: 'upcoming',
-    },
-    {
-      id: 4,
-      title: 'Ed Sheeran Live',
-      date: 'January 12, 2025',
-      time: '6:00 PM',
-      type: 'upcoming',
-    },
-    {
-      id: 5,
-      title: 'Adele: 25th Anniversary Concert',
-      date: 'February 18, 2025',
-      time: '9:00 PM',
-      type: 'upcoming',
-    },
-    {
-      id: 6,
-      title: 'The Weekend World Tour',
-      date: 'March 5, 2025',
-      time: '7:30 PM',
-      type: 'upcoming',
-    },
-    {
-      id: 7,
-      title: 'Billie Eilish Live in Tokyo',
-      date: 'April 22, 2025',
-      time: '8:00 PM',
-      type: 'upcoming',
-    },
-    {
-      id: 8,
-      title: 'Jazz Night at the Opera',
-      date: 'May 10, 2025',
-      time: '7:00 PM',
-      type: 'upcoming',
-    },
-  ]
+  const currentDate = new Date()
 
-  // Separate live and upcoming events
-  const liveEvents = events.filter((event) => event.type === 'live')
-  const upcomingEvents = events.filter((event) => event.type === 'upcoming')
+  const liveEvents = eventsData.filter((event) => {
+    try {
+      const eventStartDateTime = new Date(`${event.eventStartDay}T${event.eventStartTime}`)
+      const eventEndDateTime = new Date(`${event.eventEndDay}T${event.eventEndTime}`)
+      return currentDate >= eventStartDateTime && currentDate <= eventEndDateTime
+    } catch (error) {
+      console.error(`Error parsing date for event ${event._id}:`, error)
+      return false
+    }
+  })
+
+  const upcomingEvents = eventsData.filter((event) => {
+    try {
+      const eventStartDateTime = new Date(`${event.eventStartDay}T${event.eventStartTime}`)
+      return eventStartDateTime > currentDate
+    } catch (error) {
+      console.error(`Error parsing date for event ${event._id}:`, error)
+      return false
+    }
+  })
+
+  const formatEventDate = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr)
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    } catch (error) {
+      return dateStr
+    }
+  }
+
+  const formatEventTime = (timeStr: string) => {
+    try {
+      // Parse time in 24-hour format (HH:MM:SS)
+      const [hours, minutes] = timeStr.split(":")
+      const date = new Date()
+      date.setHours(Number.parseInt(hours, 10))
+      date.setMinutes(Number.parseInt(minutes, 10))
+
+      return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      })
+    } catch (error) {
+      return timeStr
+    }
+  }
+
+  const EventCard = ({ event }: { event: Event }) => (
+    <div
+      key={event._id}
+      className="mt-4 flex flex-col md:flex-row md:h-[160px] items-start md:items-center justify-between rounded-md border-2 p-4 md:p-8 gap-4"
+    >
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+        <div className="relative w-full md:w-[100px] h-[100px] rounded-md overflow-hidden">
+          <Image
+            src={event.coverPhotoUrl?.[0] || "/placeholder.svg?height=100&width=100"}
+            alt={event.title}
+            fill
+            className="object-cover rounded-md"
+          // onError={(e) => {
+          //   const target = e.target as HTMLImageElement
+          //   target.src = "/placeholder.svg?height=100&width=100"
+          // }}
+          />
+        </div>
+        <div>
+          <p className="text-xl font-semibold">{event.title}</p>
+          <p className="text-muted-foreground">
+            {formatEventDate(event.eventStartDay)} at {formatEventTime(event.eventStartTime)}
+          </p>
+          {event.location.type === "Physical" && event.location.city && event.location.state && (
+            <p className="text-sm text-muted-foreground mt-1">
+              {event.location.city}, {event.location.state}
+            </p>
+          )}
+        </div>
+      </div>
+      <Button size="sm" className="bg-primary hover:bg-primary/90 w-full md:w-auto" asChild>
+        <Link href={`/events/${event._id}`}>View Event Details</Link>
+      </Button>
+    </div>
+  )
 
   return (
     <section className="mt-8 max-w-4xl">
       <div className="flex items-center justify-between">
         <span className="relative flex items-center">
           <Search className="absolute left-2 top-3 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Search for events"
-            className="pl-12 text-2xl"
-          />
+          <Input type="text" placeholder="Search for events" className="pl-12 text-2xl" />
         </span>
-
         <Button size="lg" asChild>
           <Link href="/events/new-event">
-            <Plus className="mr-2 h-4 w-4" />
-            Create Event
+            <Plus className="mr-2 h-4 w-4" /> Create Event
           </Link>
         </Button>
       </div>
 
       {/* LIVE EVENTS */}
-      <div>
-        <h2 className="flex items-center gap-2">
-          <span className="text-6xl text-primary">•</span>
-          <span className="text-lg font-bold text-primary">Live Now</span>
+      <div className="mt-8">
+        <h2 className="flex items-center gap-2 mb-4">
+          <span className="text-primary">
+            <Dot className="h-8 w-8" />
+          </span>
+          <span className="text-lg font-bold">Live Now</span>
         </h2>
         {liveEvents.length > 0 ? (
-          liveEvents.map((event) => (
-            <div
-              key={event.id}
-              className="mt-4 flex h-[160px] min-h-[100px] items-center justify-between rounded-md border-2 p-8"
-            >
-              <span className="flex items-center gap-2">
-                <p className="text-2xl font-semibold capitalize">
-                  {new Date(event.date).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </p>
-                <Image
-                  src="/images/swift.jpg"
-                  alt="Event Image"
-                  width={100}
-                  height={100}
-                />
-                <span>
-                  <p className="text-xl font-semibold">{event.title}</p>
-                  <p>{`${event.date} at ${event.time}`}</p>
-                </span>
-              </span>
-              <span className="flex h-full items-end bg-red-50">
-                <Button
-                  size="sm"
-                  className="bg-black hover:bg-black/80"
-                  asChild
-                >
-                  <Link href="events/1">View Event Details</Link>
-                </Button>
-              </span>
-            </div>
-          ))
+          <div className="space-y-4">
+            {liveEvents.map((event) => (
+              <EventCard key={event._id} event={event} />
+            ))}
+          </div>
         ) : (
-          <div className="mt-4 text-center text-muted-foreground">
+          <div className="mt-4 p-8 text-center text-muted-foreground border-2 border-dashed rounded-md">
             <p>No live events available</p>
           </div>
         )}
       </div>
 
       {/* UPCOMING EVENTS */}
-      <div>
-        <h2 className="mt-6 text-xl font-semibold">Upcoming Events</h2>
+      <div className="mt-8">
+        <h2 className="flex items-center gap-2 mb-4">
+          <span className="text-lg font-bold">Upcoming Events</span>
+        </h2>
         {upcomingEvents.length > 0 ? (
-          upcomingEvents.map((event) => (
-            <div
-              key={event.id}
-              className="mt-4 flex h-[160px] min-h-[100px] items-center justify-between rounded-md border-2 p-8"
-            >
-              <span className="flex items-center gap-2">
-                <p className="text-2xl font-semibold capitalize">
-                  {new Date(event.date).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </p>
-                <Image
-                  src="/images/swift.jpg"
-                  alt="Event Image"
-                  width={100}
-                  height={100}
-                />
-                <span>
-                  <p className="text-xl font-semibold">{event.title}</p>
-                  <p>{`${event.date} at ${event.time}`}</p>
-                </span>
-              </span>
-              <span className="flex h-full items-end bg-red-50">
-                <Button
-                  size="sm"
-                  className="bg-black hover:bg-black/80"
-                  asChild
-                >
-                  <Link href="events/1">View Event Details</Link>
-                </Button>
-              </span>
-            </div>
-          ))
+          <div className="space-y-4">
+            {upcomingEvents.map((event) => (
+              <EventCard key={event._id} event={event} />
+            ))}
+          </div>
         ) : (
-          <div className="mt-4 text-center text-muted-foreground">
+          <div className="mt-4 p-8 text-center text-muted-foreground border-2 border-dashed rounded-md">
             <p>No upcoming events</p>
           </div>
         )}
@@ -198,3 +165,4 @@ const AllEvents = () => {
 }
 
 export default AllEvents
+
