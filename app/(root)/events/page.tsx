@@ -1,14 +1,26 @@
-import React from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Separator } from '@/components/ui/separator'
-import AllEvents from '@/components/AllEvents'
-import CurrentEvents from '@/components/CurrentEvents'
-import UpcomingEvents from '@/components/UpcomingEvents'
-import PastEvents from '@/components/PastEvents'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Separator } from "@/components/ui/separator"
+import AllEvents from "@/components/AllEvents"
+import CurrentEvents from "@/components/CurrentEvents"
+import UpcomingEvents from "@/components/UpcomingEvents"
+import PastEvents from "@/components/PastEvents"
+import { getAllEvents } from "@/lib/actions/events/getAllEvents"
+import type { EventsData } from "@/types/event"
 
-const page = () => {
+const EventsPage = async () => {
+  let eventsData: EventsData = []
+
+  try {
+    const response = await getAllEvents()
+    // Access the events array from response.data
+    eventsData = Array.isArray(response.data) ? response.data : []
+  } catch (error) {
+    console.error("Failed to fetch events:", error)
+    // Continue with empty array
+  }
+
   return (
-    <div className='pb-20'>
+    <div className="pb-20">
       <h3 className="text-[32px] font-bold">My Events</h3>
       <Tabs defaultValue="all" className="mt-8 w-full p-0">
         <TabsList className="m-0 rounded-none bg-background p-0">
@@ -40,20 +52,21 @@ const page = () => {
         <Separator className="h-0.5 translate-y-[-0.5px] bg-black opacity-25" />
 
         <TabsContent value="all">
-          <AllEvents />
+          <AllEvents events={eventsData} />
         </TabsContent>
         <TabsContent value="current">
-          <CurrentEvents />
+          <CurrentEvents events={eventsData} />
         </TabsContent>
         <TabsContent value="upcoming">
-          <UpcomingEvents />
+          <UpcomingEvents events={eventsData} />
         </TabsContent>
         <TabsContent value="past">
-          <PastEvents />
+          <PastEvents events={eventsData} />
         </TabsContent>
       </Tabs>
     </div>
   )
 }
 
-export default page
+export default EventsPage
+
