@@ -32,17 +32,23 @@ export async function logInAction(values: signIn) {
     const authData = await response.json()
     const token = authData?.data?.token
 
+    console.log('auth data', authData);
+    console.log(token);
+
     if (!token) {
       return { error: 'Failed to retrieve token from server.' }
     }
 
-    cookies().set('auth_token', token, {
+    // Set the cookie using the cookies() API
+    const cookieStore = await cookies()
+    cookieStore.set('auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24, // 1 week
+      maxAge: 60 * 60 * 24, // 1 day
       sameSite: 'strict',
       path: '/',
-    })
+    });
+
     console.log('Auth Token successfully stored in cookie.')
     return { success: true, user: authData.user || null }
   } catch (error) {

@@ -16,8 +16,8 @@ export async function signUpAction(formData: { [key: string]: string }) {
 
     if (!response.ok) {
       const error = await response.json()
-      console.error('Error response:', error) // Log the error response from the server
-      // Return a structured error with a message and optional code
+      console.error('Error response:', error)
+
       return {
         error: error.message || 'An error occurred during registration.',
       }
@@ -27,7 +27,6 @@ export async function signUpAction(formData: { [key: string]: string }) {
     return { success: true }
   } catch (error) {
     console.error('Error in sign-up action:', error)
-    // Return a generic error message if something goes wrong on the client side
     return { error: 'An unexpected error occurred while trying to register.' }
   }
 }

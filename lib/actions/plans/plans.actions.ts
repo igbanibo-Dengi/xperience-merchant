@@ -7,7 +7,8 @@ export async function getAllPlans() {
   try {
     const url = `${process.env.BASE_URL}/plan`
 
-    const token = (await cookies()).get('auth_token')?.value
+    const cookieStore = await cookies()
+    const token = cookieStore.get('auth_token')?.value
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
@@ -42,7 +43,8 @@ export async function getUserPlan() {
   try {
     const url = `${process.env.BASE_URL}/plan/user`
 
-    const token = (await cookies()).get('auth_token')?.value
+    const cookieStore = await cookies()
+    const token = cookieStore.get('auth_token')?.value
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })

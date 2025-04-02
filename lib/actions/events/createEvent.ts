@@ -9,7 +9,8 @@ export async function createEvent(formattedData: FormattedData) {
   try {
     const url = `${process.env.BASE_URL}/event`
 
-    const token = cookies().get('auth_token')?.value
+    const cookieStore = await cookies()
+    const token = cookieStore.get('auth_token')?.value
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })

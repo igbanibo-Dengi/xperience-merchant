@@ -24,7 +24,11 @@ interface EventPageProps {
 
 export default async function EventPage({ params }: EventPageProps) {
   try {
-    const response = await getEventById(params.id)
+
+    const paramsData = await params
+    const { id } = paramsData
+
+    const response = await getEventById(id)
 
     // Check if response is a NextResponse (error case)
     if ("status" in response) {

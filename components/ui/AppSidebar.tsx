@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
@@ -29,12 +30,22 @@ const data = {
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const {
+    state,
+    open,
+    setOpen,
+    openMobile,
+    setOpenMobile,
+    isMobile,
+    toggleSidebar,
+  } = useSidebar()
+
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
       <SidebarContent className="bg-black pb-4">
         <div className="flex items-center justify-between px-4 py-4">
-          <span className='uppercase text-white gap-4 flex border border-red-500'>
+          <span className='uppercase text-white flex'>
 
             <Image
               src='/icons/x.svg'
@@ -42,12 +53,13 @@ export function AppSidebar() {
               height={20}
               alt="Logo"
             />
-            <p className='mt-auto'>
-              perience
-            </p>
+            {open && (
+              <p className='mt-auto font-semibold text-lg'>
+                perience
+              </p>
+            )}
           </span>
 
-          <SidebarTrigger className="text-white hover:bg-transparent hover:text-white" />
         </div>
         <SidebarGroup>
           <SidebarGroupContent>

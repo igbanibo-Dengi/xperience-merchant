@@ -10,12 +10,11 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
 
-  const token = (cookies()).get('auth_token')?.value
-
-  if (!token) redirect('sign-in')
+  const cookieStore = await cookies()
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <main className="flex h-screen w-full flex-col">
         <Header />

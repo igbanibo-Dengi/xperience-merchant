@@ -24,11 +24,11 @@ export function SignInSuccess() {
       <p className="text-muted-foreground">
         You&apos;re being redirected to the dashboard.
       </p>
-      <Button variant={'link'} className="font-bold" asChild>
+      {/* <Button variant={'link'} className="font-bold" asChild>
         <Link href="/" className="font-bold text-primary transition-colors">
           Go to the dashboard
         </Link>
-      </Button>
+      </Button> */}
     </div>
   )
 }

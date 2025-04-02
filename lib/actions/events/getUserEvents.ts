@@ -1,14 +1,13 @@
 'use server'
-import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 
 export async function getUserEvents() {
   try {
     const url = `${process.env.BASE_URL}/event/user`
 
-    const token = cookies().get('auth_token')?.value
-
-    console.log(token)
+    const cookieStore = await cookies()
+    const token = cookieStore.get('auth_token')?.value
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
