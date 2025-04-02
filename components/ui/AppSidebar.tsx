@@ -93,7 +93,20 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r-0">
       <SidebarContent className="bg-black pb-4">
         <div className="flex items-center justify-between px-4 py-4">
-          {/* <SidebarTrigger className="text-white hover:bg-transparent hover:text-white" /> */}
+          <span className='uppercase text-white gap-4 flex border border-red-500'>
+
+            <Image
+              src='/icons/x.svg'
+              width={20}
+              height={20}
+              alt="Logo"
+            />
+            <p className='mt-auto'>
+              perience
+            </p>
+          </span>
+
+          <SidebarTrigger className="text-white hover:bg-transparent hover:text-white" />
         </div>
         <SidebarGroup>
           <SidebarGroupContent>
