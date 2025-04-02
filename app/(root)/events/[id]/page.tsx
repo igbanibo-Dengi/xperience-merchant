@@ -25,8 +25,7 @@ interface EventPageProps {
 export default async function EventPage({ params }: EventPageProps) {
   try {
 
-    const paramsData = await params
-    const { id } = paramsData
+    const { id } = await params
 
     const response = await getEventById(id)
 
