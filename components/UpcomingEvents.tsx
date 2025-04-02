@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { CalendarClock } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "./ui/button"
-import type { Event } from "@/types/event"
-import { EventSearch } from "./eventsSearch"
+import { useState } from 'react'
+import { CalendarClock } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Button } from './ui/button'
+import type { Event } from '@/types/event'
+import { EventSearch } from './eventsSearch'
 
 interface UpcomingEventsProps {
   events?: Event[]
@@ -19,7 +19,9 @@ const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
   // Filter for upcoming events
   const upcomingEvents = filteredEvents.filter((event) => {
     try {
-      const eventStartDateTime = new Date(`${event.eventDate}T${event.eventStartTime}`)
+      const eventStartDateTime = new Date(
+        `${event.eventDate}T${event.eventStartTime}`
+      )
       return eventStartDateTime > currentDate
     } catch (error) {
       return false
@@ -31,14 +33,14 @@ const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
   }
 
   return (
-    <section className="mt-8 max-w-4xl w-full px-4">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <section className="mt-8 w-full max-w-4xl px-4">
+      <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <EventSearch onSearch={handleSearch} allEvents={events} />
       </div>
 
       {/* UPCOMING EVENTS */}
       <div className="mt-8">
-        <h2 className="flex items-center gap-2 mb-4">
+        <h2 className="mb-4 flex items-center gap-2">
           <span className="text-primary">
             <CalendarClock className="h-6 w-6" />
           </span>
@@ -51,7 +53,7 @@ const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
             ))}
           </div>
         ) : (
-          <div className="mt-4 p-8 text-center text-muted-foreground border-2 border-dashed rounded-md">
+          <div className="mt-4 rounded-md border-2 border-dashed p-8 text-center text-muted-foreground">
             <p>No upcoming events</p>
           </div>
         )}
@@ -67,10 +69,10 @@ function EventCard({ event }: { event: Event }) {
   const formatEventDate = (dateStr: string) => {
     try {
       const date = new Date(dateStr)
-      return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
       })
     } catch (error) {
       return dateStr
@@ -79,14 +81,14 @@ function EventCard({ event }: { event: Event }) {
 
   const formatEventTime = (timeStr: string) => {
     try {
-      const [hours, minutes] = timeStr.split(":")
+      const [hours, minutes] = timeStr.split(':')
       const date = new Date()
       date.setHours(Number.parseInt(hours, 10))
       date.setMinutes(Number.parseInt(minutes, 10))
 
-      return date.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
+      return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
         hour12: true,
       })
     } catch (error) {
@@ -107,46 +109,57 @@ function EventCard({ event }: { event: Event }) {
       const diffTime = eventDate.getTime() - today.getTime()
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-      if (diffDays === 0) return "Today"
-      if (diffDays === 1) return "Tomorrow"
+      if (diffDays === 0) return 'Today'
+      if (diffDays === 1) return 'Tomorrow'
       return `${diffDays} days remaining`
     } catch (error) {
-      return ""
+      return ''
     }
   }
 
   return (
-    <div className="mt-4 flex flex-col md:flex-row md:h-[160px] items-start md:items-center justify-between rounded-md border-2 p-4 md:p-8 gap-4">
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-        <div className="relative w-full md:w-[100px] h-[100px] rounded-md overflow-hidden">
+    <div className="mt-4 flex flex-col items-start justify-between gap-4 rounded-md border-2 p-4 md:h-[160px] md:flex-row md:items-center md:p-8">
+      <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
+        <div className="relative h-[100px] w-full overflow-hidden rounded-md md:w-[100px]">
           <Image
-            src={event.coverPhotoUrl?.[0] || "/placeholder.svg?height=100&width=100"}
+            src={
+              event.coverPhotoUrl?.[0] ||
+              '/placeholder.svg?height=100&width=100'
+            }
             alt={event.title}
             fill
-            className="object-cover rounded-md"
+            className="rounded-md object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement
-              target.src = "/placeholder.svg?height=100&width=100"
+              target.src = '/placeholder.svg?height=100&width=100'
             }}
           />
         </div>
         <div>
           <p className="text-xl font-semibold">{event.title}</p>
           <p className="text-muted-foreground">
-            {formatEventDate(event.eventDate)} at {formatEventTime(event.eventStartTime)}
+            {formatEventDate(event.eventDate)} at{' '}
+            {formatEventTime(event.eventStartTime)}
           </p>
-          <p className="text-sm text-primary font-medium mt-1">{getDaysRemaining(event.eventDate)}</p>
-          {event.location.type === "Physical" && event.location.city && event.location.state && (
-            <p className="text-sm text-muted-foreground mt-1">
-              {event.location.city}, {event.location.state}
-            </p>
-          )}
+          <p className="mt-1 text-sm font-medium text-primary">
+            {getDaysRemaining(event.eventDate)}
+          </p>
+          {event.location.type === 'Physical' &&
+            event.location.city &&
+            event.location.state && (
+              <p className="mt-1 text-sm text-muted-foreground">
+                {event.location.city}, {event.location.state}
+              </p>
+            )}
         </div>
       </div>
-      <Button size="sm" className="bg-primary hover:bg-primary/90 w-full md:w-auto" asChild>
+      <Button
+        size="sm"
+        className="w-full bg-primary hover:bg-primary/90 md:w-auto"
+        asChild
+      >
         <Link href={`/events/${event._id}`}>View Event Details</Link>
       </Button>
     </div>
   )
 }
-

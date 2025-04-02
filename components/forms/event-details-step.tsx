@@ -1,19 +1,37 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Asterisk, Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Command, CommandList, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { eventDetailsSchema } from "@/lib/schema"
-import { mockVenues } from "@/lib/mock-data"
-import { Checkbox } from "@/components/ui/checkbox"
-import type { AvailableLocations, EventDetails } from "@/types/event"
-import { Badge } from "@/components/ui/badge"
+import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Asterisk, Search } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import {
+  Command,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { eventDetailsSchema } from '@/lib/schema'
+import { mockVenues } from '@/lib/mock-data'
+import { Checkbox } from '@/components/ui/checkbox'
+import type { AvailableLocations, EventDetails } from '@/types/event'
+import { Badge } from '@/components/ui/badge'
 
 interface EventDetailsStepProps {
   defaultValues?: EventDetails
@@ -21,30 +39,34 @@ interface EventDetailsStepProps {
   onBack?: () => void
 }
 
-export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetailsStepProps) {
+export function EventDetailsStep({
+  defaultValues,
+  onSubmit,
+  onBack,
+}: EventDetailsStepProps) {
   const [open, setOpen] = React.useState(false)
   const [locations] = React.useState<AvailableLocations[]>(mockVenues)
   const [manualEntry, setManualEntry] = React.useState(false)
-  const [hashtagInput, setHashtagInput] = React.useState("")
+  const [hashtagInput, setHashtagInput] = React.useState('')
 
   const form = useForm({
     resolver: zodResolver(eventDetailsSchema),
     defaultValues: {
-      title: defaultValues?.title || "",
-      description: defaultValues?.description || "",
+      title: defaultValues?.title || '',
+      description: defaultValues?.description || '',
       location: {
-        type: defaultValues?.location?.type || "Physical",
-        venueName: defaultValues?.location?.venueName || "",
-        address: defaultValues?.location?.address || "",
-        city: defaultValues?.location?.city || "",
-        state: defaultValues?.location?.state || "",
-        zipCode: defaultValues?.location?.zipCode || "",
+        type: defaultValues?.location?.type || 'Physical',
+        venueName: defaultValues?.location?.venueName || '',
+        address: defaultValues?.location?.address || '',
+        city: defaultValues?.location?.city || '',
+        state: defaultValues?.location?.state || '',
+        zipCode: defaultValues?.location?.zipCode || '',
       },
-      eventDate: defaultValues?.eventDate || "",
-      eventStartTime: defaultValues?.eventStartTime || "",
-      eventEndTime: defaultValues?.eventEndTime || "",
+      eventDate: defaultValues?.eventDate || '',
+      eventStartTime: defaultValues?.eventStartTime || '',
+      eventEndTime: defaultValues?.eventEndTime || '',
       hashtags: defaultValues?.hashtags || [],
-      planId: defaultValues?.planId || ""
+      planId: defaultValues?.planId || '',
     },
   })
 
@@ -52,35 +74,37 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
     onSubmit(data)
   }
 
-  const isOnlineEvent = form.watch("location.type") === "Online"
+  const isOnlineEvent = form.watch('location.type') === 'Online'
 
   const handleLocationSelect = (location: AvailableLocations) => {
-    form.setValue("location.venueName", location.venueName)
-    form.setValue("location.address", location.address)
-    form.setValue("location.city", location.city)
-    form.setValue("location.state", location.state)
-    form.setValue("location.zipCode", location.zipCode)
+    form.setValue('location.venueName', location.venueName)
+    form.setValue('location.address', location.address)
+    form.setValue('location.city', location.city)
+    form.setValue('location.state', location.state)
+    form.setValue('location.zipCode', location.zipCode)
     setOpen(false)
   }
 
   const handleAddHashtag = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && hashtagInput.trim() !== "") {
+    if (e.key === 'Enter' && hashtagInput.trim() !== '') {
       e.preventDefault()
-      const newHashtag = hashtagInput.trim().startsWith("#") ? hashtagInput.trim() : `#${hashtagInput.trim()}`
+      const newHashtag = hashtagInput.trim().startsWith('#')
+        ? hashtagInput.trim()
+        : `#${hashtagInput.trim()}`
 
-      const currentHashtags = form.getValues("hashtags") || []
+      const currentHashtags = form.getValues('hashtags') || []
       if (!currentHashtags.includes(newHashtag)) {
-        form.setValue("hashtags", [...currentHashtags, newHashtag])
-        setHashtagInput("")
+        form.setValue('hashtags', [...currentHashtags, newHashtag])
+        setHashtagInput('')
       }
     }
   }
 
   const handleRemoveHashtag = (tagToRemove: string) => {
-    const currentHashtags = form.getValues("hashtags") || []
+    const currentHashtags = form.getValues('hashtags') || []
     form.setValue(
-      "hashtags",
-      currentHashtags.filter((tag) => tag !== tagToRemove),
+      'hashtags',
+      currentHashtags.filter((tag) => tag !== tagToRemove)
     )
   }
 
@@ -90,19 +114,24 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
         <div>
           <h2 className="text-2xl font-bold">Event Name</h2>
           <p className="text-muted-foreground">
-            Write a name and description to your event so people can find it easily.
+            Write a name and description to your event so people can find it
+            easily.
           </p>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-8"
+          >
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Event Title <Asterisk className="inline text-destructive" size={10} />
+                    Event Title{' '}
+                    <Asterisk className="inline text-destructive" size={10} />
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="Be clear and descriptive." {...field} />
@@ -118,7 +147,8 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Event Description <Asterisk className="inline text-destructive" size={10} />
+                    Event Description{' '}
+                    <Asterisk className="inline text-destructive" size={10} />
                   </FormLabel>
                   <FormControl>
                     <textarea
@@ -133,15 +163,21 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
             />
 
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Event Location</h2>
                 {!isOnlineEvent && (
-                  <Button type="button" variant="outline" onClick={() => setManualEntry(!manualEntry)}>
-                    {manualEntry ? "Search locations" : "Enter Manually"}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setManualEntry(!manualEntry)}
+                  >
+                    {manualEntry ? 'Search locations' : 'Enter Manually'}
                   </Button>
                 )}
               </div>
-              <p className="text-muted-foreground">Help people in the area find your event location.</p>
+              <p className="text-muted-foreground">
+                Help people in the area find your event location.
+              </p>
 
               <FormField
                 control={form.control}
@@ -150,16 +186,16 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                   <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                     <FormControl>
                       <Checkbox
-                        checked={field.value === "Online"}
+                        checked={field.value === 'Online'}
                         onCheckedChange={(checked) => {
-                          const newValue = checked ? "Online" : "Physical"
-                          form.setValue("location.type", newValue)
-                          if (newValue === "Online") {
+                          const newValue = checked ? 'Online' : 'Physical'
+                          form.setValue('location.type', newValue)
+                          if (newValue === 'Online') {
                             // Clear physical address fields but keep the name field
-                            form.setValue("location.address", "")
-                            form.setValue("location.city", "")
-                            form.setValue("location.state", "")
-                            form.setValue("location.zipCode", "")
+                            form.setValue('location.address', '')
+                            form.setValue('location.city', '')
+                            form.setValue('location.state', '')
+                            form.setValue('location.zipCode', '')
                           }
                         }}
                       />
@@ -168,8 +204,8 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                       <FormLabel>This is an online event</FormLabel>
                       <p className="text-sm text-muted-foreground">
                         {isOnlineEvent
-                          ? "Enter the online platform details below"
-                          : "No physical location is needed for this event"}
+                          ? 'Enter the online platform details below'
+                          : 'No physical location is needed for this event'}
                       </p>
                     </div>
                   </FormItem>
@@ -182,7 +218,7 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {isOnlineEvent ? "Online Platform" : "Venue Name"}{" "}
+                      {isOnlineEvent ? 'Online Platform' : 'Venue Name'}{' '}
                       <Asterisk className="inline text-destructive" size={10} />
                     </FormLabel>
                     {!isOnlineEvent && !manualEntry ? (
@@ -196,7 +232,8 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                             className="w-full justify-start text-foreground"
                           >
                             <Search className="mr-2 h-4 w-4 shrink-0" />
-                            {field.value || "Search for venue or location address"}
+                            {field.value ||
+                              'Search for venue or location address'}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-[400px] p-0">
@@ -209,7 +246,9 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                                   <CommandItem
                                     key={location.id}
                                     value={location.venueName}
-                                    onSelect={() => handleLocationSelect(location)}
+                                    onSelect={() =>
+                                      handleLocationSelect(location)
+                                    }
                                   >
                                     {location.venueName}
                                   </CommandItem>
@@ -222,7 +261,11 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                     ) : (
                       <FormControl>
                         <Input
-                          placeholder={isOnlineEvent ? "e.g., Zoom, Google Meet, Microsoft Teams" : "Enter venue name"}
+                          placeholder={
+                            isOnlineEvent
+                              ? 'e.g., Zoom, Google Meet, Microsoft Teams'
+                              : 'Enter venue name'
+                          }
                           {...field}
                         />
                       </FormControl>
@@ -240,7 +283,11 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          Address <Asterisk className="inline text-destructive" size={10} />
+                          Address{' '}
+                          <Asterisk
+                            className="inline text-destructive"
+                            size={10}
+                          />
                         </FormLabel>
                         <FormControl>
                           <Input placeholder="Street address" {...field} />
@@ -256,7 +303,11 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>
-                            City <Asterisk className="inline text-destructive" size={10} />
+                            City{' '}
+                            <Asterisk
+                              className="inline text-destructive"
+                              size={10}
+                            />
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="City" {...field} />
@@ -271,7 +322,11 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>
-                            State <Asterisk className="inline text-destructive" size={10} />
+                            State{' '}
+                            <Asterisk
+                              className="inline text-destructive"
+                              size={10}
+                            />
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="State" {...field} />
@@ -286,7 +341,11 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>
-                            Zip Code <Asterisk className="inline text-destructive" size={10} />
+                            Zip Code{' '}
+                            <Asterisk
+                              className="inline text-destructive"
+                              size={10}
+                            />
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="Zip code" {...field} />
@@ -299,22 +358,32 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                 </div>
               )}
 
-              {!isOnlineEvent && !manualEntry && form.watch("location.venueName") && (
-                <div className="rounded-lg border p-4">
-                  <div className="space-y-1">
-                    <p className="font-bold">{form.watch("location.venueName")}</p>
-                    <p className="text-sm">{form.watch("location.address")}</p>
-                    <p className="text-sm">
-                      {form.watch("location.city")}, {form.watch("location.state")} {form.watch("location.zipCode")}
-                    </p>
+              {!isOnlineEvent &&
+                !manualEntry &&
+                form.watch('location.venueName') && (
+                  <div className="rounded-lg border p-4">
+                    <div className="space-y-1">
+                      <p className="font-bold">
+                        {form.watch('location.venueName')}
+                      </p>
+                      <p className="text-sm">
+                        {form.watch('location.address')}
+                      </p>
+                      <p className="text-sm">
+                        {form.watch('location.city')},{' '}
+                        {form.watch('location.state')}{' '}
+                        {form.watch('location.zipCode')}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
 
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">Date and time</h2>
-              <p className="text-muted-foreground">Choose a date and time for your event.</p>
+              <p className="text-muted-foreground">
+                Choose a date and time for your event.
+              </p>
 
               <div className="grid grid-cols-1">
                 <FormField
@@ -323,7 +392,11 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Event Date <Asterisk className="inline text-destructive" size={10} />
+                        Event Date{' '}
+                        <Asterisk
+                          className="inline text-destructive"
+                          size={10}
+                        />
                       </FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
@@ -334,14 +407,18 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="eventStartTime"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Start Time <Asterisk className="inline text-destructive" size={10} />
+                        Start Time{' '}
+                        <Asterisk
+                          className="inline text-destructive"
+                          size={10}
+                        />
                       </FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
@@ -356,7 +433,11 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        End Time <Asterisk className="inline text-destructive" size={10} />
+                        End Time{' '}
+                        <Asterisk
+                          className="inline text-destructive"
+                          size={10}
+                        />
                       </FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
@@ -370,7 +451,9 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
 
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">Hashtags</h2>
-              <p className="text-muted-foreground">Add hashtags to help people discover your event.</p>
+              <p className="text-muted-foreground">
+                Add hashtags to help people discover your event.
+              </p>
 
               <div className="space-y-4">
                 <div className="flex flex-col space-y-2">
@@ -382,13 +465,18 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
                     onKeyDown={handleAddHashtag}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Type a word and press Enter. The # will be added automatically.
+                    Type a word and press Enter. The # will be added
+                    automatically.
                   </p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {form.watch("hashtags")?.map((tag: string, index: number) => (
-                    <Badge key={index} variant="secondary" className="px-3 py-1 text-sm">
+                  {form.watch('hashtags')?.map((tag: string, index: number) => (
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="px-3 py-1 text-sm"
+                    >
                       {tag}
                       <button
                         type="button"
@@ -419,4 +507,3 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
     </div>
   )
 }
-

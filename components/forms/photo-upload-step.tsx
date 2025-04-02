@@ -1,18 +1,28 @@
-"use client"
+'use client'
 
-import { useCallback, useEffect, useState } from "react"
-import { useDropzone } from "react-dropzone"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { ImagePlus, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { photoSchema } from "@/lib/schema"
-import Image from "next/image"
-import { Separator } from "@/components/ui/separator"
-import type { PhotoUploadStepProps } from "@/types/event"
+import { useCallback, useEffect, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ImagePlus, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
+import { photoSchema } from '@/lib/schema'
+import Image from 'next/image'
+import { Separator } from '@/components/ui/separator'
+import type { PhotoUploadStepProps } from '@/types/event'
 
-export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUploadStepProps) {
+export function PhotoUploadStep({
+  defaultValues,
+  onSubmit,
+  onBack,
+}: PhotoUploadStepProps) {
   const [coverPreview, setCoverPreview] = useState<string | null>(null)
   const [feedPreviews, setFeedPreviews] = useState<string[]>([])
 
@@ -42,25 +52,25 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
             reader.onload = () => resolve(reader.result as string)
             reader.readAsDataURL(file)
           })
-        }),
+        })
       ).then(setFeedPreviews)
     }
   }, [defaultValues])
 
   const onDrop = useCallback(
-    (acceptedFiles: File[], type: "cover" | "feed") => {
-      if (type === "cover") {
+    (acceptedFiles: File[], type: 'cover' | 'feed') => {
+      if (type === 'cover') {
         const file = acceptedFiles[0]
         if (file) {
           const reader = new FileReader()
           reader.onload = () => {
             setCoverPreview(reader.result as string)
-            form.setValue("coverPhoto", file, { shouldValidate: true })
+            form.setValue('coverPhoto', file, { shouldValidate: true })
           }
           reader.readAsDataURL(file)
         }
       } else {
-        const currentFiles = form.getValues("sampleFeedPhotos") || []
+        const currentFiles = form.getValues('sampleFeedPhotos') || []
         const newFiles = [...currentFiles]
         const newPreviews = [...feedPreviews]
 
@@ -76,41 +86,43 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
           }
         })
 
-        form.setValue("sampleFeedPhotos", newFiles, { shouldValidate: true })
+        form.setValue('sampleFeedPhotos', newFiles, { shouldValidate: true })
       }
     },
-    [form, feedPreviews],
+    [form, feedPreviews]
   )
 
   const removeCoverPhoto = () => {
-    form.setValue("coverPhoto", null, { shouldValidate: true })
+    form.setValue('coverPhoto', null, { shouldValidate: true })
     setCoverPreview(null)
   }
 
   const removeFeedPhoto = (index: number) => {
-    const currentFiles = form.getValues("sampleFeedPhotos")
+    const currentFiles = form.getValues('sampleFeedPhotos')
     const newFiles = [...currentFiles]
     newFiles.splice(index, 1)
-    form.setValue("sampleFeedPhotos", newFiles, { shouldValidate: true })
+    form.setValue('sampleFeedPhotos', newFiles, { shouldValidate: true })
 
     const newPreviews = [...feedPreviews]
     newPreviews.splice(index, 1)
     setFeedPreviews(newPreviews)
   }
 
-  const { getRootProps: getCoverRootProps, getInputProps: getCoverInputProps } = useDropzone({
-    onDrop: (files) => onDrop(files, "cover"),
-    accept: { "image/*": [] },
-    maxFiles: 1,
-  })
+  const { getRootProps: getCoverRootProps, getInputProps: getCoverInputProps } =
+    useDropzone({
+      onDrop: (files) => onDrop(files, 'cover'),
+      accept: { 'image/*': [] },
+      maxFiles: 1,
+    })
 
-  const { getRootProps: getFeedRootProps, getInputProps: getFeedInputProps } = useDropzone({
-    onDrop: (files) => onDrop(files, "feed"),
-    accept: { "image/*": [] },
-    maxFiles: 4,
-  })
+  const { getRootProps: getFeedRootProps, getInputProps: getFeedInputProps } =
+    useDropzone({
+      onDrop: (files) => onDrop(files, 'feed'),
+      accept: { 'image/*': [] },
+      maxFiles: 4,
+    })
 
-  const sampleFeedPhotosCount = form.watch("sampleFeedPhotos")?.length || 0
+  const sampleFeedPhotosCount = form.watch('sampleFeedPhotos')?.length || 0
 
   const handleSubmit = (data: any) => {
     onSubmit({
@@ -128,7 +140,8 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
           <div>
             <h2 className="text-2xl font-bold">Cover Photo</h2>
             <p className="text-muted-foreground">
-              Add a cover photo to show what your event will be about. Recommended size is 1920x1080.
+              Add a cover photo to show what your event will be about.
+              Recommended size is 1920x1080.
             </p>
             <FormField
               control={form.control}
@@ -148,19 +161,29 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
                               className="relative cursor-pointer rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80"
                             >
                               <div className="relative flex flex-col gap-2">
-                                <ImagePlus className="mx-auto text-foreground" size={62} strokeWidth={1} />
-                                <p className="text-muted-foreground">Drag a photo here</p>
+                                <ImagePlus
+                                  className="mx-auto text-foreground"
+                                  size={62}
+                                  strokeWidth={1}
+                                />
+                                <p className="text-muted-foreground">
+                                  Drag a photo here
+                                </p>
                                 <span className="mx-auto flex items-center gap-2 text-muted-foreground">
                                   <Separator className="w-20" />
                                   or
                                   <Separator className="w-20" />
                                 </span>
-                                <Button className="bg-primary hover:bg-primary/90">Select from computer</Button>
+                                <Button className="bg-primary hover:bg-primary/90">
+                                  Select from computer
+                                </Button>
                               </div>
                               <input {...getCoverInputProps()} />
                             </label>
                           </div>
-                          <p className="mt-2 text-xs text-muted-foreground">PNG, JPG, GIF up to 10MB</p>
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            PNG, JPG, GIF up to 10MB
+                          </p>
                         </div>
                       </div>
                     ) : null}
@@ -172,7 +195,7 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
             {coverPreview && (
               <div className="group relative mx-auto mt-4 h-[200px] w-[340px] md:h-[350px] md:w-[660px] xl:h-[400px] xl:w-[800px]">
                 <Image
-                  src={coverPreview || "/placeholder.svg"}
+                  src={coverPreview || '/placeholder.svg'}
                   alt="Cover preview"
                   fill
                   className="mx-auto rounded-lg object-cover"
@@ -192,15 +215,19 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
           <div>
             <h2 className="text-2xl font-bold">Sample Feed Photos</h2>
             <p className="mb-8 text-muted-foreground">
-              Insert sample feed photos to showcase to your attendees. You can add up to 4 photos.
+              Insert sample feed photos to showcase to your attendees. You can
+              add up to 4 photos.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               {feedPreviews.length > 0 && (
                 <div className="grid w-full grid-cols-2 place-items-center items-center gap-4 md:gap-4 xl:flex xl:grid-cols-4">
                   {feedPreviews.map((preview, index) => (
-                    <div key={index} className="group relative size-[160px] md:size-[300px] xl:size-[180px]">
+                    <div
+                      key={index}
+                      className="group relative size-[160px] md:size-[300px] xl:size-[180px]"
+                    >
                       <Image
-                        src={preview || "/placeholder.svg"}
+                        src={preview || '/placeholder.svg'}
                         alt={`Feed preview ${index + 1}`}
                         fill
                         className="rounded-lg object-cover object-center"
@@ -227,7 +254,10 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
                       {sampleFeedPhotosCount < 4 && (
                         <div className="w-fit">
                           <div {...getFeedRootProps()} className="w-fit">
-                            <label htmlFor="file-upload" className="cursor-pointer">
+                            <label
+                              htmlFor="file-upload"
+                              className="cursor-pointer"
+                            >
                               <span className="flex w-full flex-col items-center justify-center rounded-lg border border-muted p-4 text-center font-normal text-foreground xl:hidden">
                                 <p>Add Photo</p>
                                 <input {...getFeedInputProps()} />
@@ -242,7 +272,7 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
                               <div className="mt-4 flex text-sm leading-6 text-muted-foreground">
                                 <label
                                   htmlFor="file-upload"
-                                  className="relative cursor-pointer rounded-md bg-transaprent w-[180px] h-[120px] font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80"
+                                  className="bg-transaprent relative h-[120px] w-[180px] cursor-pointer rounded-md font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80"
                                 >
                                   <span className="flex flex-col items-center justify-center font-normal text-foreground">
                                     <ImagePlus size={62} strokeWidth={1} />
@@ -267,7 +297,12 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
           </div>
 
           <div className="flex justify-between">
-            <Button className="w-[160px]" type="button" variant="outline" onClick={onBack}>
+            <Button
+              className="w-[160px]"
+              type="button"
+              variant="outline"
+              onClick={onBack}
+            >
               Back
             </Button>
             <Button
@@ -275,8 +310,8 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
               type="submit"
               disabled={
                 !form.formState.isValid ||
-                !form.getValues("coverPhoto") ||
-                form.getValues("sampleFeedPhotos").length < 4
+                !form.getValues('coverPhoto') ||
+                form.getValues('sampleFeedPhotos').length < 4
               }
             >
               Next
@@ -287,4 +322,3 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
     </div>
   )
 }
-

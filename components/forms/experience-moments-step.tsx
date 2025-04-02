@@ -1,41 +1,55 @@
-"use client"
+'use client'
 
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
-import { experienceMomentsSchema } from "@/lib/schema"
-import type { ExperienceMomentsStepProps } from "@/types/event"
-import { Asterisk } from "lucide-react"
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
+import { experienceMomentsSchema } from '@/lib/schema'
+import type { ExperienceMomentsStepProps } from '@/types/event'
+import { Asterisk } from 'lucide-react'
 
-export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: ExperienceMomentsStepProps) {
+export function ExperienceMomentsStep({
+  defaultValues,
+  onSubmit,
+  onBack,
+}: ExperienceMomentsStepProps) {
   const form = useForm({
     resolver: zodResolver(experienceMomentsSchema),
     defaultValues: defaultValues ?? {
       active: false,
-      recurrence: "",
-      duration: "",
+      recurrence: '',
+      duration: '',
     },
-    mode: "onChange", // This enables validation as fields change
+    mode: 'onChange', // This enables validation as fields change
   })
 
   const handleSubmit = (data: any) => {
     onSubmit({ experienceMoments: data })
   }
 
-  const isActive = form.watch("active")
+  const isActive = form.watch('active')
 
   return (
     <div className="mx-auto max-w-2xl xl:max-w-3xl">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           <div>
-            <h2 className="text-2xl font-bold md:text-[32px]">Create Experience Moments</h2>
+            <h2 className="text-2xl font-bold md:text-[32px]">
+              Create Experience Moments
+            </h2>
             <p className="mt-2">
-              Experience Moments highlight the best photos on the big screen. Let your attendees participate in specific
-              time frames for a chance to be featured!
+              Experience Moments highlight the best photos on the big screen.
+              Let your attendees participate in specific time frames for a
+              chance to be featured!
             </p>
           </div>
 
@@ -45,13 +59,20 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
             name="active"
             render={({ field }) => (
               <FormItem>
-                <div className="flex gap-4 items-center">
+                <div className="flex items-center gap-4">
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                   <div className="space-y-1">
-                    <FormLabel className="text-lg text-muted-foreground">Enable Experience Moments?</FormLabel>
-                    <p className="text-sm text-muted-foreground">You can change this later</p>
+                    <FormLabel className="text-lg text-muted-foreground">
+                      Enable Experience Moments?
+                    </FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      You can change this later
+                    </p>
                   </div>
                 </div>
                 <FormMessage />
@@ -69,10 +90,16 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Recurrence (in days) <Asterisk className="inline text-destructive" size={10} />
+                      Recurrence (in days){' '}
+                      <Asterisk className="inline text-destructive" size={10} />
                     </FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="Enter recurrence in days" {...field} required={isActive} />
+                      <Input
+                        type="number"
+                        placeholder="Enter recurrence in days"
+                        {...field}
+                        required={isActive}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -86,10 +113,16 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Duration (in minutes) <Asterisk className="inline text-destructive" size={10} />
+                      Duration (in minutes){' '}
+                      <Asterisk className="inline text-destructive" size={10} />
                     </FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="Enter duration in minutes" {...field} required={isActive} />
+                      <Input
+                        type="number"
+                        placeholder="Enter duration in minutes"
+                        {...field}
+                        required={isActive}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -100,7 +133,12 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
 
           {/* Navigation Buttons */}
           <div className="flex justify-between">
-            <Button className="w-[160px]" type="button" variant="outline" onClick={onBack}>
+            <Button
+              className="w-[160px]"
+              type="button"
+              variant="outline"
+              onClick={onBack}
+            >
               Back
             </Button>
             <Button className="w-[160px]" type="submit">
@@ -112,4 +150,3 @@ export function ExperienceMomentsStep({ defaultValues, onSubmit, onBack }: Exper
     </div>
   )
 }
-

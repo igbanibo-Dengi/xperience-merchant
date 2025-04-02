@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { CheckIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { CheckIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface ProgressStepsProps {
   steps: string[]
@@ -20,17 +20,28 @@ export function ProgressSteps({ steps, currentStep }: ProgressStepsProps) {
             <div key={index} className="flex flex-col items-center">
               <div
                 className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-full border-2",
+                  'flex h-10 w-10 items-center justify-center rounded-full border-2',
                   isCompleted
-                    ? "border-primary bg-primary text-primary-foreground"
+                    ? 'border-primary bg-primary text-primary-foreground'
                     : isCurrent
-                      ? "border-primary bg-background text-primary"
-                      : "border-muted-foreground bg-background text-muted-foreground",
+                      ? 'border-primary bg-background text-primary'
+                      : 'border-muted-foreground bg-background text-muted-foreground'
                 )}
               >
-                {isCompleted ? <CheckIcon className="h-5 w-5" /> : <span>{index + 1}</span>}
+                {isCompleted ? (
+                  <CheckIcon className="h-5 w-5" />
+                ) : (
+                  <span>{index + 1}</span>
+                )}
               </div>
-              <span className={cn("mt-2 text-sm", isCurrent ? "font-medium text-foreground" : "text-muted-foreground")}>
+              <span
+                className={cn(
+                  'mt-2 text-sm',
+                  isCurrent
+                    ? 'font-medium text-foreground'
+                    : 'text-muted-foreground'
+                )}
+              >
                 {step}
               </span>
             </div>
@@ -50,4 +61,3 @@ export function ProgressSteps({ steps, currentStep }: ProgressStepsProps) {
     </div>
   )
 }
-

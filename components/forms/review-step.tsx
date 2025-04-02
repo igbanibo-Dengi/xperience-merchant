@@ -1,22 +1,28 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Pencil } from "lucide-react"
-import Image from "next/image"
-import type { ReviewStepProps } from "@/types/event"
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Pencil } from 'lucide-react'
+import Image from 'next/image'
+import type { ReviewStepProps } from '@/types/event'
 
-export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: ReviewStepProps) {
+export function ReviewStep({
+  eventData,
+  onSubmit,
+  onBack,
+  onEdit,
+  submitting,
+}: ReviewStepProps) {
   const { eventDetails, eventImages, experienceMoments } = eventData
 
   // Format date for display
   const formatDate = (dateString: string) => {
-    if (!dateString) return ""
+    if (!dateString) return ''
     const date = new Date(dateString)
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     })
   }
 
@@ -24,8 +30,12 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
     <div className="mx-auto max-w-3xl">
       <div className="space-y-8">
         <div>
-          <h2 className="text-2xl font-bold md:text-[32px]">Review Your Event</h2>
-          <p className="text-muted-foreground">Please review all the information before submitting your event.</p>
+          <h2 className="text-2xl font-bold md:text-[32px]">
+            Review Your Event
+          </h2>
+          <p className="text-muted-foreground">
+            Please review all the information before submitting your event.
+          </p>
         </div>
 
         {/* Event Details Section */}
@@ -37,7 +47,7 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
                 variant="ghost"
                 size="sm"
                 className="flex items-center gap-1 text-primary"
-                onClick={() => onEdit("details")}
+                onClick={() => onEdit('details')}
               >
                 <Pencil className="h-4 w-4" />
                 Edit
@@ -50,17 +60,21 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
               </div>
               <div>
                 <h4 className="font-medium">Description</h4>
-                <p className="whitespace-pre-wrap">{eventDetails.description}</p>
+                <p className="whitespace-pre-wrap">
+                  {eventDetails.description}
+                </p>
               </div>
               <div>
                 <h4 className="font-medium">Location</h4>
-                {eventDetails.location.type === "Online" ? (
+                {eventDetails.location.type === 'Online' ? (
                   <p>{eventDetails.location.venueName} (Online Event)</p>
                 ) : (
                   <div>
                     <p>{eventDetails.location.venueName}</p>
                     <p>
-                      {eventDetails.location.address}, {eventDetails.location.city}, {eventDetails.location.state}{" "}
+                      {eventDetails.location.address},{' '}
+                      {eventDetails.location.city},{' '}
+                      {eventDetails.location.state}{' '}
                       {eventDetails.location.zipCode}
                     </p>
                   </div>
@@ -97,7 +111,7 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
                 variant="ghost"
                 size="sm"
                 className="flex items-center gap-1 text-primary"
-                onClick={() => onEdit("photos")}
+                onClick={() => onEdit('photos')}
               >
                 <Pencil className="h-4 w-4" />
                 Edit
@@ -109,7 +123,10 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
                 {eventImages.coverPhoto && (
                   <div className="mt-2 h-[200px] w-full overflow-hidden rounded-lg">
                     <Image
-                      src={URL.createObjectURL(eventImages.coverPhoto) || "/placeholder.svg"}
+                      src={
+                        URL.createObjectURL(eventImages.coverPhoto) ||
+                        '/placeholder.svg'
+                      }
                       alt="Cover photo"
                       width={400}
                       height={200}
@@ -118,24 +135,30 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
                   </div>
                 )}
               </div>
-              {eventImages.sampleFeedPhotos && eventImages.sampleFeedPhotos.length > 0 && (
-                <div>
-                  <h4 className="font-medium">Sample Feed Photos</h4>
-                  <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
-                    {eventImages.sampleFeedPhotos.map((photo, index) => (
-                      <div key={index} className="h-[100px] overflow-hidden rounded-lg">
-                        <Image
-                          src={URL.createObjectURL(photo) || "/placeholder.svg"}
-                          alt={`Feed photo ${index + 1}`}
-                          width={100}
-                          height={100}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                    ))}
+              {eventImages.sampleFeedPhotos &&
+                eventImages.sampleFeedPhotos.length > 0 && (
+                  <div>
+                    <h4 className="font-medium">Sample Feed Photos</h4>
+                    <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
+                      {eventImages.sampleFeedPhotos.map((photo, index) => (
+                        <div
+                          key={index}
+                          className="h-[100px] overflow-hidden rounded-lg"
+                        >
+                          <Image
+                            src={
+                              URL.createObjectURL(photo) || '/placeholder.svg'
+                            }
+                            alt={`Feed photo ${index + 1}`}
+                            width={100}
+                            height={100}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </CardContent>
         </Card>
@@ -149,7 +172,7 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
                 variant="ghost"
                 size="sm"
                 className="flex items-center gap-1 text-primary"
-                onClick={() => onEdit("experienceMoments")}
+                onClick={() => onEdit('experienceMoments')}
               >
                 <Pencil className="h-4 w-4" />
                 Edit
@@ -158,8 +181,8 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
             <div className="mt-4">
               <p>
                 {experienceMoments.active
-                  ? "Experience Moments are enabled for this event."
-                  : "Experience Moments are not enabled for this event."}
+                  ? 'Experience Moments are enabled for this event.'
+                  : 'Experience Moments are not enabled for this event.'}
               </p>
               {experienceMoments.active && (
                 <div className="mt-2 grid grid-cols-2 gap-4">
@@ -182,11 +205,10 @@ export function ReviewStep({ eventData, onSubmit, onBack, onEdit, submitting }: 
             Back
           </Button>
           <Button className="w-[160px]" onClick={onSubmit}>
-            {submitting ? "Submitting..." : "Submit"}
+            {submitting ? 'Submitting...' : 'Submit'}
           </Button>
         </div>
       </div>
     </div>
   )
 }
-

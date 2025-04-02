@@ -1,4 +1,4 @@
-"use server"
+'use server'
 
 type UploadResponse = {
   success: boolean
@@ -17,22 +17,22 @@ type UploadResponse = {
 export async function uploadImage(formData: FormData): Promise<UploadResponse> {
   try {
     // Get the image file from the form data
-    const imageFile = formData.get("image") as File
+    const imageFile = formData.get('image') as File
 
     if (!imageFile) {
       return {
         success: false,
         status: 400,
-        message: "No image file provided",
+        message: 'No image file provided',
       }
     }
 
     // Check if it's actually an image
-    if (!imageFile.type.startsWith("image/")) {
+    if (!imageFile.type.startsWith('image/')) {
       return {
         success: false,
         status: 400,
-        message: "The provided file is not an image",
+        message: 'The provided file is not an image',
       }
     }
 
@@ -42,7 +42,7 @@ export async function uploadImage(formData: FormData): Promise<UploadResponse> {
       return {
         success: false,
         status: 500,
-        message: "BASE_URL environment variable is not configured",
+        message: 'BASE_URL environment variable is not configured',
       }
     }
 
@@ -50,10 +50,10 @@ export async function uploadImage(formData: FormData): Promise<UploadResponse> {
 
     // Create a new FormData instance for the fetch request
     const apiFormData = new FormData()
-    apiFormData.append("image", imageFile)
+    apiFormData.append('image', imageFile)
 
     const response = await fetch(endpoint, {
-      method: "POST",
+      method: 'POST',
       body: apiFormData,
     })
 
@@ -63,23 +63,23 @@ export async function uploadImage(formData: FormData): Promise<UploadResponse> {
       return {
         success: false,
         status: response.status,
-        message: result.message || "Failed to upload image",
+        message: result.message || 'Failed to upload image',
       }
     }
 
     return {
       success: true,
       status: response.status,
-      message: result.message || "Image uploaded successfully",
+      message: result.message || 'Image uploaded successfully',
       data: result.data,
     }
   } catch (error) {
-    console.error("Error uploading image:", error)
+    console.error('Error uploading image:', error)
     return {
       success: false,
       status: 500,
-      message: error instanceof Error ? error.message : "An unknown error occurred",
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
     }
   }
 }
-

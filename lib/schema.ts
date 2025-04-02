@@ -91,36 +91,38 @@ export type PaymentFormValues = z.infer<typeof paymentFormSchema>
 // EVENT SCHEMA
 
 export const eventDetailsSchema = z.object({
-  title: z.string().min(1, "Event name is required"),
-  description: z.string().min(1, "Event description is required"),
+  title: z.string().min(1, 'Event name is required'),
+  description: z.string().min(1, 'Event description is required'),
   location: z.object({
-    type: z.string().min(1, "Location type is required"),
-    venueName: z.string().min(1, "Venue name is required"),
+    type: z.string().min(1, 'Location type is required'),
+    venueName: z.string().min(1, 'Venue name is required'),
     address: z.string().optional(),
     city: z.string().optional(),
     state: z.string().optional(),
     zipCode: z.string().optional(),
   }),
-  eventDate: z.string().min(1, "Event date is required"),
-  eventStartTime: z.string().min(1, "Start time is required"),
-  eventEndTime: z.string().min(1, "End time is required"),
+  eventDate: z.string().min(1, 'Event date is required'),
+  eventStartTime: z.string().min(1, 'Start time is required'),
+  eventEndTime: z.string().min(1, 'End time is required'),
   hashtags: z.array(z.string()).default([]),
 })
-
-
 
 export const photoSchema = z.object({
   coverPhoto: z
     .any()
     .refine((file) => file instanceof File || file === null, {
-      message: "Cover photo must be a file",
+      message: 'Cover photo must be a file',
     })
     .refine((file) => file !== null, {
-      message: "Cover photo is required",
+      message: 'Cover photo is required',
     }),
   sampleFeedPhotos: z
-    .array(z.any().refine((file) => file instanceof File, "Feed photo must be a file"))
-    .max(4, "Maximum 4 feed photos allowed"),
+    .array(
+      z
+        .any()
+        .refine((file) => file instanceof File, 'Feed photo must be a file')
+    )
+    .max(4, 'Maximum 4 feed photos allowed'),
 })
 
 export const experienceMomentsSchema = z
@@ -138,9 +140,10 @@ export const experienceMomentsSchema = z
       return true
     },
     {
-      message: "Recurrence and duration are required when Experience Moments are active",
-      path: ["active"], // This will show the error at the active field level
-    },
+      message:
+        'Recurrence and duration are required when Experience Moments are active',
+      path: ['active'], // This will show the error at the active field level
+    }
   )
 
 export const eventFormSchema = z.object({
@@ -150,5 +153,3 @@ export const eventFormSchema = z.object({
 })
 
 export type EventFormValues = z.infer<typeof eventFormSchema>
-
-

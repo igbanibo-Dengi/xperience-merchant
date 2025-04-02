@@ -41,7 +41,6 @@ export interface EventImages {
   sampleFeedPhotosUrls?: string[] // Uploaded URLs from server
 }
 
-
 export interface ExperienceMoments {
   active: boolean
   recurrence?: string
@@ -76,80 +75,79 @@ export interface ReviewStepProps {
 }
 
 export interface FormattedData {
-  title: string;
-  description: string;
-  location: EventLocation;
-  eventDate: string;
-  eventStartTime: string;
-  eventEndTime: string;
-  hashtags: string[];
-  xperienceMoment: ExperienceMoments;
-  planId: string;
-  coverPhotoUrl: string;
-  sampleFeedPhotosUrl: string[];
+  title: string
+  description: string
+  location: EventLocation
+  eventDate: string
+  eventStartTime: string
+  eventEndTime: string
+  hashtags: string[]
+  xperienceMoment: ExperienceMoments
+  planId: string
+  coverPhotoUrl: string
+  sampleFeedPhotosUrl: string[]
 }
-
 
 /////FOR FETCHED EVENT DATA==========================///////////////
 
 export interface Location {
-  type: 'Physical' | 'Virtual';
-  venueName?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
+  type: 'Physical' | 'Virtual'
+  venueName?: string
+  address?: string
+  city?: string
+  state?: string
+  zipCode?: string
 }
 
 export interface OrganizerSettings {
-  pushNotifications: boolean;
-  mode: string;
+  pushNotifications: boolean
+  mode: string
 }
 
 export interface Organizer {
-  settings: OrganizerSettings;
-  isProfileComplete: boolean;
-  _id: string;
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  userType: 'organizer' | 'attendee';
-  googleId: string | null;
-  companyName: string;
-  address: string;
-  industry: string;
-  passwordHash: string;
-  createdAt: string;
-  updatedAt: string;
+  settings: OrganizerSettings
+  isProfileComplete: boolean
+  _id: string
+  fullName: string
+  email: string
+  phoneNumber: string
+  userType: 'organizer' | 'attendee'
+  googleId: string | null
+  companyName: string
+  address: string
+  industry: string
+  passwordHash: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface Plan {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  features: string[];
-  createdAt: string;
-  updatedAt: string;
-  organizerId: string;
+  _id: string
+  name: string
+  description: string
+  price: number
+  features: string[]
+  createdAt: string
+  updatedAt: string
+  organizerId: string
 }
 
 export interface Event {
-  location: Location;
-  _id: string;
-  organizerId: Organizer;
-  planId: Plan;
-  title: string;
-  description: string;
-  eventDate: string;
-  eventStartTime: string;
-  eventEndTime: string;
-  coverPhotoUrl: string[];
-  sampleFeedPhotosUrl: string[];
-  hashtags: string[];
-  createdAt: string;
-  updatedAt: string;
-  xperienceMomentId: string;
+  location: Location
+  _id: string
+  organizerId: Organizer
+  planId: Plan
+  title: string
+  description: string
+  eventDate: string
+  eventStartTime: string
+  eventEndTime: string
+  coverPhotoUrl: string[]
+  sampleFeedPhotosUrl: string[]
+  hashtags: string[]
+  createdAt: string
+  updatedAt: string
+  xperienceMomentId: string
 }
 
-export type EventsData = Event[];
+export type EventsData = Event[]

@@ -5,7 +5,7 @@ export default async function Page() {
   const plans = await getAllPlans()
   const myPlan = await getUserPlan()
 
-  console.log(myPlan);
+  console.log(myPlan)
 
   return (
     <div className="py-10">

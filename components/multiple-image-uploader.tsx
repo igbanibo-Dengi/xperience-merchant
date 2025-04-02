@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { uploadMultipleImages } from "@/lib/actions/upload-multiple-images"
-import { useState, useRef } from "react"
+import { uploadMultipleImages } from '@/lib/actions/upload-multiple-images'
+import { useState, useRef } from 'react'
 
 export default function MultipleImageUploader() {
   const [isUploading, setIsUploading] = useState(false)
@@ -39,7 +39,8 @@ export default function MultipleImageUploader() {
     } catch (error) {
       setResult({
         success: false,
-        message: error instanceof Error ? error.message : "An unknown error occurred",
+        message:
+          error instanceof Error ? error.message : 'An unknown error occurred',
       })
     } finally {
       setIsUploading(false)
@@ -47,8 +48,8 @@ export default function MultipleImageUploader() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Upload Multiple Images</h2>
+    <div className="mx-auto max-w-md rounded-lg bg-white p-6 shadow-md">
+      <h2 className="mb-6 text-2xl font-bold">Upload Multiple Images</h2>
 
       <form ref={formRef} action={handleSubmit} className="space-y-4">
         <div className="space-y-2">
@@ -62,49 +63,52 @@ export default function MultipleImageUploader() {
             accept="image/*"
             multiple
             required
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+            className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-foreground hover:file:bg-primary/90"
           />
-          <p className="text-xs text-muted-foreground mt-1">
-            You can select multiple images by holding Ctrl (or Cmd on Mac) while selecting files
+          <p className="mt-1 text-xs text-muted-foreground">
+            You can select multiple images by holding Ctrl (or Cmd on Mac) while
+            selecting files
           </p>
         </div>
 
         <button
           type="submit"
           disabled={isUploading}
-          className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isUploading ? "Uploading..." : "Upload Images"}
+          {isUploading ? 'Uploading...' : 'Upload Images'}
         </button>
       </form>
 
       {result && (
         <div
-          className={`mt-6 p-4 rounded-md ${result.success ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}
+          className={`mt-6 rounded-md p-4 ${result.success ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}
         >
-          <p className="font-medium">{result.success ? "Success!" : "Error"}</p>
+          <p className="font-medium">{result.success ? 'Success!' : 'Error'}</p>
           <p className="text-sm">{result.message}</p>
 
           {result.mediaUrls && result.mediaUrls.length > 0 && (
             <div className="mt-4">
-              <p className="text-sm font-medium mb-2">Uploaded Image URLs:</p>
+              <p className="mb-2 text-sm font-medium">Uploaded Image URLs:</p>
               <div className="space-y-4">
                 {result.mediaUrls.map((url, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex items-center">
-                      <span className="text-xs font-medium mr-2">Image {index + 1}:</span>
+                      <span className="mr-2 text-xs font-medium">
+                        Image {index + 1}:
+                      </span>
                       <input
                         type="text"
                         readOnly
                         value={url}
-                        className="flex-1 p-2 text-xs bg-white border rounded-md"
+                        className="flex-1 rounded-md border bg-white p-2 text-xs"
                         onClick={(e) => (e.target as HTMLInputElement).select()}
                       />
                     </div>
                     <img
-                      src={url || "/placeholder.svg"}
+                      src={url || '/placeholder.svg'}
                       alt={`Uploaded image ${index + 1}`}
-                      className="max-w-full h-auto rounded-md border border-gray-200"
+                      className="h-auto max-w-full rounded-md border border-gray-200"
                     />
                   </div>
                 ))}
@@ -116,4 +120,3 @@ export default function MultipleImageUploader() {
     </div>
   )
 }
-

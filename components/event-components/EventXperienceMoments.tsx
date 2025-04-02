@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { InfoIcon as InfoCircle } from 'lucide-react'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { Event } from '@/types/event'
 
 interface TimeSlot {
   startTime: string
@@ -48,7 +49,7 @@ const timeSlots: TimeSlot[] = [
     images: Array(6).fill('/images/swift.jpg'),
   },
 ]
-export default function XperienceMoments() {
+export default function XperienceMoments({ event }: { event: Event }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
     null

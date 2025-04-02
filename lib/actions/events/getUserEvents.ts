@@ -1,29 +1,29 @@
 'use server'
-
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import type { FormattedData } from '@/types/event'
-// import { revalidatePath } from "next/cache"
 
-export async function createEvent(formattedData: FormattedData) {
+export async function getUserEvents() {
   try {
-    const url = `${process.env.BASE_URL}/event`
+    const url = `${process.env.BASE_URL}/event/user`
 
     const token = cookies().get('auth_token')?.value
+
+    console.log(token)
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
+    if (!token) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
     const response = await fetch(url, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formattedData),
     })
-
     if (!response.ok) {
       throw new Error(
         `Failed to fetch data: ${response.status} ${response.statusText}`
@@ -32,14 +32,13 @@ export async function createEvent(formattedData: FormattedData) {
 
     const data = await response.json()
 
-    // Revalidate the events page to show the new event
-    // revalidatePath("/events")
-
     return data
+
+    console.log(data)
   } catch (error) {
-    console.error('Error in createEvent action:', error)
+    console.error('Error in getUserEvents action:', error)
     return NextResponse.json(
-      { message: 'Failed create Event' },
+      { message: 'Failed to fetch user events' },
       { status: 500 }
     )
   }

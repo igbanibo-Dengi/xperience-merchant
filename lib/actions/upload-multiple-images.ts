@@ -1,4 +1,4 @@
-"use server"
+'use server'
 
 type MultipleUploadResponse = {
   success: boolean
@@ -14,26 +14,30 @@ type MultipleUploadResponse = {
  * @param formData - FormData containing the image files with key 'images'
  * @returns Response with success status and array of media URLs if successful
  */
-export async function uploadMultipleImages(formData: FormData): Promise<MultipleUploadResponse> {
+export async function uploadMultipleImages(
+  formData: FormData
+): Promise<MultipleUploadResponse> {
   try {
     // Get the image files from the form data
-    const imageFiles = formData.getAll("images") as File[]
+    const imageFiles = formData.getAll('images') as File[]
 
     if (!imageFiles || imageFiles.length === 0) {
       return {
         success: false,
         status: 400,
-        message: "No image files provided",
+        message: 'No image files provided',
       }
     }
 
     // Check if all files are images
-    const nonImageFiles = imageFiles.filter((file) => !file.type.startsWith("image/"))
+    const nonImageFiles = imageFiles.filter(
+      (file) => !file.type.startsWith('image/')
+    )
     if (nonImageFiles.length > 0) {
       return {
         success: false,
         status: 400,
-        message: "One or more provided files are not images",
+        message: 'One or more provided files are not images',
       }
     }
 
@@ -43,7 +47,7 @@ export async function uploadMultipleImages(formData: FormData): Promise<Multiple
       return {
         success: false,
         status: 500,
-        message: "BASE_URL environment variable is not configured",
+        message: 'BASE_URL environment variable is not configured',
       }
     }
 
@@ -54,11 +58,11 @@ export async function uploadMultipleImages(formData: FormData): Promise<Multiple
 
     // Append all image files with the same key name 'images'
     imageFiles.forEach((file) => {
-      apiFormData.append("images", file)
+      apiFormData.append('images', file)
     })
 
     const response = await fetch(endpoint, {
-      method: "POST",
+      method: 'POST',
       body: apiFormData,
     })
 
@@ -68,7 +72,7 @@ export async function uploadMultipleImages(formData: FormData): Promise<Multiple
       return {
         success: false,
         status: response.status,
-        message: result.message || "Failed to upload images",
+        message: result.message || 'Failed to upload images',
       }
     }
 
@@ -76,16 +80,16 @@ export async function uploadMultipleImages(formData: FormData): Promise<Multiple
     return {
       success: true,
       status: response.status,
-      message: result.message || "Images uploaded successfully",
+      message: result.message || 'Images uploaded successfully',
       data: result.data,
     }
   } catch (error) {
-    console.error("Error uploading images:", error)
+    console.error('Error uploading images:', error)
     return {
       success: false,
       status: 500,
-      message: error instanceof Error ? error.message : "An unknown error occurred",
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
     }
   }
 }
-

@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Search } from "lucide-react"
-import { Input } from "./ui/input"
-import type { Event } from "@/types/event"
+import { useState } from 'react'
+import { Search } from 'lucide-react'
+import { Input } from './ui/input'
+import type { Event } from '@/types/event'
 
 interface EventSearchProps {
   onSearch: (filteredEvents: Event[]) => void
@@ -11,7 +11,7 @@ interface EventSearchProps {
 }
 
 export function EventSearch({ onSearch, allEvents }: EventSearchProps) {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleSearch = (query: string) => {
     setSearchQuery(query)
@@ -26,8 +26,7 @@ export function EventSearch({ onSearch, allEvents }: EventSearchProps) {
 
     // Filter events based on search query
     const filteredEvents = allEvents.filter(
-      (event) =>
-        event.title.toLowerCase().includes(lowercaseQuery)
+      (event) => event.title.toLowerCase().includes(lowercaseQuery)
       // ||
       // event.description.toLowerCase().includes(lowercaseQuery) ||
       // (event.location.type === "Physical" &&
@@ -41,16 +40,15 @@ export function EventSearch({ onSearch, allEvents }: EventSearchProps) {
   }
 
   return (
-    <div className="relative flex items-center w-full">
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+    <div className="relative flex w-full items-center">
+      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
       <Input
         type="text"
         placeholder="Search for events"
-        className="pl-10 w-full"
+        className="w-full pl-10"
         value={searchQuery}
         onChange={(e) => handleSearch(e.target.value)}
       />
     </div>
   )
 }
-

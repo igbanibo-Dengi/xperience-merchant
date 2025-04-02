@@ -93,7 +93,6 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r-0">
       <SidebarContent className="bg-black pb-4">
         <div className="flex items-center justify-between px-4 py-4">
-
           {/* <SidebarTrigger className="text-white hover:bg-transparent hover:text-white" /> */}
         </div>
         <SidebarGroup>

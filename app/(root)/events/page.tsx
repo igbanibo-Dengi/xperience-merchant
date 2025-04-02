@@ -1,12 +1,11 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
-import AllEvents from "@/components/AllEvents"
-import CurrentEvents from "@/components/CurrentEvents"
-import UpcomingEvents from "@/components/UpcomingEvents"
-import PastEvents from "@/components/PastEvents"
-import { getAllEvents } from "@/lib/actions/events/getAllEvents"
-import type { EventsData } from "@/types/event"
-import { getUserEvents } from "@/lib/actions/events/getEventByUser"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Separator } from '@/components/ui/separator'
+import AllEvents from '@/components/AllEvents'
+import CurrentEvents from '@/components/CurrentEvents'
+import UpcomingEvents from '@/components/UpcomingEvents'
+import PastEvents from '@/components/PastEvents'
+import type { EventsData } from '@/types/event'
+import { getUserEvents } from '@/lib/actions/events/getUserEvents'
 
 const EventsPage = async () => {
   let eventsData: EventsData = []
@@ -17,7 +16,7 @@ const EventsPage = async () => {
 
     eventsData = Array.isArray(response.data) ? response.data : []
   } catch (error) {
-    console.error("Failed to fetch events:", error)
+    console.error('Failed to fetch events:', error)
     // Continue with empty array
   }
 
@@ -71,4 +70,3 @@ const EventsPage = async () => {
 }
 
 export default EventsPage
-
