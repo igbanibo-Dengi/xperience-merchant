@@ -21,7 +21,7 @@ const PastEvents = ({ events = [] }: PastEventsProps) => {
     .filter((event) => {
       try {
         const eventEndDateTime = new Date(
-          `${event.eventEndDay}T${event.eventEndTime}`
+          `${event.eventDate}`
         )
         return eventEndDateTime < currentDate
       } catch (error) {
@@ -30,8 +30,8 @@ const PastEvents = ({ events = [] }: PastEventsProps) => {
     })
     .sort((a, b) => {
       // Sort by most recent first
-      const dateA = new Date(`${a.eventEndDay}T${a.eventEndTime}`)
-      const dateB = new Date(`${b.eventEndDay}T${b.eventEndTime}`)
+      const dateA = new Date(`${a.eventDate}T${a.eventEndTime}`)
+      const dateB = new Date(`${b.eventDate}T${b.eventEndTime}`)
       return dateB.getTime() - dateA.getTime()
     })
 
@@ -146,10 +146,10 @@ function EventCard({ event }: { event: Event }) {
           <p className="text-xl font-semibold">{event.title}</p>
           <p className="text-muted-foreground">
             {formatEventDate(event.eventStartDay)} -{' '}
-            {formatEventDate(event.eventEndDay)}
+            {formatEventDate(event.eventDate)}
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            {getDaysSince(event.eventEndDay)}
+            {getDaysSince(event.eventDate)}
           </p>
           {event.location.type === 'Physical' &&
             event.location.city &&
