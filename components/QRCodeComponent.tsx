@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback } from 'react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { Button } from '@/components/ui/button'
+import { eventbaseUrl } from '@/constants'
 
 interface QRCodeComponentProps {
   value: string
@@ -18,7 +19,7 @@ export default function QRCodeComponent({ value, size, download, share }: QRCode
   const copyEventLink = useCallback(() => {
 
     try {
-      navigator.clipboard.writeText(value).then(() => {
+      navigator.clipboard.writeText(`${eventbaseUrl + value}`).then(() => {
         setCopied(true)
         setTimeout(() => setCopied(false), 2000) // Reset after 2s
       })
@@ -42,7 +43,7 @@ export default function QRCodeComponent({ value, size, download, share }: QRCode
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 mx-auto">
       <QRCodeCanvas
-        value={value}
+        value={`${eventbaseUrl + value}`}
         size={size}
         bgColor="white"
         fgColor="black"

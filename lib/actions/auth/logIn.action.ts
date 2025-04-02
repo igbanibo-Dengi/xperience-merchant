@@ -39,7 +39,7 @@ export async function logInAction(values: signIn) {
     cookies().set('auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      maxAge: 60 * 60 * 24, // 1 week
       sameSite: 'strict',
       path: '/',
     })

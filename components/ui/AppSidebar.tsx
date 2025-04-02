@@ -1,23 +1,6 @@
 'use client'
 
-import {
-  Home,
-  CalendarDays,
-  BarChart2,
-  Settings,
-  HelpCircle,
-  Banknote,
-} from 'lucide-react'
 import Image from 'next/image'
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from '@/components/ui/menubar'
 import {
   Sidebar,
   SidebarContent,
@@ -28,66 +11,24 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
-  useSidebar,
 } from '@/components/ui/sidebar'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Button } from './button'
 import { NavUser } from '../nav-user'
+import { sidebarLinks } from '@/constants'
 
-const items = [
-  {
-    title: 'Home',
-    url: '/',
-    icon: Home,
-  },
-  {
-    title: 'Events',
-    url: '/events',
-    icon: CalendarDays,
-  },
-  {
-    title: 'Analytics',
-    url: '/analytics',
-    icon: BarChart2,
-  },
-  {
-    title: 'Settings',
-    url: '/settings',
-    icon: Settings,
-  },
-  {
-    title: 'Pricing',
-    url: '/pricing',
-    icon: Banknote,
-  },
-  {
-    title: 'Support',
-    url: '/support',
-    icon: HelpCircle,
-  },
-]
+
 
 const data = {
   user: {
     name: 'shadcn',
     email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
+    avatar: '/images/SWIFT.jpg',
   },
 }
 
 export function AppSidebar() {
   const pathname = usePathname()
-  const {
-    state,
-    open,
-    setOpen,
-    openMobile,
-    setOpenMobile,
-    isMobile,
-    toggleSidebar,
-  } = useSidebar()
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
@@ -111,7 +52,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => {
+              {sidebarLinks.map((item) => {
                 const isActive =
                   pathname === item.url || pathname.startsWith(`${item.url}/`)
                 return (

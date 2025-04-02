@@ -164,7 +164,7 @@ export default async function EventPage({ params }: EventPageProps) {
                     </p>
                     <div>
                       <QRCodeComponent
-                        value={`https://xperience/events/${event._id}`}
+                        value={event._id}
                         download
                         share
                         size={300}
@@ -219,7 +219,7 @@ export default async function EventPage({ params }: EventPageProps) {
                     </div>
                     <div className="flex items-center justify-center">
                       <QRCodeComponent
-                        value={`https://xperience/events/${event._id}`}
+                        value={event._id}
                         size={120}
                       />
                     </div>
