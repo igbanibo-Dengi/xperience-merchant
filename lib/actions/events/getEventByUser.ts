@@ -1,17 +1,20 @@
 'use server'
 import { NextResponse } from "next/server"
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers"
 
 
-export async function getAllEvents() {
+export async function getUserEvents() {
+
   try {
-
-    const url = `${process.env.BASE_URL}/event`
+    const url = `${process.env.BASE_URL}/event/user`
 
     const token = cookies().get("auth_token")?.value
 
-    // console.log(token);
+    console.log(token);
 
+    if (!token) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    }
 
     if (!token) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
@@ -31,10 +34,11 @@ export async function getAllEvents() {
 
     return data
 
+    console.log(data);
+
 
   } catch (error) {
-    console.error("Error in getAllEvents action:", error)
-    return NextResponse.json({ message: "Failed to fetch events" }, { status: 500 })
-
+    console.error("Error in getUserEvents action:", error)
+    return NextResponse.json({ message: "Failed to fetch user events" }, { status: 500 })
   }
 }

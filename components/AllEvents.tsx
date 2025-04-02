@@ -19,8 +19,8 @@ const AllEvents = ({ events }: AllEventsProps) => {
   // Derived state for live and upcoming events based on filtered events
   const liveEvents = filteredEvents.filter((event) => {
     try {
-      const eventStartDateTime = new Date(`${event.eventStartDay}T${event.eventStartTime}`)
-      const eventEndDateTime = new Date(`${event.eventEndDay}T${event.eventEndTime}`)
+      const eventStartDateTime = new Date(`${event.eventDate}T${event.eventStartTime}`)
+      const eventEndDateTime = new Date(`${event.eventDate}T${event.eventEndTime}`)
       return currentDate >= eventStartDateTime && currentDate <= eventEndDateTime
     } catch (error) {
       return false
@@ -29,7 +29,7 @@ const AllEvents = ({ events }: AllEventsProps) => {
 
   const upcomingEvents = filteredEvents.filter((event) => {
     try {
-      const eventStartDateTime = new Date(`${event.eventStartDay}T${event.eventStartTime}`)
+      const eventStartDateTime = new Date(`${event.eventDate}T${event.eventStartTime}`)
       return eventStartDateTime > currentDate
     } catch (error) {
       return false
@@ -145,7 +145,7 @@ function EventCard({ event }: { event: Event }) {
         <div>
           <p className="text-xl font-semibold">{event.title}</p>
           <p className="text-muted-foreground">
-            {formatEventDate(event.eventStartDay)} at {formatEventTime(event.eventStartTime)}
+            {formatEventDate(event.eventDate)} at {formatEventTime(event.eventStartTime)}
           </p>
           {event.location.type === "Physical" && event.location.city && event.location.state && (
             <p className="text-sm text-muted-foreground mt-1">

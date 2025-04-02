@@ -19,7 +19,7 @@ const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
   // Filter for upcoming events
   const upcomingEvents = filteredEvents.filter((event) => {
     try {
-      const eventStartDateTime = new Date(`${event.eventStartDay}T${event.eventStartTime}`)
+      const eventStartDateTime = new Date(`${event.eventDate}T${event.eventStartTime}`)
       return eventStartDateTime > currentDate
     } catch (error) {
       return false
@@ -133,9 +133,9 @@ function EventCard({ event }: { event: Event }) {
         <div>
           <p className="text-xl font-semibold">{event.title}</p>
           <p className="text-muted-foreground">
-            {formatEventDate(event.eventStartDay)} at {formatEventTime(event.eventStartTime)}
+            {formatEventDate(event.eventDate)} at {formatEventTime(event.eventStartTime)}
           </p>
-          <p className="text-sm text-primary font-medium mt-1">{getDaysRemaining(event.eventStartDay)}</p>
+          <p className="text-sm text-primary font-medium mt-1">{getDaysRemaining(event.eventDate)}</p>
           {event.location.type === "Physical" && event.location.city && event.location.state && (
             <p className="text-sm text-muted-foreground mt-1">
               {event.location.city}, {event.location.state}

@@ -40,11 +40,11 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
         state: defaultValues?.location?.state || "",
         zipCode: defaultValues?.location?.zipCode || "",
       },
-      eventStartDay: defaultValues?.eventStartDay || "",
-      eventEndDay: defaultValues?.eventEndDay || "",
+      eventDate: defaultValues?.eventDate || "",
       eventStartTime: defaultValues?.eventStartTime || "",
       eventEndTime: defaultValues?.eventEndTime || "",
       hashtags: defaultValues?.hashtags || [],
+      planId: defaultValues?.planId || ""
     },
   })
 
@@ -316,29 +316,14 @@ export function EventDetailsStep({ defaultValues, onSubmit, onBack }: EventDetai
               <h2 className="text-2xl font-bold">Date and time</h2>
               <p className="text-muted-foreground">Choose a date and time for your event.</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1">
                 <FormField
                   control={form.control}
-                  name="eventStartDay"
+                  name="eventDate"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Start Date <Asterisk className="inline text-destructive" size={10} />
-                      </FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="eventEndDay"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        End Date <Asterisk className="inline text-destructive" size={10} />
+                        Event Date <Asterisk className="inline text-destructive" size={10} />
                       </FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />

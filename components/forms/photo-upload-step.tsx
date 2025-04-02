@@ -242,7 +242,7 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
                               <div className="mt-4 flex text-sm leading-6 text-muted-foreground">
                                 <label
                                   htmlFor="file-upload"
-                                  className="relative cursor-pointer rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80"
+                                  className="relative cursor-pointer rounded-md bg-transaprent w-[180px] h-[120px] font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80"
                                 >
                                   <span className="flex flex-col items-center justify-center font-normal text-foreground">
                                     <ImagePlus size={62} strokeWidth={1} />
@@ -270,7 +270,15 @@ export function PhotoUploadStep({ defaultValues, onSubmit, onBack }: PhotoUpload
             <Button className="w-[160px]" type="button" variant="outline" onClick={onBack}>
               Back
             </Button>
-            <Button className="w-[160px]" type="submit" disabled={!form.watch("coverPhoto")}>
+            <Button
+              className="w-[160px]"
+              type="submit"
+              disabled={
+                !form.formState.isValid ||
+                !form.getValues("coverPhoto") ||
+                form.getValues("sampleFeedPhotos").length < 4
+              }
+            >
               Next
             </Button>
           </div>

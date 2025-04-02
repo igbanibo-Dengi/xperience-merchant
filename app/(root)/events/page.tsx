@@ -6,13 +6,15 @@ import UpcomingEvents from "@/components/UpcomingEvents"
 import PastEvents from "@/components/PastEvents"
 import { getAllEvents } from "@/lib/actions/events/getAllEvents"
 import type { EventsData } from "@/types/event"
+import { getUserEvents } from "@/lib/actions/events/getEventByUser"
 
 const EventsPage = async () => {
   let eventsData: EventsData = []
 
   try {
-    const response = await getAllEvents()
+    const response = await getUserEvents()
     // Access the events array from response.data
+
     eventsData = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     console.error("Failed to fetch events:", error)

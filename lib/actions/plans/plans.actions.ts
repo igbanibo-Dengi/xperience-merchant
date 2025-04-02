@@ -62,7 +62,7 @@ export async function getUserPlan() {
       );
     }
 
-    const data = await response.json(); // Fix: Add "await"
+    const data = await response.json();
 
     return data;
   } catch (error) {

@@ -8,8 +8,7 @@ export interface EventDetails {
   title: string
   description: string
   location: EventLocation
-  eventStartDay: string
-  eventEndDay: string
+  eventDate: string
   eventStartTime: string
   eventEndTime: string
   hashtags: string[]
@@ -80,8 +79,7 @@ export interface FormattedData {
   title: string;
   description: string;
   location: EventLocation;
-  eventStartDay: string;
-  eventEndDay: string;
+  eventDate: string;
   eventStartTime: string;
   eventEndTime: string;
   hashtags: string[];
@@ -143,8 +141,7 @@ export interface Event {
   planId: Plan;
   title: string;
   description: string;
-  eventStartDay: string;
-  eventEndDay: string;
+  eventDate: string;
   eventStartTime: string;
   eventEndTime: string;
   coverPhotoUrl: string[];

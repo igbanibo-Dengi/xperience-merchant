@@ -27,8 +27,7 @@ const initialFormState: EventData = {
       state: "",
       zipCode: "",
     },
-    eventStartDay: "",
-    eventEndDay: "",
+    eventDate: "",
     eventStartTime: "",
     eventEndTime: "",
     hashtags: [],
@@ -92,11 +91,17 @@ export function EventCreationForm() {
   }
 
   const handleSubmit = async () => {
-    setSubmitting(true)
+    // setSubmitting(true)
+
+    console.log("submission started");
+
 
     // Get the user's plan
     const plan = await getUserPlan()
     const userPlanId = plan.data[0]._id
+
+    console.log(userPlanId);
+
 
 
     // Create a copy of formData
@@ -143,8 +148,7 @@ export function EventCreationForm() {
       title: formDataCopy.eventDetails.title,
       description: formDataCopy.eventDetails.description,
       location: formDataCopy.eventDetails.location,
-      eventStartDay: formDataCopy.eventDetails.eventStartDay,
-      eventEndDay: formDataCopy.eventDetails.eventEndDay,
+      eventDate: formDataCopy.eventDetails.eventDate,
       eventStartTime: formDataCopy.eventDetails.eventStartTime,
       eventEndTime: formDataCopy.eventDetails.eventEndTime,
       hashtags: formDataCopy.eventDetails.hashtags,
@@ -159,14 +163,17 @@ export function EventCreationForm() {
     };
 
 
+    console.log("Formatted Data:", formattedData);
+
+
     // Submit the data using the server action
     try {
       const result = await createEvent(formattedData)
 
       if (result.success) {
         console.log("Event created successfully:", result.data)
-        setSuccess(true)
-        setSubmitting(false)
+        // setSuccess(true)
+        // setSubmitting(false)
       } else {
         console.error("Failed to create event:", result.message)
         // Todo: Add error state and display to user
