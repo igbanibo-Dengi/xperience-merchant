@@ -17,9 +17,9 @@ import CountdownTimer from "@/components/CountdownTimer"
 import EventSettings from "@/components/EventSettings"
 
 interface EventPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default async function EventPage({ params }: EventPageProps) {
