@@ -9,6 +9,9 @@ export async function getAllPlans() {
 
     const token = (await cookies()).get('auth_token')?.value
 
+    console.log(token);
+
+
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }

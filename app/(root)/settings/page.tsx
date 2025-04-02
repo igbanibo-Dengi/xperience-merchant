@@ -8,9 +8,10 @@ import React from 'react'
 
 const page = async () => {
 
-  const plan = await getUserPlan()
+  const allPlans = await getAllPlans()
 
-  console.log(plan);;
+  console.log(allPlans);
+
 
 
   return (

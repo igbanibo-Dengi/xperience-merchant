@@ -189,8 +189,7 @@ export default async function EventPage({ params }: EventPageProps) {
             <div className="flex items-center text-muted-foreground">
               <CalendarDays className="mr-2 h-5 w-5" />
               <span>
-                {formatDate(event.eventStartDay)}
-                {event.eventStartDay !== event.eventEndDay && ` - ${formatDate(event.eventEndDay)}`}
+                {formatDate(event.eventDate)}
               </span>
             </div>
             <div className="flex items-center text-muted-foreground">
@@ -265,8 +264,7 @@ export default async function EventPage({ params }: EventPageProps) {
               <div>
                 <p className="font-medium">Date & Time</p>
                 <p className="text-muted-foreground">
-                  {formatDate(event.eventStartDay)}
-                  {event.eventStartDay !== event.eventEndDay && ` - ${formatDate(event.eventEndDay)}`}
+                  {formatDate(event.eventDate)}
                 </p>
                 <p className="text-muted-foreground">
                   {formatTime(event.eventStartTime)} - {formatTime(event.eventEndTime)}
@@ -300,7 +298,7 @@ export default async function EventPage({ params }: EventPageProps) {
               </div>
             </div>
 
-            <QRCodeComponent value="https://reactjs.org/" />
+            <QRCodeComponent value={`xperience/events/${event._id}`} />
 
             <div className="space-y-3">
               <Button className="w-full">Register for Event</Button>
