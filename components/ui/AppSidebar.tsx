@@ -7,9 +7,11 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar'
@@ -46,7 +48,6 @@ export function AppSidebar() {
       <SidebarContent className="bg-black pb-4">
         <div className="flex items-center justify-between px-4 py-4">
           <span className='uppercase text-white flex'>
-
             <Image
               src='/icons/x.svg'
               width={20}
@@ -59,8 +60,8 @@ export function AppSidebar() {
               </p>
             )}
           </span>
-
         </div>
+        {/* ============================ */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -73,6 +74,7 @@ export function AppSidebar() {
                       asChild
                       isActive={isActive}
                       className="h-[41px] text-base text-white hover:bg-muted data-[active=true]:bg-primary data-[active=true]:text-white"
+                      tooltip={item.title}
                     >
                       <Link href={item.url}>
                         <item.icon
@@ -94,6 +96,7 @@ export function AppSidebar() {
           <NavUser user={data.user} />
         </SidebarFooter>
       </SidebarContent>
+      <SidebarRail />
     </Sidebar>
   )
 }
