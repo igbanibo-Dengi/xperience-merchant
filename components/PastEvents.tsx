@@ -145,7 +145,6 @@ function EventCard({ event }: { event: Event }) {
         <div>
           <p className="text-xl font-semibold">{event.title}</p>
           <p className="text-muted-foreground">
-            {formatEventDate(event.eventStartDay)} -{' '}
             {formatEventDate(event.eventDate)}
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
