@@ -193,7 +193,7 @@ export function PhotoUploadStep({
               )}
             />
             {coverPreview && (
-              <div className="group relative mx-auto mt-4 h-[200px] w-[340px] md:h-[350px] md:w-[660px] xl:h-[400px] xl:w-[800px]">
+              <div className="group relative mx-auto mt-4 h-[200px] w-[340px] md:h-[350px] md:w-[660px] xl:h-[400px] xl:w-[800px] border rounded-md">
                 <Image
                   src={coverPreview || '/placeholder.svg'}
                   alt="Cover preview"

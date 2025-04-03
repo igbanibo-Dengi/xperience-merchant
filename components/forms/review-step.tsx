@@ -55,17 +55,17 @@ export function ReviewStep({
             </div>
             <div className="mt-4 space-y-4">
               <div>
-                <h4 className="font-medium">Event Name</h4>
+                <h4 className="font-semibold">Event Name</h4>
                 <p>{eventDetails.title}</p>
               </div>
               <div>
-                <h4 className="font-medium">Description</h4>
+                <h4 className="font-semibold">Description</h4>
                 <p className="whitespace-pre-wrap">
                   {eventDetails.description}
                 </p>
               </div>
               <div>
-                <h4 className="font-medium">Location</h4>
+                <h4 className="font-semibold">Location</h4>
                 {eventDetails.location.type === 'Online' ? (
                   <p>{eventDetails.location.venueName} (Online Event)</p>
                 ) : (
@@ -80,19 +80,21 @@ export function ReviewStep({
                   </div>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="">
                 <div>
-                  <h4 className="font-medium">Start Date</h4>
+                  <h4 className="font-semibold">Event Date</h4>
                   <p>{formatDate(eventDetails.eventDate)}</p>
                 </div>
+                <div className='flex items-center gap-20 mt-6'>
 
-                <div>
-                  <h4 className="font-medium">Start Time</h4>
-                  <p>{eventDetails.eventStartTime}</p>
-                </div>
-                <div>
-                  <h4 className="font-medium">End Time</h4>
-                  <p>{eventDetails.eventEndTime}</p>
+                  <div>
+                    <h4 className="font-semibold">Start Time</h4>
+                    <p>{eventDetails.eventStartTime}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">End Time</h4>
+                    <p>{eventDetails.eventEndTime}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -116,7 +118,7 @@ export function ReviewStep({
             </div>
             <div className="mt-4 space-y-4">
               <div>
-                <h4 className="font-medium">Cover Photo</h4>
+                <h4 className="font-semibold">Cover Photo</h4>
                 {eventImages.coverPhoto && (
                   <div className="mt-2 h-[200px] w-full overflow-hidden rounded-lg">
                     <Image
@@ -135,7 +137,7 @@ export function ReviewStep({
               {eventImages.sampleFeedPhotos &&
                 eventImages.sampleFeedPhotos.length > 0 && (
                   <div>
-                    <h4 className="font-medium">Sample Feed Photos</h4>
+                    <h4 className="font-semibold">Sample Feed Photos</h4>
                     <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
                       {eventImages.sampleFeedPhotos.map((photo, index) => (
                         <div
@@ -184,11 +186,11 @@ export function ReviewStep({
               {experienceMoments.active && (
                 <div className="mt-2 grid grid-cols-2 gap-4">
                   <div>
-                    <h4 className="font-medium">Recurrence</h4>
+                    <h4 className="font-semibold">Recurrence</h4>
                     <p>{experienceMoments.recurrence} days</p>
                   </div>
                   <div>
-                    <h4 className="font-medium">Duration</h4>
+                    <h4 className="font-semibold">Duration</h4>
                     <p>{experienceMoments.duration} minutes</p>
                   </div>
                 </div>

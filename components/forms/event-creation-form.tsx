@@ -166,7 +166,6 @@ export function EventCreationForm() {
 
     console.log('Formatted Data:', formattedData)
 
-    // Submit the data using the server action
     try {
       const result = await createEvent(formattedData)
 
