@@ -83,12 +83,9 @@ export function ReviewStep({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-medium">Start Date</h4>
-                  <p>{formatDate(eventDetails.eventStartDay)}</p>
+                  <p>{formatDate(eventDetails.eventDate)}</p>
                 </div>
-                <div>
-                  <h4 className="font-medium">End Date</h4>
-                  <p>{formatDate(eventDetails.eventEndDay)}</p>
-                </div>
+
                 <div>
                   <h4 className="font-medium">Start Time</h4>
                   <p>{eventDetails.eventStartTime}</p>
