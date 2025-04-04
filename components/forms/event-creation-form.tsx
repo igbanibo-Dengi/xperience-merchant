@@ -96,7 +96,7 @@ export function EventCreationForm() {
   }
 
   const handleSubmit = async () => {
-    // setSubmitting(true)
+    setSubmitting(true)
 
     console.log('submission started')
 
@@ -171,8 +171,8 @@ export function EventCreationForm() {
 
       if (result.success) {
         console.log('Event created successfully:', result.data)
-        // setSuccess(true)
-        // setSubmitting(false)
+        setSuccess(true)
+        setSubmitting(false)
       } else {
         console.error('Failed to create event:', result.message)
         // Todo: Add error state and display to user
