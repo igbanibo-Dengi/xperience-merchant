@@ -5,6 +5,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+
+// Utility function to get initials from a name
+export const getInitials = (name: string): string =>
+  name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+
 // Format date for display
 export const formatDate = (dateStr: string) => {
   const date = new Date(dateStr)

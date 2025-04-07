@@ -33,3 +33,23 @@ export interface AuthResponse {
     industry: string
   }
 }
+
+export interface UserSettings {
+  pushNotification: boolean
+  mode: string
+}
+
+export interface LoggedInUser {
+  settings: UserSettings
+  isProfileComplete: boolean
+  _id: string
+  fullName: string
+  email: string
+  phoneNumber: string
+  userType: string
+  companyName: string
+  address: string
+  industry: string
+  createdAt: string
+  updatedAt: string
+}

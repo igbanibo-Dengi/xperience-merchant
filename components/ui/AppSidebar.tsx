@@ -19,6 +19,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { NavUser } from '../nav-user'
 import { sidebarLinks } from '@/constants'
+import { LoggedInUser } from '@/types/auth'
 
 
 
@@ -30,7 +31,7 @@ const data = {
   },
 }
 
-export function AppSidebar() {
+export function AppSidebar({ loggedInUser }: { loggedInUser: LoggedInUser }) {
   const pathname = usePathname()
   const {
     state,
@@ -93,7 +94,7 @@ export function AppSidebar() {
 
         {/* Profile Section */}
         <SidebarFooter className="mt-auto">
-          <NavUser user={data.user} />
+          <NavUser loggedInUser={loggedInUser} />
         </SidebarFooter>
       </SidebarContent>
       <SidebarRail />
