@@ -10,8 +10,13 @@ import type { EventData } from '@/types/event'
 import { EventSuccess } from './event-suucess'
 import { uploadMultipleImages } from '@/lib/actions/upload-multiple-images'
 import { uploadImage } from '@/lib/actions/uploadImage'
-import { getUserPlan } from '@/lib/actions/plans/plans.actions'
+import { assignPlanToUser, getAllPlans, getPlanById, getUserPlan } from '@/lib/actions/plans/plans.actions'
 import { createEvent } from '@/lib/actions/events/createEvent'
+import { ToastAction } from '../ui/toast'
+import { toast } from '@/hooks/use-toast'
+import Link from 'next/link'
+import { Button } from '../ui/button'
+import { basicPlanId } from '@/constants'
 
 const steps = [
   'Event Details',
@@ -96,56 +101,97 @@ export function EventCreationForm() {
   }
 
   const handleSubmit = async () => {
+    console.log('submission started')
     setSubmitting(true)
 
-    console.log('submission started')
+    let userPlanId: string | null = null
 
-    // Get the user's plan
-    const plan = await getUserPlan()
-    const userPlanId = plan.data[0]._id
+    // Step 1: Get or Assign User Plan
+    try {
+      const plan = await getUserPlan()
 
-    console.log(userPlanId)
+      if (!plan.data || plan.data.length === 0) {
+        const assignPlan = await assignPlanToUser(basicPlanId)
 
-    // Create a copy of formData
+        if (!assignPlan.success || !assignPlan.data?._id) {
+          console.error('Failed to assign plan to user:', assignPlan.message)
+          toast({
+            title: 'Error',
+            description: 'Could not assign a plan to your account.',
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          })
+          return
+        }
+
+        userPlanId = assignPlan.data._id
+      } else {
+        userPlanId = plan.data[0]._id
+      }
+    } catch (error) {
+      console.error('Error fetching or assigning plan:', error)
+      toast({
+        title: 'Error',
+        description: 'There was a problem setting up your plan.',
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+      return
+    }
+
+    // Step 2: Prepare a safe copy of formData
     const formDataCopy = { ...formData }
+    formDataCopy.eventImages = formDataCopy.eventImages || {}
+    formDataCopy.experienceMoments = formDataCopy.experienceMoments || {}
+    formDataCopy.eventDetails = formDataCopy.eventDetails || {}
 
-    // Upload cover photo if it exists
-    if (formData.eventImages.coverPhoto) {
-      const imageFormData = new FormData()
-      imageFormData.append('image', formData.eventImages.coverPhoto)
+    // Step 3: Prepare image uploads
+    const coverPhoto = formData.eventImages?.coverPhoto
+    const sampleFeedPhotos = formData.eventImages?.sampleFeedPhotos || []
 
-      try {
-        const response = await uploadImage(imageFormData)
-        // console.log("Cover Photo Response:", response);
+    let coverPhotoUrl = ''
+    let sampleFeedPhotosUrls: string[] = []
 
-        if (response.success && response.data) {
-          formDataCopy.eventImages.coverPhotoUrl = response.data.mediaUrl
-        }
-      } catch (error) {
-        console.error('Error uploading cover photo:', error)
+    const coverUploadPromise = coverPhoto
+      ? (() => {
+        const imageFormData = new FormData()
+        imageFormData.append('image', coverPhoto)
+        return uploadImage(imageFormData)
+      })()
+      : Promise.resolve(null)
+
+    const sampleUploadPromise = sampleFeedPhotos.length
+      ? (() => {
+        const multipleImageFormData = new FormData()
+        sampleFeedPhotos.forEach((file) =>
+          multipleImageFormData.append('images', file)
+        )
+        return uploadMultipleImages(multipleImageFormData)
+      })()
+      : Promise.resolve(null)
+
+    try {
+      const [coverResponse, multipleResponse] = await Promise.all([
+        coverUploadPromise,
+        sampleUploadPromise,
+      ])
+
+      if (coverResponse?.success && coverResponse.data) {
+        coverPhotoUrl = coverResponse.data.mediaUrl
       }
+
+      if (multipleResponse?.success && multipleResponse.data) {
+        sampleFeedPhotosUrls = multipleResponse.data.mediaUrl
+      }
+    } catch (error) {
+      console.error('Error uploading one or more images:', error)
+      toast({
+        title: 'Upload Error',
+        description: 'There was an issue uploading your images. Please try again.',
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+      return
     }
 
-    // Upload multiple sample feed photos if they exist
-    if (formData.eventImages.sampleFeedPhotos?.length) {
-      const multipleImageFormData = new FormData()
-      formData.eventImages.sampleFeedPhotos.forEach((file) =>
-        multipleImageFormData.append('images', file)
-      )
-
-      try {
-        const response = await uploadMultipleImages(multipleImageFormData)
-        // console.log("Multiple Upload Response:", response);
-
-        if (response.success && response.data) {
-          formDataCopy.eventImages.sampleFeedPhotosUrls = response.data.mediaUrl
-        }
-      } catch (error) {
-        console.error('Error uploading sample feed photos:', error)
-      }
-    }
-
-    // Restructure `formDataCopy` to match the expected API format
+    // Step 4: Prepare data for submission
     const formattedData = {
       title: formDataCopy.eventDetails.title,
       description: formDataCopy.eventDetails.description,
@@ -159,28 +205,44 @@ export function EventCreationForm() {
         recurrence: formDataCopy.experienceMoments.recurrence,
         duration: formDataCopy.experienceMoments.duration,
       },
-      planId: userPlanId,
-      coverPhotoUrl: formDataCopy.eventImages.coverPhotoUrl || '',
-      sampleFeedPhotosUrl: formDataCopy.eventImages.sampleFeedPhotosUrls || [],
+      planId: userPlanId!,
+      coverPhotoUrl,
+      sampleFeedPhotosUrl: sampleFeedPhotosUrls,
     }
 
     console.log('Formatted Data:', formattedData)
 
+    // Step 5: Submit event
     try {
       const result = await createEvent(formattedData)
 
       if (result.success) {
         console.log('Event created successfully:', result.data)
+        toast({
+          title: 'Success',
+          description: 'Your event has been created!',
+        })
         setSuccess(true)
-        setSubmitting(false)
       } else {
         console.error('Failed to create event:', result.message)
-        // Todo: Add error state and display to user
+        toast({
+          title: 'Submission Error',
+          description: result.message || 'Something went wrong while creating your event.',
+        })
+        setSuccess(false)
+        setSubmitting(false)
       }
     } catch (error) {
       console.error('Error submitting event:', error)
+      toast({
+        title: 'Error',
+        description: 'Unexpected error while submitting your event.',
+      })
+      setSuccess(false)
+      setSubmitting(false)
     }
   }
+
 
   return (
     <>

@@ -7,6 +7,8 @@ import {
   Banknote,
 } from 'lucide-react'
 
+export const basicPlanId = "67f790ca161d52e6deaf2545"
+
 export const eventbaseUrl = "https://xperience-web-app.vercel.app/event/"
 
 export const sidebarLinks = [

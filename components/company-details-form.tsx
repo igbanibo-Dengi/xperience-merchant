@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { type CompanyDetails, companyDetailsSchema } from '@/lib/schema'
 import { CompanyDetailsFormProps } from '@/types/auth'
 import { Button } from '@/components/ui/button'
-// import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -24,6 +23,7 @@ import {
 } from '@/components/ui/select'
 import Link from 'next/link'
 import { Building2, MapPin, Globe } from 'lucide-react'
+import { Checkbox } from './ui/checkbox'
 
 export function CompanyDetailsForm({
   onSubmit,
@@ -40,7 +40,7 @@ export function CompanyDetailsForm({
       state: '',
       zipCode: '',
       country: '',
-      // termsAccepted: false,
+      termsAccepted: false,
     },
   })
 
@@ -194,7 +194,7 @@ export function CompanyDetailsForm({
                 />
               </div>
             </div>
-            {/* <FormField
+            <FormField
               control={form.control}
               name="termsAccepted"
               render={({ field }) => (
@@ -213,7 +213,7 @@ export function CompanyDetailsForm({
                   </div>
                 </FormItem>
               )}
-            /> */}
+            />
             <div className="flex gap-4">
               <Button
                 type="button"

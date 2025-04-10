@@ -1,6 +1,7 @@
 'use server'
+import { signUpData } from "@/types/auth"
 
-export async function signUpAction(formData: { [key: string]: string }) {
+export async function signUpAction(formData: signUpData) {
   try {
     const url = `${process.env.BASE_URL}/auth/register`
 

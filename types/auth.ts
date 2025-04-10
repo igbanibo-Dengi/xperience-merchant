@@ -53,3 +53,19 @@ export interface LoggedInUser {
   createdAt: string
   updatedAt: string
 }
+
+export interface signUpData {
+  email: string
+  fullName: string
+  password: string
+  confirmPassword: string
+  industry: string
+  address: string
+  companyName: string
+  city: string
+  state: string
+  country: string
+  zipCode: string
+  termsAccepted: boolean
+}
+

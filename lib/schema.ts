@@ -47,9 +47,9 @@ export const companyDetailsSchema = z.object({
   state: z.string().min(1, 'Please enter a state/province'),
   zipCode: z.string().min(1, 'Please enter a ZIP/postal code'),
   country: z.string().min(1, 'Please select a country'),
-  // termsAccepted: z.boolean().refine((val) => val === true, {
-  //   message: "You must accept the terms and conditions",
-  // })
+  termsAccepted: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  })
 })
 
 export const signInSchema = z.object({
