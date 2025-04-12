@@ -41,7 +41,7 @@ export async function logInAction(values: signIn) {
 
     // Set the cookie using the cookies() API
     const cookieStore = await cookies()
-    cookieStore.set('auth_token', token, {
+    cookieStore.set('xperience_auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 24, // 1 day

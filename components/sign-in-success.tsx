@@ -12,7 +12,7 @@ export function SignInSuccess() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       router.push('/')
-    }, 3000)
+    }, 1000)
 
     return () => clearTimeout(timeout)
   }, [router])

@@ -12,7 +12,7 @@ export function SignupSuccess() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       router.push('/sign-in')
-    }, 3000)
+    }, 1000)
 
     return () => clearTimeout(timeout)
   }, [router])
@@ -22,13 +22,13 @@ export function SignupSuccess() {
       <CheckCircle className="h-16 w-16 text-primary" />
       <h2 className="text-2xl font-semibold">Account Created!</h2>
       <p className="text-muted-foreground">
-        You&apos;re being redirected to the dashboard.
+        You&apos;re being redirected to the sign in page.
       </p>
-      <Button variant={'link'} className="font-bold" asChild>
+      {/* <Button variant={'link'} className="font-bold" asChild>
         <Link href="/" className="font-bold text-primary transition-colors">
           Go to the dashboard
         </Link>
-      </Button>
+      </Button> */}
     </div>
   )
 }

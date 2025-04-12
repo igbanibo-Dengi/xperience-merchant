@@ -114,7 +114,7 @@ export function EventCreationForm() {
         const assignPlan = await assignPlanToUser(basicPlanId)
 
         if (!assignPlan.success || !assignPlan.data?._id) {
-          console.error('Failed to assign plan to user:', assignPlan.message)
+          // console.error('Failed to assign plan to user:', assignPlan.message)
           toast({
             title: 'Error',
             description: 'Could not assign a plan to your account.',
@@ -128,7 +128,7 @@ export function EventCreationForm() {
         userPlanId = plan.data[0]._id
       }
     } catch (error) {
-      console.error('Error fetching or assigning plan:', error)
+      // console.error('Error fetching or assigning plan:', error)
       toast({
         title: 'Error',
         description: 'There was a problem setting up your plan.',
@@ -182,11 +182,11 @@ export function EventCreationForm() {
         sampleFeedPhotosUrls = multipleResponse.data.mediaUrl
       }
     } catch (error) {
-      console.error('Error uploading one or more images:', error)
+      // console.error('Error uploading one or more images:', error)
       toast({
         title: 'Upload Error',
         description: 'There was an issue uploading your images. Please try again.',
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
       })
       return
     }
@@ -217,14 +217,14 @@ export function EventCreationForm() {
       const result = await createEvent(formattedData)
 
       if (result.success) {
-        console.log('Event created successfully:', result.data)
+        // console.log('Event created successfully:', result.data)
         toast({
           title: 'Success',
           description: 'Your event has been created!',
         })
         setSuccess(true)
       } else {
-        console.error('Failed to create event:', result.message)
+        // console.error('Failed to create event:', result.message)
         toast({
           title: 'Submission Error',
           description: result.message || 'Something went wrong while creating your event.',
@@ -233,7 +233,7 @@ export function EventCreationForm() {
         setSubmitting(false)
       }
     } catch (error) {
-      console.error('Error submitting event:', error)
+      // console.error('Error submitting event:', error)
       toast({
         title: 'Error',
         description: 'Unexpected error while submitting your event.',
