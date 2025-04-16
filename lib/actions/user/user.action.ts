@@ -7,7 +7,7 @@ export async function getLoggedInUser() {
   try {
     const url = `${process.env.BASE_URL}/auth/user-info`
     const cookieStore = await cookies()
-    const token = cookieStore.get('auth_token')?.value
+    const token = cookieStore.get('xperience_auth_token')?.value
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })

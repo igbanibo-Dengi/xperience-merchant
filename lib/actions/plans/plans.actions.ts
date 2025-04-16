@@ -8,7 +8,7 @@ export async function getAllPlans() {
     const url = `${process.env.BASE_URL}/plan`
 
     const cookieStore = await cookies()
-    const token = cookieStore.get('auth_token')?.value
+    const token = cookieStore.get('xperience_auth_token')?.value
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
@@ -44,7 +44,7 @@ export async function getUserPlan() {
     const url = `${process.env.BASE_URL}/plan/user`
 
     const cookieStore = await cookies()
-    const token = cookieStore.get('auth_token')?.value
+    const token = cookieStore.get('xperience_auth_token')?.value
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
@@ -107,7 +107,7 @@ export const assignPlanToUser = async (planId: string) => {
     const url = `${process.env.BASE_URL}/plan/select`
 
     const cookieStore = await cookies()
-    const token = cookieStore.get('auth_token')?.value
+    const token = cookieStore.get('xperience_auth_token')?.value
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }

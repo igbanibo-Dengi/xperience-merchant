@@ -17,7 +17,6 @@ export default async function RootLayout({
   const User = await getLoggedInUser()
   const LoggedInUser = User.data as LoggedInUser
 
-
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar loggedInUser={LoggedInUser} />

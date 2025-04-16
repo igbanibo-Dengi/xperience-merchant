@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server'
 const publicPaths = ['/sign-in', '/sign-up']
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('auth_token')
+  const token = request.cookies.get('xperience_auth_token')
 
   const { pathname } = request.nextUrl
 
