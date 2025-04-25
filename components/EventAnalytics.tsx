@@ -32,7 +32,7 @@ const EventAnalytics = () => {
         <div className="bg-primary/20 rounded-lg p-4 flex items-start gap-3">
           <Rocket className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
           <p className="text-sm text-muted-foreground text-left">
-            We're building a comprehensive analytics dashboard to help you track and optimize your events.
+            We&apos;re building a comprehensive analytics dashboard to help you track and optimize your events.
             Stay tuned for updates!
           </p>
         </div>
