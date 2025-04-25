@@ -203,7 +203,11 @@ export function ReviewStep({
           <Button className="w-[160px]" variant="outline" onClick={onBack}>
             Back
           </Button>
-          <Button className="w-[160px]" onClick={onSubmit}>
+          <Button
+            className="w-[160px]"
+            onClick={onSubmit}
+            disabled={submitting}
+          >
             {submitting ? 'Submitting...' : 'Submit'}
           </Button>
         </div>
