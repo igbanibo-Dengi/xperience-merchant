@@ -15,6 +15,7 @@ import { getEventById } from "@/lib/actions/events/getEventById"
 import { formatDate } from "@/lib/utils"
 import CountdownTimer from "@/components/CountdownTimer"
 import EventSettings from "@/components/EventSettings"
+import EventAnalytics from "@/components/EventAnalytics"
 
 interface EventPageProps {
   params: Promise<{
@@ -156,7 +157,7 @@ export default async function EventPage({ params }: EventPageProps) {
                 <EventXperienceMoments event={event} />
               </TabsContent>
               <TabsContent value="analytics" className="mt-0">
-                {/* <EventAnalytics event={event} /> */}
+                <EventAnalytics />
               </TabsContent>
               <TabsContent value="qr-code" className="mt-0">
                 <div className="space-y-6">

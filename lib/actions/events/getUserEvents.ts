@@ -13,9 +13,6 @@ export async function getUserEvents() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
-    if (!token) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
-    }
     const response = await fetch(url, {
       method: 'GET',
       headers: {

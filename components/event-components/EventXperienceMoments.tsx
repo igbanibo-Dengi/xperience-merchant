@@ -31,7 +31,14 @@ const timeSlots: TimeSlot[] = [
   {
     startTime: '7:30 PM',
     endTime: '7:35 PM',
-    images: Array(6).fill('/images/swift.jpg'),
+    images: [
+      'https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg',
+      'https://images.pexels.com/photos/3130810/pexels-photo-3130810.jpeg',
+      'https://images.pexels.com/photos/3182740/pexels-photo-3182740.jpeg',
+      'https://images.pexels.com/photos/3182740/pexels-photo-3182740.jpeg',
+      'https://images.pexels.com/photos/3182740/pexels-photo-3182740.jpeg',
+      'https://images.pexels.com/photos/3182740/pexels-photo-3182740.jpeg',
+    ],
   },
   {
     startTime: '8:15 PM',
