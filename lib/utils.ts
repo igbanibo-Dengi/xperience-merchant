@@ -15,6 +15,15 @@ export const getInitials = (name: string): string =>
     .toUpperCase()
     .slice(0, 2);
 
+export function getFirstName(fullName: string): string {
+  if (!fullName?.trim()) return ''; // Handle empty/undefined input
+
+  // Split by spaces and take the first part
+  const firstName = fullName.trim().split(/\s+/)[0];
+
+  return firstName;
+}
+
 
 // Format date for display
 export const formatDate = (dateStr: string) => {

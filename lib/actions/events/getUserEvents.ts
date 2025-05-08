@@ -30,7 +30,6 @@ export async function getUserEvents() {
 
     return data
 
-    console.log(data)
   } catch (error) {
     console.error('Error in getUserEvents action:', error)
     return NextResponse.json(

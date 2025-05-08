@@ -31,7 +31,6 @@ import { getInitials } from '@/lib/utils'
 
 export function NavUser({ loggedInUser }: { loggedInUser: LoggedInUser }) {
 
-  console.log('loggedInUser', loggedInUser);
 
 
   const { isMobile } = useSidebar()

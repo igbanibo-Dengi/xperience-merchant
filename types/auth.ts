@@ -68,4 +68,3 @@ export interface signUpData {
   zipCode: string
   termsAccepted: boolean
 }
-

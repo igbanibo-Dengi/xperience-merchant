@@ -132,6 +132,14 @@ export interface Plan {
   organizerId: string
 }
 
+export interface Plans {
+  plans: Plan[]
+}
+
+export interface UserEvents {
+  userEvents: Event[]
+}
+
 export interface Event {
   location: Location
   _id: string

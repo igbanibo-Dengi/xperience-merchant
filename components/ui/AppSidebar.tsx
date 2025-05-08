@@ -21,16 +21,6 @@ import { NavUser } from '../nav-user'
 import { sidebarLinks } from '@/constants'
 import { LoggedInUser } from '@/types/auth'
 
-
-
-const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/images/SWIFT.jpg',
-  },
-}
-
 export function AppSidebar({ loggedInUser }: { loggedInUser: LoggedInUser }) {
   const pathname = usePathname()
   const {

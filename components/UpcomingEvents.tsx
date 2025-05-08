@@ -12,7 +12,7 @@ interface UpcomingEventsProps {
   events?: Event[]
 }
 
-const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
+export const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>(events)
   const currentDate = new Date()
 
@@ -65,7 +65,7 @@ const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
 export default UpcomingEvents
 
 // Event card component
-function EventCard({ event }: { event: Event }) {
+export function EventCard({ event }: { event: Event }) {
   const formatEventDate = (dateStr: string) => {
     try {
       const date = new Date(dateStr)
