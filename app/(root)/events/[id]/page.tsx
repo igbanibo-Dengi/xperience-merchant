@@ -33,11 +33,6 @@ export default async function EventPage({ params }: EventPageProps) {
     const response = await getEventById(id)
     const mediaResponse = await getEventMedia(id, 1, 12)
 
-    console.log("media response:", mediaResponse);
-
-
-
-
     // if (mediaResponse instanceof NextResponse) {
     //   return (
     //     <div className="p-4">
@@ -236,18 +231,22 @@ export default async function EventPage({ params }: EventPageProps) {
             <div className="space-y-6">
               <Card>
                 <CardContent className="p-6">
-                  <div className="mb-4 flex items-center justify-between">
+                  {/* <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-xl font-semibold">Analytics</h2>
-                    {/* <Button variant="link" className="p-0 text-primary" asChild>
+                    <Button variant="link" className="p-0 text-primary" asChild>
                       <Link href={`/events/${event._id}/analytics`}>View All</Link>
-                    </Button> */}
-                  </div>
+                    </Button> 
+                  </div> */}
 
                   <div className="space-y-4">
                     <div className="flex items-center justify-between rounded-lg border p-4">
                       <span className="flex items-center gap-2">
                         <PhoneOutgoing className="h-5 w-5 text-muted-foreground" />
-                        <p>Photos Uploaded:</p>
+                        <div className="flex">Photos Uploaded: {mediaResponse instanceof NextResponse ? (
+                          <p>0</p>
+                        ) : (
+                          <p>{mediaResponse.data.length}</p>
+                        )}</div>
                       </span>
                       {/* <p className="font-bold">{mediaResponse.data.length}</p> */}
                     </div>
