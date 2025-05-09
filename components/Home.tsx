@@ -63,9 +63,9 @@ const Home = ({ plan, events, user }: HomeProps) => {
             <div className="">
               {hasEvents ? (
                 <div className="space-y-4">
-                  <UpcomingEvents />
+                  <UpcomingEvents events={events} bigButton={false} />
                   <div className='w-full flex items-center justify-center'>
-                    <Button variant={'outline'} className='mx-auto' asChild>
+                    <Button variant={'outline'} className='w-full mx-4' asChild>
                       <Link href={"/events"}>
                         See All Events <ArrowRight />
                       </Link>

@@ -32,8 +32,8 @@ export async function logInAction(values: signIn) {
     const authData = await response.json()
     const token = authData?.data?.token
 
-    console.log('auth data', authData);
-    console.log(token);
+    // console.log('auth data', authData);
+    // console.log(token);
 
     if (!token) {
       return { error: 'Failed to retrieve token from server.' }
@@ -49,7 +49,7 @@ export async function logInAction(values: signIn) {
       path: '/',
     });
 
-    console.log('Auth Token successfully stored in cookie.')
+    // console.log('Auth Token successfully stored in cookie.')
     return { success: true, user: authData.user || null }
   } catch (error) {
     console.error('Error in log-in action:', error)

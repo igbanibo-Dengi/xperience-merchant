@@ -7,12 +7,14 @@ import Link from 'next/link'
 import { Button } from './ui/button'
 import type { Event } from '@/types/event'
 import { EventSearch } from './eventsSearch'
+import { boolean } from 'zod'
 
 interface UpcomingEventsProps {
   events?: Event[]
+  bigButton?: boolean
 }
 
-export const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
+export const UpcomingEvents = ({ events = [], bigButton = false }: UpcomingEventsProps) => {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>(events)
   const currentDate = new Date()
 
@@ -49,7 +51,7 @@ export const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
         {upcomingEvents.length > 0 ? (
           <div className="space-y-4">
             {upcomingEvents.map((event) => (
-              <EventCard key={event._id} event={event} />
+              <EventCard key={event._id} event={event} bigButton={bigButton} />
             ))}
           </div>
         ) : (
@@ -64,8 +66,13 @@ export const UpcomingEvents = ({ events = [] }: UpcomingEventsProps) => {
 
 export default UpcomingEvents
 
+interface EventCardProps {
+  event: Event
+  bigButton?: boolean
+}
+
 // Event card component
-export function EventCard({ event }: { event: Event }) {
+export function EventCard({ event, bigButton }: EventCardProps) {
   const formatEventDate = (dateStr: string) => {
     try {
       const date = new Date(dateStr)
@@ -136,7 +143,7 @@ export function EventCard({ event }: { event: Event }) {
           />
         </div>
         <div>
-          <p className="text-xl font-semibold">{event.title}</p>
+          <p className={`font-semibold ${bigButton ? "text-xl" : "text-base"}`}>{event.title}</p>
           <p className="text-muted-foreground">
             {formatEventDate(event.eventDate)} at{' '}
             {formatEventTime(event.eventStartTime)}
@@ -158,7 +165,9 @@ export function EventCard({ event }: { event: Event }) {
         className="w-full bg-primary hover:bg-primary/90 md:w-auto"
         asChild
       >
-        <Link href={`/events/${event._id}`}>View Event Details</Link>
+        <Link href={`/events/${event._id}`}>
+          {bigButton ? 'View Event' : 'View'}
+        </Link>
       </Button>
     </div>
   )

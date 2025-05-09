@@ -217,7 +217,7 @@ export function EventCreationForm() {
       const result = await createEvent(formattedData)
 
       if (result.success) {
-        // console.log('Event created successfully:', result.data)
+
         toast({
           title: 'Success',
           description: 'Your event has been created!',

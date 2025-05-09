@@ -33,15 +33,19 @@ export default async function EventPage({ params }: EventPageProps) {
     const response = await getEventById(id)
     const mediaResponse = await getEventMedia(id, 1, 12)
 
+    console.log("media response:", mediaResponse);
 
-    if (mediaResponse instanceof NextResponse) {
-      return (
-        <div className="p-4">
-          <h1 className="text-xl font-bold mb-4">Error Loading Media</h1>
-          <p>Unable to load event media. Please try again later.</p>
-        </div>
-      )
-    }
+
+
+
+    // if (mediaResponse instanceof NextResponse) {
+    //   return (
+    //     <div className="p-4">
+    //       <h1 className="text-xl font-bold mb-4">Error Loading Media</h1>
+    //       <p>Unable to load event media. Please try again later.</p>
+    //     </div>
+    //   )
+    // }
     if ("status" in response) {
       if (response.status === 404) {
         notFound()
@@ -49,6 +53,7 @@ export default async function EventPage({ params }: EventPageProps) {
       // Handle other error cases
       throw new Error(`Failed to load event: ${response.statusText || "Unknown error"}`)
     }
+
 
     const event = response.data
     const isToday = new Date(event.eventDate).toDateString() === new Date().toDateString()
@@ -159,18 +164,44 @@ export default async function EventPage({ params }: EventPageProps) {
           <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <TabsContent value="overview" className="mt-0">
-                <EventOverview
-                  eventId={id}
-                  event={event}
-                  initialEventMedia={mediaResponse.data}
-                />
+                {mediaResponse instanceof NextResponse ? (
+                  <div className="p-4">
+                    <h1 className="text-2xl font-bold mb-4">No Event Media Yet</h1>
+                    <p className="text-lg text-muted-foreground">Scan the QR code below to create your first media and launch your event</p>
+                    <QRCodeComponent
+                      value={event._id}
+                      download
+                      share
+                      size={300}
+                    />
+                  </div>
+                ) : (
+                  <EventOverview
+                    eventId={id}
+                    event={event}
+                    initialEventMedia={mediaResponse.data}
+                  />
+                )}
               </TabsContent>
               <TabsContent value="photos" className="mt-0">
-                <EventPhotos
-                  eventId={id}
-                  event={event}
-                  initialEventMedia={mediaResponse.data}
-                />
+                {mediaResponse instanceof NextResponse ? (
+                  <div className="p-4">
+                    <h1 className="text-xl font-bold mb-4">No Event Media Yet</h1>
+                    <p>Scan the QR code below to create your first media and launch your event</p>
+                    <QRCodeComponent
+                      value={event._id}
+                      download
+                      share
+                      size={300}
+                    />
+                  </div>
+                ) : (
+                  <EventPhotos
+                    eventId={id}
+                    event={event}
+                    initialEventMedia={mediaResponse.data}
+                  />
+                )}
               </TabsContent>
               <TabsContent value="xperience-moments" className="mt-0">
                 <EventXperienceMoments event={event} />
@@ -218,7 +249,7 @@ export default async function EventPage({ params }: EventPageProps) {
                         <PhoneOutgoing className="h-5 w-5 text-muted-foreground" />
                         <p>Photos Uploaded:</p>
                       </span>
-                      <p className="font-bold">{mediaResponse.data.length}</p>
+                      {/* <p className="font-bold">{mediaResponse.data.length}</p> */}
                     </div>
                     {/* <div className="flex items-center justify-between rounded-lg border p-4">
                       <span className="flex items-center gap-2">
