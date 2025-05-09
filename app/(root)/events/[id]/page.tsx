@@ -16,6 +16,8 @@ import { formatDate } from "@/lib/utils"
 import CountdownTimer from "@/components/CountdownTimer"
 import EventSettings from "@/components/EventSettings"
 import EventAnalytics from "@/components/EventAnalytics"
+import { getEventMedia } from "@/lib/actions/events/getEventMedia"
+import { NextResponse } from "next/server"
 
 interface EventPageProps {
   params: Promise<{
@@ -29,7 +31,17 @@ export default async function EventPage({ params }: EventPageProps) {
     const { id } = await params
 
     const response = await getEventById(id)
+    const mediaResponse = await getEventMedia(id, 1, 12)
 
+
+    if (mediaResponse instanceof NextResponse) {
+      return (
+        <div className="p-4">
+          <h1 className="text-xl font-bold mb-4">Error Loading Media</h1>
+          <p>Unable to load event media. Please try again later.</p>
+        </div>
+      )
+    }
     if ("status" in response) {
       if (response.status === 404) {
         notFound()
@@ -106,14 +118,14 @@ export default async function EventPage({ params }: EventPageProps) {
               >
                 <span className="flex items-center gap-2">Photos</span>
               </TabsTrigger>
-              <TabsTrigger
+              {/* <TabsTrigger
                 value="xperience-moments"
                 className="rounded-t-lg border-b-2 border-transparent px-4 py-3 data-[state=active]:border-primary data-[state=active]:bg-muted data-[state=active]:font-semibold"
               >
                 <span className="flex items-center gap-2">
                   <span className="hidden sm:inline">Xperience</span> Moments
                 </span>
-              </TabsTrigger>
+              </TabsTrigger> */}
               <TabsTrigger
                 value="analytics"
                 className="rounded-t-lg border-b-2 border-transparent px-4 py-3 data-[state=active]:border-primary data-[state=active]:bg-muted data-[state=active]:font-semibold"
@@ -147,10 +159,18 @@ export default async function EventPage({ params }: EventPageProps) {
           <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <TabsContent value="overview" className="mt-0">
-                <EventOverview event={event} />
+                <EventOverview
+                  eventId={id}
+                  event={event}
+                  initialEventMedia={mediaResponse.data}
+                />
               </TabsContent>
               <TabsContent value="photos" className="mt-0">
-                <EventPhotos event={event} />
+                <EventPhotos
+                  eventId={id}
+                  event={event}
+                  initialEventMedia={mediaResponse.data}
+                />
               </TabsContent>
               <TabsContent value="xperience-moments" className="mt-0">
                 <EventXperienceMoments event={event} />
@@ -187,9 +207,9 @@ export default async function EventPage({ params }: EventPageProps) {
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-xl font-semibold">Analytics</h2>
-                    <Button variant="link" className="p-0 text-primary" asChild>
+                    {/* <Button variant="link" className="p-0 text-primary" asChild>
                       <Link href={`/events/${event._id}/analytics`}>View All</Link>
-                    </Button>
+                    </Button> */}
                   </div>
 
                   <div className="space-y-4">
@@ -198,15 +218,15 @@ export default async function EventPage({ params }: EventPageProps) {
                         <PhoneOutgoing className="h-5 w-5 text-muted-foreground" />
                         <p>Photos Uploaded:</p>
                       </span>
-                      <p className="font-bold">1234</p>
+                      <p className="font-bold">{mediaResponse.data.length}</p>
                     </div>
-                    <div className="flex items-center justify-between rounded-lg border p-4">
+                    {/* <div className="flex items-center justify-between rounded-lg border p-4">
                       <span className="flex items-center gap-2">
                         <User className="h-5 w-5 text-muted-foreground" />
                         <p>Live Users:</p>
                       </span>
                       <p className="font-bold">1234</p>
-                    </div>
+                    </div> */}
                   </div>
                 </CardContent>
               </Card>

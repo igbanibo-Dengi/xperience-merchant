@@ -159,3 +159,28 @@ export interface Event {
 }
 
 export type EventsData = Event[]
+
+
+
+export interface EventMedia {
+  _id: string
+  eventId: string
+  attendeeId: string
+  mediaType: string
+  mediaUrl: string[]
+  caption: string
+  hashtags: string[]
+  createdAt: string
+  updatedAt: string
+}
+
+export interface EventMediaResponse {
+  success: boolean
+  status: number
+  message: string
+  data: EventMedia[]
+}
+
+export interface EventMediaArray {
+  data: EventMedia[]
+}
