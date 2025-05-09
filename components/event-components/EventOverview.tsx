@@ -10,7 +10,6 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { addWatermark } from "@/lib/actions/watermark.action"
 import type { Event, EventMedia } from "@/types/event"
 import { toast } from "@/hooks/use-toast"
-import { addWatermarkFallback } from "@/lib/actions/watermark-fallback.action"
 import { Badge } from "../ui/badge"
 
 interface EventOverviewProps {

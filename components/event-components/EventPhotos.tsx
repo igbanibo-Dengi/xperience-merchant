@@ -1,7 +1,6 @@
 'use client'
 
 import { toast } from '@/hooks/use-toast'
-import { getEventMedia } from '@/lib/actions/events/getEventMedia'
 import { addWatermark } from '@/lib/actions/watermark.action'
 import { Event, EventMedia } from '@/types/event'
 import useEmblaCarousel from 'embla-carousel-react'
@@ -9,38 +8,14 @@ import { ChevronLeft, ChevronRight, Download, ImageIcon, X } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from '../ui/badge'
-import { addWatermarkFallback } from '@/lib/actions/watermark-fallback.action'
 
-const pexelsImages = [
-  'https://images.pexels.com/photos/3184193/pexels-photo-3184193.jpeg',
-  'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg',
-  'https://images.pexels.com/photos/1181316/pexels-photo-1181316.jpeg',
-  'https://images.pexels.com/photos/1181316/pexels-photo-1181316.jpeg',
-  'https://images.pexels.com/photos/2566581/pexels-photo-2566581.jpeg',
-  'https://images.pexels.com/photos/3771847/pexels-photo-3771847.jpeg',
-  'https://images.pexels.com/photos/1542085/pexels-photo-1542085.jpeg',
-  'https://images.pexels.com/photos/1542085/pexels-photo-1542085.jpeg',
-  'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg',
-  'https://images.pexels.com/photos/3321793/pexels-photo-3321793.jpeg',
-  'https://images.pexels.com/photos/3321793/pexels-photo-3321793.jpeg',
-  'https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg',
-  'https://images.pexels.com/photos/3130810/pexels-photo-3130810.jpeg',
-  'https://images.pexels.com/photos/3182740/pexels-photo-3182740.jpeg',
-  'https://images.pexels.com/photos/3182740/pexels-photo-3182740.jpeg',
-  'https://images.pexels.com/photos/3182740/pexels-photo-3182740.jpeg',
-  'https://images.pexels.com/photos/3182740/pexels-photo-3182740.jpeg',
-]
 
 interface EventOverviewProps {
   event: Event
