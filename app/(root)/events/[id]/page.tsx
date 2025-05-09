@@ -30,7 +30,6 @@ export default async function EventPage({ params }: EventPageProps) {
 
     const response = await getEventById(id)
 
-    // Check if response is a NextResponse (error case)
     if ("status" in response) {
       if (response.status === 404) {
         notFound()
@@ -41,7 +40,7 @@ export default async function EventPage({ params }: EventPageProps) {
 
     const event = response.data
     const isToday = new Date(event.eventDate).toDateString() === new Date().toDateString()
-    // const nextMomentTime = event.xperienceMoments?.[0]?.time || null // Assuming you have xperienceMoments data
+    // const nextMomentTime = event.xperienceMoments?.[0]?.time || null 
 
     return (
       <div className="container mx-auto px-4 py-8">
