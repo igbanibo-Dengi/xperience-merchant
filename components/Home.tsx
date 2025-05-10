@@ -13,7 +13,7 @@ import Link from 'next/link'
 import React, { useState, useEffect } from 'react'
 
 interface HomeProps {
-  plan: Plan[]
+  plan?: Plan[] | undefined
   user: LoggedInUser
   events: Event[]
 }
@@ -23,7 +23,7 @@ interface HomeProps {
 const Home = ({ plan, events, user }: HomeProps) => {
   const [showAlert, setShowAlert] = useState(true)
   const hasEvents = events.length > 0
-  const planName = plan[0].name
+  const planName = plan?.[0]?.name
 
   return (
     <div className="p-6">
@@ -84,7 +84,7 @@ const Home = ({ plan, events, user }: HomeProps) => {
           </div>
         </div>
 
-        {planName === "Basic Plan" && (
+        {planName === "Basic Plan" || planName === undefined && (
           <div className="ml-6 mt-14 h-fit w-[300px] rounded-md border-2 p-4">
             <h4 className="mb-2 font-semibold">
               Take your events to the next level!

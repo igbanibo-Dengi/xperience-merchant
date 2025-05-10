@@ -26,14 +26,6 @@ export function EventSuccess() {
             Go to Events
           </Link>
         </Button>
-        <Button className="w-full" size="lg">
-          <Link
-            href="/dashboard"
-            className="flex w-full items-center justify-center"
-          >
-            Return to Dashboard
-          </Link>
-        </Button>
       </div>
     </div>
   )
