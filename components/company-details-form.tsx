@@ -186,6 +186,7 @@ export function CompanyDetailsForm({
                           <SelectItem value="ca">Canada</SelectItem>
                           <SelectItem value="uk">United Kingdom</SelectItem>
                           <SelectItem value="au">Australia</SelectItem>
+                          <SelectItem value="ng">Nigeria</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
