@@ -225,6 +225,7 @@ export function CompanyDetailsForm({
               </Button>
               <Button
                 type="submit"
+                disabled={isLoading}
                 className="flex-1 bg-orange-500 hover:bg-orange-600"
               >
                 {isLoading ? 'Signing You Up...' : 'Sign Up'}

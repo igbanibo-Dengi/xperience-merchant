@@ -83,6 +83,7 @@ export function SignInForm({ onSubmit, isLoading }: SignInFormProps) {
             </div>
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-orange-500 hover:bg-orange-600"
             >
               {isLoading ? 'Signing in...' : 'Sign in'}
