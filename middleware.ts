@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Add paths that don't require authentication
-const publicPaths = ['/sign-in', '/sign-up']
+const publicPaths = ['/sign-in', '/sign-up', '/sign-up/successful']
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('xperience_auth_token')

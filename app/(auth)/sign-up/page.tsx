@@ -61,7 +61,7 @@ export default function SignUpPage() {
             </ToastAction>
           ),
         })
-        router.push('/sign-in')
+        router.push('/sign-up/successful')
       } else {
         setIsLoading(false)
         toast({
