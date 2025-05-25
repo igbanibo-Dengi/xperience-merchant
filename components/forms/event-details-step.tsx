@@ -32,6 +32,7 @@ import { mockVenues } from '@/lib/mock-data'
 import { Checkbox } from '@/components/ui/checkbox'
 import type { AvailableLocations, EventDetails } from '@/types/event'
 import { Badge } from '@/components/ui/badge'
+import { loadGetInitialProps } from 'next/dist/shared/lib/utils'
 
 interface EventDetailsStepProps {
   defaultValues?: EventDetails
@@ -165,15 +166,6 @@ export function EventDetailsStep({
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Event Location</h2>
-                {!isOnlineEvent && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setManualEntry(!manualEntry)}
-                  >
-                    {manualEntry ? 'Search locations' : 'Enter Manually'}
-                  </Button>
-                )}
               </div>
               <p className="text-muted-foreground">
                 Help people in the area find your event location.
@@ -211,69 +203,84 @@ export function EventDetailsStep({
                   </FormItem>
                 )}
               />
+              <div className='flex items-end gap-4'>
 
-              <FormField
-                control={form.control}
-                name="location.venueName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {isOnlineEvent ? 'Online Platform' : 'Venue Name'}{' '}
-                      <Asterisk className="inline text-destructive" size={10} />
-                    </FormLabel>
-                    {!isOnlineEvent && !manualEntry ? (
-                      <Popover open={open} onOpenChange={setOpen}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-label="Search for location"
-                            aria-expanded={open}
-                            className="w-full justify-start text-foreground"
-                          >
-                            <Search className="mr-2 h-4 w-4 shrink-0" />
-                            {field.value ||
-                              'Search for venue or location address'}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[400px] p-0">
-                          <Command>
-                            <CommandInput placeholder="Search venues..." />
-                            <CommandList>
-                              <CommandEmpty>No venues found.</CommandEmpty>
-                              <CommandGroup>
-                                {locations.map((location) => (
-                                  <CommandItem
-                                    key={location.id}
-                                    value={location.venueName}
-                                    onSelect={() =>
-                                      handleLocationSelect(location)
-                                    }
-                                  >
-                                    {location.venueName}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    ) : (
-                      <FormControl>
-                        <Input
-                          placeholder={
-                            isOnlineEvent
-                              ? 'e.g., Zoom, Google Meet, Microsoft Teams'
-                              : 'Enter venue name'
-                          }
-                          {...field}
-                        />
-                      </FormControl>
-                    )}
-                    <FormMessage />
-                  </FormItem>
+                <FormField
+                  control={form.control}
+                  name="location.venueName"
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>
+                        {isOnlineEvent ? 'Online Platform' : 'Venue Name'}{' '}
+                        <Asterisk className="inline text-destructive" size={10} />
+                      </FormLabel>
+                      {!isOnlineEvent && !manualEntry ? (
+                        <Popover open={open} onOpenChange={setOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-label="Search for location"
+                              aria-expanded={open}
+                              className="w-full h-12 justify-start text-foreground"
+                            >
+                              <Search className="mr-2 h-4 w-4 shrink-0" />
+                              {field.value ||
+                                'Search for venue or location address'}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[400px] p-0">
+                            <Command>
+                              <CommandInput placeholder="Search venues..." />
+                              <CommandList>
+                                <CommandEmpty>No venues found.</CommandEmpty>
+                                <CommandGroup>
+                                  {locations.map((location) => (
+                                    <CommandItem
+                                      key={location.id}
+                                      value={location.venueName}
+                                      onSelect={() =>
+                                        handleLocationSelect(location)
+                                      }
+                                    >
+                                      {location.venueName}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      ) : (
+                        <FormControl>
+                          <Input
+                            placeholder={
+                              isOnlineEvent
+                                ? 'e.g., Zoom, Google Meet, Microsoft Teams'
+                                : 'Enter venue name'
+                            }
+                            {...field}
+                          />
+                        </FormControl>
+                      )}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {!isOnlineEvent && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setManualEntry(!manualEntry)}
+                    size={"lg"}
+                    className='h-12'
+                  >
+                    {manualEntry ? 'Search locations' : 'Enter Manually'}
+                  </Button>
                 )}
-              />
+              </div>
+
 
               {!isOnlineEvent && manualEntry && (
                 <div className="space-y-4">

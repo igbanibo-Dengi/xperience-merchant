@@ -11,6 +11,7 @@ import { Event, EventData, EventsData, Plan } from '@/types/event'
 import { ArrowRight, CircleAlert, X } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState, useEffect } from 'react'
+import CurrentEvents from './CurrentEvents'
 
 interface HomeProps {
   plan?: Plan[] | undefined
@@ -59,13 +60,14 @@ const Home = ({ plan, events, user }: HomeProps) => {
           )}
 
           <div>
-            <h4 className="mb-4 text-lg font-bold">Upcoming Events</h4>
+            <h4 className=" text-2xl font-bold">My Events</h4>
             <div className="">
               {hasEvents ? (
                 <div className="space-y-4">
+                  <CurrentEvents events={events} eventSearch={false} />
                   <UpcomingEvents events={events} bigButton={false} />
-                  <div className='w-full flex items-center justify-center'>
-                    <Button variant={'outline'} className='w-full mx-4' asChild>
+                  <div className='w-full flex items-center'>
+                    <Button variant={'outline'} className='w-full max-w-4xl' asChild>
                       <Link href={"/events"}>
                         See All Events <ArrowRight />
                       </Link>

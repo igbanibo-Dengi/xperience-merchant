@@ -9,7 +9,7 @@ const Page = async () => {
 
   const userPlan = await getUserPlan()
   const UserData = await getLoggedInUser()
-  console.log(userPlan);
+  // console.log(userPlan);
 
   let eventsData: EventsData = []
 

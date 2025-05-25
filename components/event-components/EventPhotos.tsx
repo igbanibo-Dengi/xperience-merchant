@@ -3,11 +3,9 @@
 import { toast } from '@/hooks/use-toast'
 import { addWatermark } from '@/lib/actions/watermark.action'
 import { Event, EventMedia } from '@/types/event'
-import useEmblaCarousel from 'embla-carousel-react'
-import { ChevronLeft, ChevronRight, Download, ImageIcon, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, ImageIcon, VideoIcon, X } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -16,41 +14,33 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from '../ui/badge'
 
-
 interface EventOverviewProps {
   event: Event
   initialEventMedia: EventMedia[]
   eventId: string
 }
 
-
-export default function EventPhotos({ event, initialEventMedia, eventId }: EventOverviewProps) {
-  const router = useRouter()
+export default function EventPhotos({ initialEventMedia }: EventOverviewProps) {
   const [eventMedia] = useState<EventMedia[]>(initialEventMedia)
-  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false)
+  const [isMediaViewerOpen, setIsMediaViewerOpen] = useState(false)
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [currentItemIndex, setCurrentItemIndex] = useState(0)
   const [isDownloading, setIsDownloading] = useState(false)
 
-
-  const openImageViewer = (mediaIndex: number) => {
+  const openMediaViewer = (mediaIndex: number) => {
     setSelectedMediaIndex(mediaIndex)
-    setCurrentImageIndex(0) // Always start with the first image
-    setIsImageViewerOpen(true)
+    setCurrentItemIndex(0)
+    setIsMediaViewerOpen(true)
   }
 
-  const closeImageViewer = () => {
-    setIsImageViewerOpen(false)
-  }
-
-  const navigateToFeed = () => {
-    router.push(`/event/${eventId}/feed`)
+  const closeMediaViewer = () => {
+    setIsMediaViewerOpen(false)
   }
 
   const goToPreviousMedia = () => {
     setSelectedMediaIndex((prev) => {
       const newIndex = prev === 0 ? eventMedia.length - 1 : prev - 1
-      setCurrentImageIndex(0) // Reset to first image when changing media
+      setCurrentItemIndex(0)
       return newIndex
     })
   }
@@ -58,38 +48,20 @@ export default function EventPhotos({ event, initialEventMedia, eventId }: Event
   const goToNextMedia = () => {
     setSelectedMediaIndex((prev) => {
       const newIndex = (prev + 1) % eventMedia.length
-      setCurrentImageIndex(0) // Reset to first image when changing media
+      setCurrentItemIndex(0)
       return newIndex
     })
   }
 
-  const goToPreviousImage = () => {
-    if (!eventMedia[selectedMediaIndex]) return
-
-    const mediaUrls = eventMedia[selectedMediaIndex].mediaUrl
-    if (!mediaUrls || mediaUrls.length <= 1) return
-
-    setCurrentImageIndex((prev) => (prev === 0 ? mediaUrls.length - 1 : prev - 1))
-  }
-
-  const goToNextImage = () => {
-    if (!eventMedia[selectedMediaIndex]) return
-
-    const mediaUrls = eventMedia[selectedMediaIndex].mediaUrl
-    if (!mediaUrls || mediaUrls.length <= 1) return
-
-    setCurrentImageIndex((prev) => (prev + 1) % mediaUrls.length)
-  }
-
-  const selectImage = (index: number) => {
-    setCurrentImageIndex(index)
+  const selectMediaItem = (index: number) => {
+    setCurrentItemIndex(index)
   }
 
   const downloadImage = async (url: string) => {
     if (!url) {
       toast({
         title: "Error",
-        description: "Image URL is missing",
+        description: "Media URL is missing",
         variant: "destructive",
       })
       return
@@ -97,11 +69,7 @@ export default function EventPhotos({ event, initialEventMedia, eventId }: Event
 
     try {
       setIsDownloading(true)
-
-      // Get watermarked image as base64 from server action
       const base64Image = await addWatermark(url)
-
-      // Create a temporary link element to trigger download
       const link = document.createElement("a")
       link.href = base64Image
       link.download = `watermarked-${url.substring(url.lastIndexOf("/") + 1)}`
@@ -109,7 +77,7 @@ export default function EventPhotos({ event, initialEventMedia, eventId }: Event
       link.click()
       document.body.removeChild(link)
     } catch (error) {
-      console.error("Error downloading image:", error)
+      console.error("Error downloading media:", error)
       toast({
         title: "Download Failed",
         description: "There was an error adding the watermark. Please try again.",
@@ -120,11 +88,67 @@ export default function EventPhotos({ event, initialEventMedia, eventId }: Event
     }
   }
 
-  // Get the current media and image URL
-  const currentMedia = eventMedia[selectedMediaIndex] || null
-  const currentImageUrl = currentMedia?.mediaUrl?.[currentImageIndex] || null
-  const hasMultipleImages = currentMedia?.mediaUrl?.length > 1 || false
+  const isVideo = (url: string) => {
+    return url.endsWith('.mp4') || url.endsWith('.mov') || url.includes('video')
+  }
 
+  const currentMedia = eventMedia[selectedMediaIndex] || null
+  const currentMediaUrl = currentMedia?.mediaUrl?.[currentItemIndex] || null
+  const hasMultipleItems = currentMedia?.mediaUrl?.length > 1 || false
+  const currentIsVideo = currentMediaUrl ? isVideo(currentMediaUrl) : false
+
+  const renderMediaThumbnail = (url: string) => {
+    if (isVideo(url)) {
+      return (
+        <div className="relative w-full h-full">
+          <video
+            src={url}
+            className="w-full h-full object-cover rounded-lg"
+            muted
+            playsInline
+            disablePictureInPicture
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+            <VideoIcon className="h-8 w-8 text-white" />
+          </div>
+        </div>
+      )
+    }
+    return (
+      <Image
+        src={url || "/placeholder.svg"}
+        alt="Media thumbnail"
+        fill
+        className="object-cover"
+        loading="lazy"
+        onError={(e) => (e.currentTarget.src = "/fallback-image.png")}
+      />
+    )
+  }
+
+  const renderMediaPreview = (url: string) => {
+    if (isVideo(url)) {
+      return (
+        <video
+          src={url}
+          className="object-contain max-h-[70vh] max-w-full"
+          controls
+          playsInline
+        />
+      )
+    }
+    return (
+      <Image
+        src={url || "/placeholder.svg"}
+        alt={currentMedia?.caption || "Event media"}
+        width={1200}
+        height={800}
+        className="object-contain max-h-[70vh] max-w-full"
+        priority
+        onError={(e) => (e.currentTarget.src = "/fallback-image.png")}
+      />
+    )
+  }
 
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -132,57 +156,44 @@ export default function EventPhotos({ event, initialEventMedia, eventId }: Event
         <div
           key={`featured-${media._id}-${index}`}
           className="relative aspect-square overflow-hidden rounded-lg cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
-          onClick={() => openImageViewer(index)}
+          onClick={() => openMediaViewer(index)}
         >
-          <Image
-            src={media.mediaUrl[0] || "/placeholder.svg"}
-            alt={media.caption || `Featured Photo ${index + 1}`}
-            fill
-            className="object-cover"
-            loading="lazy"
-            onError={(e) => (e.currentTarget.src = "/fallback-image.png")}
-          />
+          {renderMediaThumbnail(media.mediaUrl[0])}
 
-          {/* Show indicator for multiple images */}
           {media.mediaUrl.length > 1 && (
             <div className="absolute top-2 right-2 bg-black/70 text-white rounded-full px-2 py-1 text-xs flex items-center">
-              <ImageIcon className="h-3 w-3 mr-1" />
+              {isVideo(media.mediaUrl[0]) ? (
+                <VideoIcon className="h-3 w-3 mr-1" />
+              ) : (
+                <ImageIcon className="h-3 w-3 mr-1" />
+              )}
               <span>{media.mediaUrl.length}</span>
             </div>
           )}
         </div>
       ))}
 
-
-      {/* Image Viewer Dialog */}
-      <Dialog open={isImageViewerOpen} onOpenChange={setIsImageViewerOpen}>
+      {/* Media Viewer Dialog */}
+      <Dialog open={isMediaViewerOpen} onOpenChange={setIsMediaViewerOpen}>
         <DialogContent className="max-w-full min-w-full bg-black/90 border-none p-0">
-          <DialogTitle className="sr-only">carousel</DialogTitle>
+          <DialogTitle className="sr-only">Media Viewer</DialogTitle>
           <div className="relative h-screen flex flex-col items-center justify-center">
             {/* Close button */}
             <Button
               variant="ghost"
               size="icon"
               className="absolute top-4 right-4 z-50 text-white hover:bg-white/20"
-              onClick={closeImageViewer}
+              onClick={closeMediaViewer}
             >
               <X className="h-6 w-6" />
             </Button>
 
-            {/* Main image display */}
+            {/* Main media display */}
             <div className="relative flex-1 w-full flex items-center justify-center p-4">
-              {currentImageUrl ? (
-                <Image
-                  src={currentImageUrl || "/placeholder.svg"}
-                  alt={currentMedia?.caption || "Event photo"}
-                  width={1200}
-                  height={800}
-                  className="object-contain max-h-[70vh] max-w-full"
-                  priority
-                  onError={(e) => (e.currentTarget.src = "/fallback-image.png")}
-                />
+              {currentMediaUrl ? (
+                renderMediaPreview(currentMediaUrl)
               ) : (
-                <div className="text-white">No image available</div>
+                <div className="text-white">No media available</div>
               )}
 
               {/* Media navigation buttons */}
@@ -202,41 +213,19 @@ export default function EventPhotos({ event, initialEventMedia, eventId }: Event
               >
                 <ChevronRight className="h-8 w-8" />
               </Button>
-
-              {/* Image navigation buttons (only shown for media with multiple images) */}
-              {/* {hasMultipleImages && (
-                <>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute left-20 top-1/2 transform -translate-y-1/2 z-10 text-white hover:bg-white/20"
-                    onClick={goToPreviousImage}
-                  >
-                    <ChevronLeft className="h-6 w-6" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-20 top-1/2 transform -translate-y-1/2 z-10 text-white hover:bg-white/20"
-                    onClick={goToNextImage}
-                  >
-                    <ChevronRight className="h-6 w-6" />
-                  </Button>
-                </>
-              )} */}
             </div>
 
-            {/* Image info and controls */}
+            {/* Media info and controls */}
             <div className="bg-white text-black p-4 rounded-lg w-full max-w-3xl mx-auto">
               <div className="flex items-center justify-between">
                 <p className="font-medium">{currentMedia?.caption || "No caption"}</p>
                 <div className="mt-2 text-xs text-gray-500 flex mr-4 justify-between">
                   <span>
-                    Photo {selectedMediaIndex + 1} of {eventMedia.length}
+                    Media {selectedMediaIndex + 1} of {eventMedia.length}
                   </span>
-                  {hasMultipleImages && (
+                  {hasMultipleItems && (
                     <span>
-                      Image {currentImageIndex + 1} of {currentMedia?.mediaUrl?.length}
+                      Item {currentItemIndex + 1} of {currentMedia?.mediaUrl?.length}
                     </span>
                   )}
                 </div>
@@ -255,8 +244,8 @@ export default function EventPhotos({ event, initialEventMedia, eventId }: Event
                     variant="outline"
                     size="sm"
                     className="flex items-center gap-2"
-                    onClick={() => downloadImage(currentImageUrl || "")}
-                    disabled={isDownloading || !currentImageUrl}
+                    onClick={() => !currentIsVideo && downloadImage(currentMediaUrl || "")}
+                    disabled={isDownloading || !currentMediaUrl || currentIsVideo}
                   >
                     {isDownloading ? (
                       <span className="h-4 w-4 animate-spin rounded-full border-2 border-gray-500 border-t-transparent" />
@@ -269,24 +258,36 @@ export default function EventPhotos({ event, initialEventMedia, eventId }: Event
               </div>
             </div>
 
-            {/* Thumbnail navigation for multiple images */}
-            {hasMultipleImages && currentMedia?.mediaUrl && (
+            {/* Thumbnail navigation for multiple items */}
+            {hasMultipleItems && currentMedia?.mediaUrl && (
               <div className="w-full flex justify-center mb-8 px-4">
                 <div className="bg-black/50 p-2 rounded-lg flex gap-2 overflow-x-auto max-w-full">
-                  {currentMedia.mediaUrl.map((url, imgIndex) => (
+                  {currentMedia.mediaUrl.map((url, itemIndex) => (
                     <button
-                      key={`thumb-${imgIndex}`}
-                      className={`w-16 h-16 rounded-md overflow-hidden flex-shrink-0 border-2 ${currentImageIndex === imgIndex ? "border-white" : "border-transparent"
+                      key={`thumb-${itemIndex}`}
+                      className={`w-16 h-16 rounded-md overflow-hidden flex-shrink-0 border-2 ${currentItemIndex === itemIndex ? "border-white" : "border-transparent"
                         }`}
-                      onClick={() => selectImage(imgIndex)}
+                      onClick={() => selectMediaItem(itemIndex)}
                     >
-                      <Image
-                        src={url || "/placeholder.svg"}
-                        alt={`Thumbnail ${imgIndex + 1}`}
-                        width={64}
-                        height={64}
-                        className="w-full h-full object-cover"
-                      />
+                      {isVideo(url) ? (
+                        <div className="relative w-full h-full">
+                          <video
+                            src={url}
+                            className="w-full h-full object-cover"
+                            muted
+                            playsInline
+                          />
+                          <VideoIcon className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-4 w-4 text-white" />
+                        </div>
+                      ) : (
+                        <Image
+                          src={url || "/placeholder.svg"}
+                          alt={`Thumbnail ${itemIndex + 1}`}
+                          width={64}
+                          height={64}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                     </button>
                   ))}
                 </div>

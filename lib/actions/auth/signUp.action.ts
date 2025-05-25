@@ -13,7 +13,7 @@ export async function signUpAction(formData: signUpData) {
       body: JSON.stringify(formData),
     })
 
-    console.log('Response Status:', response.status)
+    // console.log('Response Status:', response.status)
 
     if (!response.ok) {
       const error = await response.json()

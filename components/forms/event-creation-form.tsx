@@ -101,7 +101,7 @@ export function EventCreationForm() {
   }
 
   const handleSubmit = async () => {
-    console.log('submission started')
+    // console.log('submission started')
     setSubmitting(true)
 
     let userPlanId: string | null = null
@@ -210,7 +210,7 @@ export function EventCreationForm() {
       sampleFeedPhotosUrl: sampleFeedPhotosUrls,
     }
 
-    console.log('Formatted Data:', formattedData)
+    // console.log('Formatted Data:', formattedData)
 
     // Step 5: Submit event
     try {

@@ -33,14 +33,7 @@ export default async function EventPage({ params }: EventPageProps) {
     const response = await getEventById(id)
     const mediaResponse = await getEventMedia(id, 1, 12)
 
-    // if (mediaResponse instanceof NextResponse) {
-    //   return (
-    //     <div className="p-4">
-    //       <h1 className="text-xl font-bold mb-4">Error Loading Media</h1>
-    //       <p>Unable to load event media. Please try again later.</p>
-    //     </div>
-    //   )
-    // }
+
     if ("status" in response) {
       if (response.status === 404) {
         notFound()
@@ -52,7 +45,6 @@ export default async function EventPage({ params }: EventPageProps) {
 
     const event = response.data
     const isToday = new Date(event.eventDate).toDateString() === new Date().toDateString()
-    // const nextMomentTime = event.xperienceMoments?.[0]?.time || null 
 
     return (
       <div className="container mx-auto px-4 py-8">
@@ -95,10 +87,6 @@ export default async function EventPage({ params }: EventPageProps) {
                 </div>
               )}
             </div>
-
-            {/* {nextMomentTime && (
-              <CountdownTimer targetTime={nextMomentTime} label="Next Xperience moment" className="mt-4 lg:mt-0" />
-            )} */}
           </div>
         </header>
 

@@ -56,10 +56,10 @@ const EventsPage = async () => {
           <AllEvents events={eventsData} />
         </TabsContent>
         <TabsContent value="current">
-          <CurrentEvents events={eventsData} />
+          <CurrentEvents events={eventsData} eventSearch={true} />
         </TabsContent>
         <TabsContent value="upcoming">
-          <UpcomingEvents events={eventsData} />
+          <UpcomingEvents events={eventsData} eventSearch={true} />
         </TabsContent>
         <TabsContent value="past">
           <PastEvents events={eventsData} />

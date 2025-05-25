@@ -10,9 +10,10 @@ import { EventSearch } from './eventsSearch'
 
 interface CurrentEventsProps {
   events?: Event[]
+  eventSearch?: boolean
 }
 
-const CurrentEvents = ({ events = [] }: CurrentEventsProps) => {
+const CurrentEvents = ({ events = [], eventSearch }: CurrentEventsProps) => {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>(events)
   const currentDate = new Date()
 
@@ -38,9 +39,12 @@ const CurrentEvents = ({ events = [] }: CurrentEventsProps) => {
   }
 
   return (
-    <section className="mt-8 w-full max-w-4xl px-4">
+    <section className="w-full max-w-4xl px-4">
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <EventSearch onSearch={handleSearch} allEvents={events} />
+        {eventSearch === true && (
+          <EventSearch onSearch={handleSearch} allEvents={events} />
+        )
+        }
       </div>
 
       {/* LIVE EVENTS */}

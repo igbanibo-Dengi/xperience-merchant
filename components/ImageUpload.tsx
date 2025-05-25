@@ -19,7 +19,7 @@ export default function ImageUploader() {
     try {
       const response = await uploadImage(formData)
 
-      console.log(response)
+      // console.log(response)
 
       if (response.success && response.data?.mediaUrl) {
         setResult({

@@ -215,16 +215,15 @@ export function PhotoUploadStep({
           <div>
             <h2 className="text-2xl font-bold">Sample Feed Photos</h2>
             <p className="mb-8 text-muted-foreground">
-              Insert sample feed photos to showcase to your attendees. You can
-              add up to 4 photos.
+              Insert sample feed photos to showcase to your attendees. minimum of four photos required.
             </p>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               {feedPreviews.length > 0 && (
-                <div className="grid w-full grid-cols-2 place-items-center items-center gap-4 md:gap-4 xl:flex xl:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 mx-auto lg:flex">
                   {feedPreviews.map((preview, index) => (
                     <div
                       key={index}
-                      className="group relative size-[160px] md:size-[300px] xl:size-[180px]"
+                      className="group relative size-[160px] md:size-[180px] xl:size-[180px]"
                     >
                       <Image
                         src={preview || '/placeholder.svg'}
@@ -253,20 +252,20 @@ export function PhotoUploadStep({
                     <FormControl>
                       {sampleFeedPhotosCount < 4 && (
                         <div className="w-fit">
-                          <div {...getFeedRootProps()} className="w-fit">
+                          {/* <div {...getFeedRootProps()} className="w-fit">
                             <label
                               htmlFor="file-upload"
                               className="cursor-pointer"
                             >
-                              <span className="flex w-full flex-col items-center justify-center rounded-lg border border-muted p-4 text-center font-normal text-foreground xl:hidden">
+                              <span className="flex w-full flex-col items-center justify-center rounded-lg border border-muted p-4 text-center font-normal text-foreground md:hidden">
                                 <p>Add Photo</p>
                                 <input {...getFeedInputProps()} />
                               </span>
                             </label>
-                          </div>
+                          </div> */}
                           <div
                             {...getFeedRootProps()}
-                            className="hidden size-[160px] justify-center rounded-lg border px-6 py-10 md:size-[300px] xl:flex xl:size-[180px]"
+                            className="flex size-[160px] justify-center rounded-lg border px-6 py-10 md:size-[180px] "
                           >
                             <div className="text-center">
                               <div className="mt-4 flex text-sm leading-6 text-muted-foreground">
@@ -281,7 +280,7 @@ export function PhotoUploadStep({
                                   </span>
                                 </label>
                               </div>
-                              <p className="mt-2 text-xs text-muted-foreground">
+                              <p className="mt-0 text-sm text-red-400">
                                 {4 - sampleFeedPhotosCount} remaining
                               </p>
                             </div>
@@ -296,9 +295,9 @@ export function PhotoUploadStep({
             </div>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex flex-col-reverse md:flex-row gap-4 pt-10 justify-between">
             <Button
-              className="w-[160px]"
+              className="w-full md:w-[160px]"
               type="button"
               variant="outline"
               onClick={onBack}
@@ -306,7 +305,7 @@ export function PhotoUploadStep({
               Back
             </Button>
             <Button
-              className="w-[160px]"
+              className="w-full md:w-[160px]"
               type="submit"
               disabled={
                 !form.formState.isValid ||
